@@ -1,0 +1,33 @@
+{
+  "_note": "Programme facts come from AUM's own tuition table and programme pages as indexed by Google on 2026-10-20. Fields left null were not published there. Verify every number on aum.edu.jo before AUM sees this.",
+  "registrationFeeGraduateJD": 250,
+  "faculties": [
+    { "id": "engineering", "en": "Faculty of Engineering", "ar": "كلية الهندسة" },
+    { "id": "science", "en": "Faculty of Science", "ar": "كلية العلوم" },
+    { "id": "health", "en": "Faculty of Health Sciences", "ar": "كلية العلوم الصحية" },
+    { "id": "it", "en": "Faculty of Information Technology", "ar": "كلية تكنولوجيا المعلومات" },
+    { "id": "business", "en": "Faculty of Business", "ar": "كلية الأعمال" },
+    { "id": "design", "en": "Faculty of Architecture and Design", "ar": "كلية العمارة والتصميم" },
+    { "id": "languages", "en": "Faculty of Languages and Communication", "ar": "كلية اللغات والاتصال" }
+  ],
+  "programmes": [
+    { "id": "civil-engineering", "faculty": "engineering", "level": "bachelor", "en": "Civil Engineering", "ar": "الهندسة المدنية", "credits": null, "minAverage": null, "feePerCredit": null, "streams": null },
+    { "id": "electrical-engineering", "faculty": "engineering", "level": "bachelor", "en": "Electrical Engineering", "ar": "الهندسة الكهربائية", "credits": null, "minAverage": null, "feePerCredit": null, "streams": null },
+    { "id": "mechanical-engineering", "faculty": "engineering", "level": "bachelor", "en": "Mechanical Engineering", "ar": "الهندسة الميكانيكية", "credits": null, "minAverage": 80, "feePerCredit": 110, "streams": null },
+    { "id": "intelligent-robotics", "faculty": "engineering", "level": "bachelor", "en": "Intelligent Robotics Systems Engineering", "ar": "هندسة أنظمة الروبوتات الذكية", "credits": 160, "minAverage": 80, "feePerCredit": 100, "streams": { "en": "Scientific, Scientific/Medical, Scientific/Engineering, Industrial", "ar": "العلمي، العلمي/الطبي، العلمي/الهندسي، الصناعي" } },
+    { "id": "biology-biotechnology", "faculty": "science", "level": "bachelor", "en": "Biology and Biotechnology", "ar": "علم الأحياء والتكنولوجيا الحيوية", "credits": 134, "minAverage": 60, "feePerCredit": 70, "streams": null, "page": "biology-and-biotechnology.html" },
+    { "id": "pharmacy", "faculty": "health", "level": "bachelor", "en": "Pharmacy", "ar": "الصيدلة", "credits": 165, "minAverage": 80, "feePerCredit": null, "streams": null },
+    { "id": "medical-laboratories", "faculty": "health", "level": "bachelor", "en": "Medical Laboratories", "ar": "المختبرات الطبية", "credits": 136, "minAverage": 70, "feePerCredit": null, "streams": null },
+    { "id": "nutrition-health-psychology", "faculty": "health", "level": "bachelor", "en": "Nutrition and Health Psychology", "ar": "التغذية وعلم النفس الصحي", "credits": 136, "minAverage": 70, "feePerCredit": null, "streams": null },
+    { "id": "computer-science", "faculty": "it", "level": "bachelor", "en": "Computer Science", "ar": "علم الحاسوب", "credits": null, "minAverage": null, "feePerCredit": null, "streams": null },
+    { "id": "data-science", "faculty": "it", "level": "bachelor", "en": "Data Science", "ar": "علم البيانات", "credits": null, "minAverage": null, "feePerCredit": null, "streams": null },
+    { "id": "cybersecurity", "faculty": "it", "level": "bachelor", "en": "Cybersecurity", "ar": "الأمن السيبراني", "credits": null, "minAverage": null, "feePerCredit": 80, "streams": null },
+    { "id": "business-administration", "faculty": "business", "level": "bachelor", "en": "Business Administration", "ar": "إدارة الأعمال", "credits": 133, "minAverage": 60, "feePerCredit": 90, "streams": null },
+    { "id": "architecture", "faculty": "design", "level": "bachelor", "en": "Architecture", "ar": "هندسة العمارة", "credits": 168, "minAverage": 80, "feePerCredit": null, "streams": null },
+    { "id": "design-visual-communication", "faculty": "design", "level": "bachelor", "en": "Design and Visual Communication", "ar": "التصميم والاتصال البصري", "credits": 140, "minAverage": 60, "feePerCredit": null, "streams": null },
+    { "id": "design-applied-arts", "faculty": "design", "level": "bachelor", "en": "Design and Applied Arts", "ar": "التصميم والفنون التطبيقية", "credits": 140, "minAverage": 60, "feePerCredit": null, "streams": null },
+    { "id": "msc-risk-management", "faculty": "business", "level": "master", "en": "Master of Science in Risk Management", "ar": "ماجستير العلوم في إدارة المخاطر", "credits": null, "minAverage": null, "feePerCredit": 175, "streams": null },
+    { "id": "mba-business-analytics", "faculty": "business", "level": "master", "en": "MBA and Business Analytics", "ar": "ماجستير إدارة الأعمال وتحليلات الأعمال", "credits": null, "minAverage": null, "feePerCredit": 150, "streams": null },
+    { "id": "msc-autonomous-cybersecurity", "faculty": "it", "level": "master", "en": "Master of Science in Autonomous Cybersecurity with AI", "ar": "ماجستير العلوم في الأمن السيبراني الذاتي بالذكاء الاصطناعي", "credits": null, "minAverage": null, "feePerCredit": 160, "streams": null }
+  ]
+}
