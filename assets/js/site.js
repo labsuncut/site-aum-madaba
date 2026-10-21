@@ -37,6 +37,18 @@
     box.appendChild(frag);
   });
 
+  // Student tools filter
+  var tq = doc.getElementById('t-q');
+  if (tq) {
+    var cards = [].slice.call(doc.querySelectorAll('.tool')), groups = [].slice.call(doc.querySelectorAll('.tgroup')), emptyT = doc.getElementById('t-empty');
+    tq.addEventListener('input', function () {
+      var n = tq.value.trim().toLowerCase(), shown = 0;
+      cards.forEach(function (c) { var ok = !n || c.dataset.text.indexOf(n) !== -1; c.hidden = !ok; if (ok) shown++; });
+      groups.forEach(function (g) { g.hidden = !g.querySelector('.tool:not([hidden])'); });
+      emptyT.hidden = shown > 0;
+    });
+  }
+
   // Programme data
   var D = window.AUM_DATA;
   if (!D) return;
@@ -48,16 +60,11 @@
 
   function card(p) {
     var name = p[lang] || p.en, fac = FAC[p.faculty] ? (FAC[p.faculty][lang] || FAC[p.faculty].en) : '';
-    var chips = [];
-    chips.push('<span class="chip gold">' + esc(t(p.level)) + '</span>');
+    var chips = ['<span class="chip gold">' + esc(t(p.level)) + '</span>'];
     if (p.credits) chips.push('<span class="chip">' + fmt(p.credits) + ' ' + esc(t('credits')) + '</span>');
     if (p.minAverage) chips.push('<span class="chip">' + fmt(p.minAverage) + '% ' + esc(t('minAverage')) + '</span>');
-    if (p.feePerCredit) chips.push('<span class="chip">' + fmt(p.feePerCredit) + ' ' + esc(t('perCredit')) + '</span>');
-    if (!p.credits && !p.feePerCredit) chips.push('<span class="chip quiet">' + esc(t('notPublished')) + '</span>');
-    var est = estimate(p);
-    var estHtml = est ? '<div class="est">' + esc(t('estimate')) + ': <b>' + fmt(est) + ' JD</b></div>' : '';
     var href = p.page ? root + p.page : (root + 'academics.html#' + p.faculty);
-    return '<a class="pcard" href="' + href + '"><span class="fac">' + esc(fac) + '</span><h3>' + esc(name) + '</h3>' + estHtml + '<div class="meta">' + chips.join('') + '</div></a>';
+    return '<a class="pcard" href="' + href + '"><span class="fac">' + esc(fac) + '</span><h3>' + esc(name) + '</h3><div class="meta">' + chips.join('') + '</div><span class="go" aria-hidden="true">→</span></a>';
   }
 
   // Finder (home)
@@ -80,8 +87,12 @@
       count.textContent = fmt(out.length) + ' ' + t('finderCount');
       list.innerHTML = out.length ? out.map(card).join('') : '<p class="empty">' + esc(t('finderEmpty')) + '</p>';
     }
+    var fchips = [].slice.call(finder.querySelectorAll('.fchip'));
+    function syncChips() { fchips.forEach(function (b) { b.classList.toggle('on', b.dataset.fac === fs.value); }); }
+    fchips.forEach(function (b) { b.addEventListener('click', function () { fs.value = b.dataset.fac; syncChips(); render(); }); });
+    fs.addEventListener('change', syncChips);
     [q, fs, lv].forEach(function (el) { el.addEventListener('input', render); el.addEventListener('change', render); });
-    render();
+    syncChips(); render();
   }
 
   // Programme lists by faculty (academics page)

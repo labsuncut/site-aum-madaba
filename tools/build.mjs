@@ -14,13 +14,43 @@ const SITE = 'https://labsuncut.github.io/site-aum-madaba/';
 const LINKS = {
   apply: 'https://registration.aum.edu.jo/faces/ui/pages/guest/admissionOnline/index.xhtml',
   elearning: 'https://elearning.aum.edu.jo/',
-  registration: 'https://reg.aum.edu.jo/PreAdmission.aspx',
+  registration: 'https://reg.aum.edu.jo/',
   bus: 'https://aum.edu.jo/announcements/bus-schedule-second-semester-2025-2026',
   calendar: 'https://aum.edu.jo/admissions/academic-calendar/view',
   email: 'mailto:info@aum.edu.jo',
   tel: 'tel:+96253294444',
   maps: 'https://www.google.com/maps/search/?api=1&query=American+University+of+Madaba',
-  intl: 'https://aum.edu.jo/international-students',
+  intl: 'https://www.aum.edu.jo/life-at-aum/international-students-office',
+  courseFinder: 'https://aum.edu.jo/course-finder',
+  studyPlans: 'https://aum.edu.jo/academics/programs/program-type/undergraduates',
+  grading: 'https://aum.edu.jo/admissions/grading-system',
+  exams: 'https://aum.edu.jo/final-examinations-regulations',
+  genEd: 'https://www.aum.edu.jo/academics/general-education-program',
+  library: 'https://aum.edu.jo/library-services',
+  health: 'https://www.aum.edu.jo/life-at-aum/health-and-wellbeing',
+  housing: 'https://aum.edu.jo/apply-to-the-dorms-form',
+  dorms: 'https://www.aum.edu.jo/life-at-aum/female-dorms',
+  studentAffairs: 'https://aum.edu.jo/life-at-aum/deanship-of-student-affairs',
+  studentEmail: 'https://mail.google.com/',
+  fees: 'https://aum.edu.jo/admissions/tuition-fees/tuition-and-registration-fees-for-graduates-and-undergraduates-programs',
+  scholarships: 'https://aum.edu.jo/admissions/tuition-fees/scholarships',
+  qa: 'https://aum.edu.jo/admissions/qanda',
+  bachelorRules: 'https://aum.edu.jo/awarding-the-bachelors-degree',
+  masterRules: 'https://aum.edu.jo/awarding-the-masters-degree',
+  discipline: 'https://aum.edu.jo/regulation-for-student-discipline',
+  transferPolicy: 'https://aum.edu.jo/policy-for-student-admission-and-transfer',
+  announcements: 'https://aum.edu.jo/announcements',
+  news: 'https://aum.edu.jo/news',
+  events: 'https://www.aum.edu.jo/events',
+  alumni: 'https://aum.edu.jo/life-at-aum/alumni-and-career-development',
+  contact: 'https://www.aum.edu.jo/about/overview/aum-contact',
+  abroad: 'https://aum.edu.jo/life-at-aum/study-abroad-program',
+  president: 'https://aum.edu.jo/about/overview/message-from-the-president',
+  board: 'https://www.aum.edu.jo/about/board',
+  council: 'https://www.aum.edu.jo/about/governance-and-policies/university-council',
+  licensing: 'https://www.aum.edu.jo/about/licensing-and-accreditation',
+  adminDepts: 'https://aum.edu.jo/about/administrative-departments',
+  glance: 'https://aum.edu.jo/about/overview/aum-at-a-glance',
   transport: 'https://www.aum.edu.jo/life-at-aum/transportation',
   aum: 'https://aum.edu.jo/'
 };
@@ -28,8 +58,28 @@ const LINKS = {
 const PAGES = {
   home: 'index.html', academics: 'academics.html', science: 'faculty-of-science.html',
   biotech: 'biology-and-biotechnology.html', admissions: 'admissions.html', life: 'life-at-aum.html',
-  about: 'about.html', notfound: '404.html'
+  about: 'about.html', tools: 'student-tools.html', notfound: '404.html'
 };
+
+// Student tools: id, group, icon, url. Text lives in strings.json (tools.t_<id>, tools.d_<id>).
+const TOOLS = [
+  ['elearning', 'gStudy', 'laptop', LINKS.elearning], ['registration', 'gStudy', 'edit', LINKS.registration],
+  ['courseFinder', 'gStudy', 'grid', LINKS.courseFinder], ['studyPlans', 'gStudy', 'list', LINKS.studyPlans],
+  ['calendar', 'gStudy', 'calendar', LINKS.calendar], ['grading', 'gStudy', 'percent', LINKS.grading],
+  ['exams', 'gStudy', 'file', LINKS.exams], ['genEd', 'gStudy', 'book', LINKS.genEd],
+  ['bus', 'gCampus', 'bus', LINKS.bus], ['library', 'gCampus', 'library', LINKS.library],
+  ['health', 'gCampus', 'health', LINKS.health], ['housing', 'gCampus', 'home', LINKS.housing],
+  ['studentAffairs', 'gCampus', 'clubs', LINKS.studentAffairs], ['intl', 'gCampus', 'intl', LINKS.intl],
+  ['email', 'gCampus', 'mail', LINKS.studentEmail],
+  ['fees', 'gMoney', 'coins', LINKS.fees], ['scholarships', 'gMoney', 'award', LINKS.scholarships],
+  ['apply', 'gMoney', 'send', LINKS.apply], ['qa', 'gMoney', 'help', LINKS.qa],
+  ['bachelorRules', 'gRules', 'file', LINKS.bachelorRules], ['masterRules', 'gRules', 'file', LINKS.masterRules],
+  ['discipline', 'gRules', 'shield', LINKS.discipline], ['transfer', 'gRules', 'swap', LINKS.transferPolicy],
+  ['announcements', 'gContact', 'megaphone', LINKS.announcements], ['news', 'gContact', 'flag', LINKS.news],
+  ['events', 'gContact', 'star', LINKS.events], ['alumni', 'gContact', 'user', LINKS.alumni],
+  ['contact', 'gContact', 'phone', LINKS.contact]
+];
+const HOME_TOOLS = ['elearning', 'registration', 'courseFinder', 'calendar', 'bus', 'library'];
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 let uid = 0;
@@ -70,7 +120,23 @@ const ICONS = {
   pin: '<path d="M12 21s7-6.5 7-11.5a7 7 0 1 0-14 0C5 14.5 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/>',
   book: '<path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4V4Z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7V4Z"/>',
-  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  laptop: '<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M2 20h20"/>',
+  edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/>',
+  percent: '<path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+  file: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h6"/>',
+  library: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M9 7h7"/>',
+  coins: '<circle cx="9" cy="9" r="6"/><path d="M15.5 8.5a6 6 0 1 1-7 7"/>',
+  award: '<circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/>',
+  send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7"/><path d="M12 17h.01"/>',
+  shield: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6Z"/><path d="m9 12 2 2 4-4"/>',
+  swap: '<path d="M7 7h13l-3-3"/><path d="M17 17H4l3 3"/>',
+  megaphone: '<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/>',
+  flag: '<path d="M5 21V4"/><path d="M5 4h12l-2 4 2 4H5"/>',
+  star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/>'
 };
 const icon = (k) => `<span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg></span>`;
 
@@ -85,16 +151,20 @@ function shell(ctx, page, body) {
   for (const k of Object.keys(S.common)) strings[k] = S.common[k];
   for (const k of Object.keys(S[page] || {})) strings[k] = S[page][k];
   const navItems = [
-    ['academics', c('navAcademics')], ['science', c('navScience')], ['admissions', c('navAdmissions')],
+    ['academics', c('navAcademics')], ['admissions', c('navAdmissions')], ['tools', c('navTools')],
     ['life', c('navLife')], ['about', c('navAbout')]
   ];
   const nav = navItems.map(([p, label]) => `<a href="${R + PAGES[p]}"${p === page ? ' aria-current="page"' : ''}>${esc(label)}</a>`).join('');
   const tools = [
-    [LINKS.elearning, c('toolElearning')], [LINKS.registration, c('toolRegistration')], [LINKS.bus, c('toolBus')],
-    [LINKS.calendar, c('toolCalendar')], [LINKS.email, c('toolEmail')]
+    [LINKS.elearning, c('toolElearning')], [LINKS.registration, c('toolRegistration')], [LINKS.courseFinder, c('toolCourseFinder')],
+    [LINKS.calendar, c('toolCalendar')], [LINKS.bus, c('toolBus')], [LINKS.library, c('toolLibrary')]
+  ];
+  const uni = [
+    [LINKS.news, c('linkNews')], [LINKS.events, c('linkEvents')], [LINKS.announcements, c('linkAnnouncements')],
+    [LINKS.president, c('linkResearch')], [LINKS.alumni, c('linkAlumni')], [LINKS.contact, c('linkContact')]
   ];
   const toolLinks = (cls) => tools.map(([h, l]) => `<a href="${h}"${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}${cls ? ` class="${cls}"` : ''}>${esc(l)}</a>`).join('');
-  const brand = (extra = '') => `<a class="brand${extra}" href="${R}index.html"><img src="${seal}" width="46" height="46" alt=""><span class="brand-text"><span class="brand-name">${esc(c('siteName'))}</span><span class="brand-sub">${esc(c('motto'))}</span></span></a>`;
+  const brand = (extra = '') => `<a class="brand${extra}" href="${R}index.html"><img src="${seal}" width="60" height="60" alt=""><span class="brand-text"><span class="brand-name">${esc(c('siteName'))}</span><span class="brand-sub">${esc(c('brandSub'))}</span></span></a>`;
 
   return `<!doctype html>
 <html lang="${lang}" dir="${dir}"${R ? ` data-root="${R}"` : ''}>
@@ -118,18 +188,15 @@ function shell(ctx, page, body) {
 <body>
 <div class="intro" id="intro" aria-hidden="true">
   <canvas class="intro-canvas" id="intro-canvas"></canvas>
-  <div class="intro-stage">
-    <img class="intro-seal" src="${seal}" width="239" height="239" alt="">
-    <p class="intro-name"><small>${esc(lang === 'ar' ? 'مادبا · الأردن' : 'Madaba · Jordan')}</small>${esc(c('siteName'))}</p>
-    <p class="intro-motto">${esc(c('motto'))}</p>
-  </div>
+  <img class="intro-seal" id="intro-seal" src="${seal}" width="239" height="239" alt="">
+  <p class="intro-name"><small>${esc(lang === 'ar' ? 'مادبا · الأردن' : 'Madaba · Jordan')}</small>${esc(c('siteName'))}</p>
   <button class="intro-skip" type="button">${esc(c('skip'))}</button>
 </div>
 <script src="${R}assets/js/intro.js"></script>
 <div class="tools">
   <div class="wrap">
     <span class="tools-label">${esc(c('tools'))}</span>
-    <nav class="tools-links" aria-label="${esc(c('tools'))}">${toolLinks()}</nav>
+    <nav class="tools-links" aria-label="${esc(c('tools'))}">${toolLinks()}<a href="${R + PAGES.tools}" class="tools-all">${esc(c('allTools'))}</a></nav>
     <a class="lang" href="${other}" lang="${lang === 'ar' ? 'en' : 'ar'}" hreflang="${lang === 'ar' ? 'en' : 'ar'}" aria-label="${esc(c('langSwitchLabel'))}">${esc(c('langSwitch'))}</a>
   </div>
 </div>
@@ -152,9 +219,9 @@ ${body}
         <p><a href="${LINKS.tel}">${esc(c('phone'))}</a><br>${esc(c('phoneAdmissions'))}</p>
         <p><a href="${LINKS.email}">info@aum.edu.jo</a></p>
       </div>
-      <div><h4>${esc(c('footerSitemap'))}</h4><ul>${navItems.map(([p, l]) => `<li><a href="${R + PAGES[p]}">${esc(l)}</a></li>`).join('')}<li><a href="${R}index.html#finder">${esc(c('findProgramme'))}</a></li></ul></div>
-      <div><h4>${esc(c('footerStudents'))}</h4><ul>${tools.map(([h, l]) => `<li><a href="${h}"${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${esc(l)}</a></li>`).join('')}</ul></div>
-      <div><h4>${esc(c('contact'))}</h4><ul><li><a href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))}</a></li><li><a href="${LINKS.maps}" target="_blank" rel="noopener">${esc(c('directions'))}</a></li><li><a href="${LINKS.aum}" target="_blank" rel="noopener">aum.edu.jo</a></li><li><a href="${other}" lang="${lang === 'ar' ? 'en' : 'ar'}">${esc(c('langSwitch'))}</a></li><li><a href="#main">${esc(c('back'))}</a></li></ul></div>
+      <div><h4>${esc(c('footerSitemap'))}</h4><ul>${navItems.map(([p, l]) => `<li><a href="${R + PAGES[p]}">${esc(l)}</a></li>`).join('')}<li><a href="${R + PAGES.science}">${esc(c('navScience'))}</a></li><li><a href="${R}index.html#finder">${esc(c('findProgramme'))}</a></li></ul></div>
+      <div><h4>${esc(c('footerStudents'))}</h4><ul>${tools.map(([h, l]) => `<li><a href="${h}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join('')}<li><a href="${R + PAGES.tools}">${esc(c('allTools'))}</a></li></ul></div>
+      <div><h4>${esc(c('footerUniversity'))}</h4><ul>${uni.map(([h, l]) => `<li><a href="${h}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join('')}<li><a href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))}</a></li><li><a href="${other}" lang="${lang === 'ar' ? 'en' : 'ar'}">${esc(c('langSwitch'))}</a></li></ul></div>
     </div>
     <div class="foot-bottom">
       <span class="badge">${esc(c('concept'))}</span>
@@ -193,24 +260,21 @@ const facultyIcon = { engineering: 'engineering', science: 'science', health: 'h
 const count = (fid, level) => D.programmes.filter((p) => p.faculty === fid && p.level === level).length;
 
 /* ---------- pages ---------- */
+function toolCard(ctx, id, group, ic, url, i) {
+  const { T, c } = ctx;
+  return `<a class="tool rv d${i % 4}" href="${url}" target="_blank" rel="noopener" data-group="${group}" data-text="${esc((T('tools', 't_' + id) + ' ' + T('tools', 'd_' + id)).toLowerCase())}">${icon(ic)}<span class="tool-body"><b>${esc(T('tools', 't_' + id))}</b><span>${esc(T('tools', 'd_' + id))}</span></span><span class="tool-go" aria-hidden="true">↗</span></a>`;
+}
+
 function home(ctx) {
-  const { R, t, c, lang } = ctx;
+  const { R, t, c, lang, T } = ctx;
   const seal = R + 'assets/img/seal.png';
   const stats = [['statFacultiesN', 'statFaculties'], ['statLangN', 'statLang'], ['statSinceN', 'statSince'], ['statNecheN', 'statNeche']]
     .map(([n, l]) => `<div class="stat"><b>${esc(t(n))}</b><span>${esc(t(l))}</span></div>`).join('');
-  const faculties = D.faculties.map((f, i) => {
-    const n = count(f.id, 'bachelor'), m = count(f.id, 'master');
-    const parts = [];
-    if (n) parts.push(`${n} ${lang === 'ar' ? (n === 1 ? 'برنامج بكالوريوس' : 'برامج بكالوريوس') : (n === 1 ? 'bachelor programme' : 'bachelor programmes')}`);
-    if (m) parts.push(`${m} ${lang === 'ar' ? (m === 1 ? 'برنامج ماجستير' : 'برامج ماجستير') : (m === 1 ? 'master programme' : 'master programmes')}`);
-    const line = parts.length ? parts.join(' · ') : (lang === 'ar' ? 'تفاصيل البرامج تُضاف من الكلية' : 'Programme details to be added from the faculty');
-    const href = f.id === 'science' ? R + PAGES.science : R + PAGES.academics + '#' + f.id;
-    return `<a class="tile rv d${i % 4}" href="${href}">${icon(facultyIcon[f.id])}<h3>${esc(f[lang])}</h3><p>${esc(line)}</p><span class="link">${esc(c('learnMore'))}</span></a>`;
-  }).join('');
-  const labs = [1, 2, 3, 4].map((i) => `<div class="lab"><b>${esc(S.science['lab' + i + 'T'][lang])}</b><span>${esc(S.science['lab' + i + 'D'][lang])}</span></div>`).join('');
+  const quick = HOME_TOOLS.map((id, i) => { const tl = TOOLS.find((x) => x[0] === id); return `<a class="quick rv d${i % 4}" href="${tl[3]}" target="_blank" rel="noopener">${icon(tl[2])}<b>${esc(T('tools', 't_' + id))}</b></a>`; }).join('');
+  const chips = D.faculties.map((f) => `<button type="button" class="fchip" data-fac="${f.id}">${esc(f[lang])}</button>`).join('');
   const life = [['bus', 'Bus'], ['home', 'Housing'], ['clubs', 'Clubs'], ['intl', 'Intl']].map(([ic, k], i) =>
     `<a class="tile rv d${i}" href="${R + PAGES.life}#${k.toLowerCase()}">${icon(ic)}<h3>${esc(t('life' + k + 'T'))}</h3><p>${esc(t('life' + k + 'D'))}</p><span class="link">${esc(c('learnMore'))}</span></a>`).join('');
-  const news = [1, 2, 3, 4].map((i) => `<article class="rv d${i - 1}"><h3>${esc(t('news' + i + 'T'))}</h3><p>${esc(t('news' + i + 'D'))}</p></article>`).join('');
+  const news = [1, 2, 3].map((i) => `<article class="rv d${i - 1}"><h3>${esc(t('news' + i + 'T'))}</h3><p>${esc(t('news' + i + 'D'))}</p></article>`).join('');
 
   return `
 <section class="hero">
@@ -229,58 +293,81 @@ function home(ctx) {
   </div>
 </section>
 ${mosaicRule()}
+<section class="quickbar" aria-label="${esc(t('toolsKicker'))}">
+  <div class="wrap">
+    <div class="quick-head"><span class="kicker">${esc(t('toolsKicker'))}</span><a class="link" href="${R + PAGES.tools}">${esc(c('allTools'))}</a></div>
+    <div class="quick-grid">${quick}</div>
+  </div>
+</section>
 <section class="stats"><div class="wrap">${stats}</div></section>
 
 <section class="section" id="finder">
   <div class="wrap">
     ${head(ctx, t('finderKicker'), t('finderTitle'), t('finderLead'))}
     <div class="finder rv">
+      <div class="fchips"><button type="button" class="fchip on" data-fac="">${esc(t('finderAll'))}</button>${chips}</div>
       <div class="finder-controls">
         <label class="field">${esc(t('finderSearch'))}<input id="f-q" type="search" placeholder="${esc(t('finderPlaceholder'))}" autocomplete="off"></label>
         <label class="field">${esc(t('finderFaculty'))}<select id="f-fac"><option value="">${esc(t('finderAll'))}</option></select></label>
         <label class="field">${esc(t('finderLevel'))}<select id="f-level"><option value="">${esc(t('finderAllLevels'))}</option><option value="bachelor">${esc(c('bachelor'))}</option><option value="master">${esc(c('master'))}</option></select></label>
       </div>
-      <div class="finder-meta"><span id="f-count"></span><span>${esc(c('verify'))}</span></div>
-      <div class="plist" id="f-list"></div>
-      <p class="finder-note">${esc(t('finderNote'))} ${esc(c('estimate'))}: ${esc(c('estimateNote'))}.</p>
+      <div class="finder-meta"><span id="f-count"></span><a class="link" href="${R + PAGES.academics}">${esc(t('finderAllFaculties'))}</a></div>
+      <div class="plist compact" id="f-list"></div>
+      <p class="finder-note">${esc(t('finderNote'))}</p>
     </div>
   </div>
 </section>
 
 <section class="section tint">
-  <div class="wrap">
-    ${head(ctx, t('facultiesKicker'), t('facultiesTitle'), '', true)}
-    <div class="grid c4">${faculties}<a class="tile rv d3" href="${R + PAGES.academics}#graduate">${icon('book')}<h3>${esc(S.academics.graduate[lang])}</h3><p>${esc(lang === 'ar' ? 'ثلاثة برامج ماجستير في الأعمال وإدارة المخاطر والأمن السيبراني' : 'Three master programmes in business, risk management and cybersecurity')}</p><span class="link">${esc(c('learnMore'))}</span></a></div>
-  </div>
-</section>
-${mosaicRule()}
-<section class="section dark">
-  <div class="wrap">
-    <div class="spot">
-      <div class="photo olive rv"><div class="tesserae" data-count="70"></div><p class="note">${esc(S.science.photoNote[lang])}</p></div>
-      <div>
-        ${head(ctx, t('scienceKicker'), t('scienceTitle'), t('scienceLead'))}
-        <div class="labs rv d1">${labs}</div>
-        <p class="rv d2" style="margin-top:26px"><a class="btn btn-light" href="${R + PAGES.science}">${esc(t('scienceCta'))} <span class="arr">→</span></a></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
   <div class="wrap">
     ${head(ctx, t('lifeKicker'), t('lifeTitle'))}
     <div class="grid c4">${life}</div>
   </div>
 </section>
+${mosaicRule()}
+<section class="section dark">
+  <div class="wrap two">
+    <div>${head(ctx, t('researchKicker'), t('researchTitle'), t('researchLead'))}<p class="rv d1"><a class="btn btn-light" href="${R + PAGES.academics}#graduate">${esc(S.academics.graduate[lang])} <span class="arr">→</span></a></p></div>
+    <div class="labs rv d1"><a class="lab" href="${LINKS.alumni}" target="_blank" rel="noopener"><b>${esc(t('alumniT'))}</b><span>${esc(t('alumniD'))}</span></a><a class="lab" href="${LINKS.events}" target="_blank" rel="noopener"><b>${esc(t('eventsT'))}</b><span>${esc(t('eventsD'))}</span></a><a class="lab" href="${LINKS.announcements}" target="_blank" rel="noopener"><b>${esc(t('annT'))}</b><span>${esc(t('annD'))}</span></a><a class="lab" href="${LINKS.library}" target="_blank" rel="noopener"><b>${esc(c('linkLibrary'))}</b><span>${esc(T('tools', 'd_library'))}</span></a></div>
+  </div>
+</section>
 
-<section class="section tint">
+<section class="section">
   <div class="wrap">
-    ${head(ctx, t('newsKicker'), t('newsTitle'))}
-    <div class="news">${news}</div>
+    <div class="section-head rv"><span class="kicker">${esc(t('newsKicker'))}</span><h2>${esc(t('newsTitle'))}</h2><p class="lead">${esc(t('newsLead'))}</p></div>
+    <div class="news">${news}<article class="rv d3"><h3>${esc(t('news4T'))}</h3><p>${esc(t('news4D'))}</p></article></div>
+    <p class="rv" style="margin-top:22px"><a class="link" href="${LINKS.news}" target="_blank" rel="noopener">${esc(c('linkNews'))}</a> &nbsp;·&nbsp; <a class="link" href="${LINKS.events}" target="_blank" rel="noopener">${esc(c('linkEvents'))}</a> &nbsp;·&nbsp; <a class="link" href="${LINKS.announcements}" target="_blank" rel="noopener">${esc(c('linkAnnouncements'))}</a></p>
   </div>
 </section>
 ${contactTiles(ctx, t('visitKicker'), t('visitTitle'), t('visitLead'))}
+${applyCta(ctx)}`;
+}
+
+function tools(ctx) {
+  const { t, T, c } = ctx;
+  const groups = ['gStudy', 'gCampus', 'gMoney', 'gRules', 'gContact'];
+  const blocks = groups.map((g) => `<div class="tgroup" data-group="${g}"><h2 class="rv">${esc(t(g))}</h2><div class="tgrid">${TOOLS.filter((x) => x[1] === g).map((x, i) => toolCard(ctx, x[0], x[1], x[2], x[3], i)).join('')}</div></div>`).join('');
+  return `
+${phero(ctx, t('kicker'), t('h1'), t('lead'))}
+<section class="section" id="tools">
+  <div class="wrap">
+    <div class="finder rv tool-search"><label class="field">${esc(t('search'))}<input id="t-q" type="search" placeholder="${esc(t('placeholder'))}" autocomplete="off"></label><p class="finder-note" style="margin:10px 0 0">${esc(c('opensAum'))}</p></div>
+    ${blocks}
+    <p class="empty" id="t-empty" hidden>${esc(t('empty'))}</p>
+  </div>
+</section>
+<section class="section tint">
+  <div class="wrap">
+    ${head(ctx, t('extKicker'), t('extTitle'))}
+    <div class="facts">
+      <div class="fact rv"><b>1900 · 1901</b><span>${esc(t('extAdm'))}</span></div>
+      <div class="fact rv d1"><b>1700 – 1702</b><span>${esc(t('extSA'))}</span></div>
+      <div class="fact rv d2"><b>1200 · 1201</b><span>${esc(t('extLib'))}</span></div>
+      <a class="fact rv d3" href="${LINKS.tel}"><b>${esc(c('phone'))}</b><span>${esc(c('siteName'))}</span></a>
+    </div>
+    <p class="finder-note">${esc(t('extNote'))}</p>
+  </div>
+</section>
 ${applyCta(ctx)}`;
 }
 
@@ -290,7 +377,7 @@ function academics(ctx) {
     const n = count(f.id, 'bachelor');
     const list = n ? `<div class="plist" data-programmes="${f.id}" data-level="bachelor"></div>`
       : `<p class="empty" style="text-align:start;padding:18px 0">${esc(lang === 'ar' ? 'لم تُنشر تفاصيل البرامج بعد في هذه المعاينة؛ تُضاف من الكلية.' : 'Programme details are not yet in this preview; they will be added from the faculty.')}</p>`;
-    const extra = f.id === 'science' ? ` <a class="link" href="${R + PAGES.science}">${esc(c('navScience'))}</a>` : '';
+    const extra = f.id === 'science' ? ` <a class="link" href="${R + PAGES.science}">${esc(c('facultyPage'))}</a>` : '';
     return `<div class="facblock rv" id="${f.id}"><div class="facblock-head">${icon(facultyIcon[f.id])}<h3>${esc(f[lang])}</h3>${extra}</div>${list}</div>`;
   }).join('');
   return `
@@ -426,6 +513,19 @@ ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
     <div class="tile rv d1">${icon('book')}<h3>${esc(t('gradKicker'))}</h3><p>${esc(t('gradLead'))}</p><p>${esc(S.academics.graduateLead[lang])}</p></div>
   </div>
 </section>
+<section class="section tint">
+  <div class="wrap">
+    ${head(ctx, t('linksKicker'), t('linksTitle'))}
+    <div class="grid c3">
+      <a class="tile rv" href="${LINKS.fees}" target="_blank" rel="noopener">${icon('coins')}<h3>${esc(S.tools.t_fees[lang])}</h3><p>${esc(S.tools.d_fees[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile rv d1" href="${LINKS.scholarships}" target="_blank" rel="noopener">${icon('award')}<h3>${esc(S.tools.t_scholarships[lang])}</h3><p>${esc(S.tools.d_scholarships[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile rv d2" href="${LINKS.qa}" target="_blank" rel="noopener">${icon('help')}<h3>${esc(S.tools.t_qa[lang])}</h3><p>${esc(S.tools.d_qa[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile rv" href="${LINKS.grading}" target="_blank" rel="noopener">${icon('percent')}<h3>${esc(t('gradeT'))}</h3><p>${esc(t('gradeD'))}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile rv d1" href="${LINKS.intl}" target="_blank" rel="noopener">${icon('intl')}<h3>${esc(t('intlT'))}</h3><p>${esc(t('intlD'))}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile rv d2" href="${LINKS.transferPolicy}" target="_blank" rel="noopener">${icon('swap')}<h3>${esc(S.tools.t_transfer[lang])}</h3><p>${esc(S.tools.d_transfer[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
+    </div>
+  </div>
+</section>
 ${contactTiles(ctx, t('contactKicker'), t('contactTitle'), t('contactLead'))}
 ${applyCta(ctx)}`;
 }
@@ -451,12 +551,23 @@ ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
   <div class="wrap">
     ${head(ctx, t('housingKicker'), t('housingTitle'))}
     <div class="grid c2">
-      <div class="tile rv">${icon('home')}<h3>${esc(lang === 'ar' ? 'للطالبات' : 'For women')}</h3><p>${esc(t('housingW'))}</p></div>
+      <div class="tile rv">${icon('home')}<h3>${esc(lang === 'ar' ? 'للطالبات' : 'For women')}</h3><p>${esc(t('housingW'))}</p><a class="link" href="${LINKS.housing}" target="_blank" rel="noopener">${esc(t('housingApply'))}</a></div>
       <div class="tile rv d1">${icon('pin')}<h3>${esc(lang === 'ar' ? 'للطلاب والطلبة الدوليين' : 'For men and international students')}</h3><p>${esc(t('housingM'))}</p></div>
     </div>
   </div>
 </section>
-<section class="section" id="clubs">
+<section class="section" id="health">
+  <div class="wrap two">
+    <div class="rv"><span class="kicker">${esc(t('healthKicker'))}</span><h2>${esc(t('healthTitle'))}</h2><p class="lead">${esc(t('healthLead'))}</p><p class="finder-note">${esc(t('healthHours'))}</p><a class="link" href="${LINKS.health}" target="_blank" rel="noopener">${esc(c('opensAum'))}</a></div>
+    <div class="grid c2 rv d1">
+      <a class="tile" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${icon('languages')}<h3>${esc(t('langT'))}</h3><p>${esc(t('langD'))}</p></a>
+      <a class="tile" href="${LINKS.alumni}" target="_blank" rel="noopener">${icon('user')}<h3>${esc(t('careerT'))}</h3><p>${esc(t('careerD'))}</p></a>
+      <a class="tile" href="${LINKS.abroad}" target="_blank" rel="noopener">${icon('intl')}<h3>${esc(t('abroadT'))}</h3><p>${esc(t('abroadD'))}</p></a>
+      <a class="tile" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${icon('clubs')}<h3>${esc(S.tools.t_studentAffairs[lang])}</h3><p>${esc(S.tools.d_studentAffairs[lang])}</p></a>
+    </div>
+  </div>
+</section>
+<section class="section tint" id="clubs">
   <div class="wrap two">
     <div class="rv"><span class="kicker">${esc(t('clubsKicker'))}</span><h2>${esc(t('clubsTitle'))}</h2><p class="lead">${esc(t('clubsLead'))}</p><div class="pills">${clubs}</div></div>
     <div class="photo olive rv d1"><div class="tesserae" data-count="60"></div><p class="note">${esc(S.science.photoNote[lang])}</p></div>
@@ -507,6 +618,12 @@ ${mosaicRule()}
     <div class="rv d1"><span class="kicker">${esc(t('kicker'))}</span><h2>${esc(t('memKicker'))}</h2><div class="pills">${mem}</div></div>
   </div>
 </section>
+<section class="section tint">
+  <div class="wrap">
+    ${head(ctx, t('linksKicker'), t('linksTitle'))}
+    <div class="pills rv">${[['l1', LINKS.president], ['l2', LINKS.board], ['l3', LINKS.council], ['l4', LINKS.licensing], ['l5', LINKS.adminDepts], ['l6', LINKS.glance]].map(([k, h]) => `<a class="pill" href="${h}" target="_blank" rel="noopener">${esc(t(k))} ↗</a>`).join('')}</div>
+  </div>
+</section>
 ${contactTiles(ctx, t('contactKicker'), t('contactTitle'), c('address'))}`;
 }
 
@@ -517,7 +634,7 @@ ${phero(ctx, '404', t('h1'), t('lead'))}
 <section class="section"><div class="wrap"><p class="rv"><a class="btn" href="${R}index.html">${esc(t('home'))} <span class="arr">→</span></a></p></div></section>`;
 }
 
-const BUILDERS = { home, academics, science, biotech, admissions, life, about, notfound };
+const BUILDERS = { home, academics, science, biotech, admissions, life, about, tools, notfound };
 
 /* ---------- run ---------- */
 let n = 0;
