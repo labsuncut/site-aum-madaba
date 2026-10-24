@@ -116,4 +116,21 @@
         '<td class="num">' + (est ? '<b>' + fmt(est) + '</b>' : dash) + '</td></tr>';
     }).join('');
   }
+
+  // Alumni stories: one at a time, rotate every 8 s, dots to pick
+  const sl = document.querySelector('[data-slides]');
+  if (sl) {
+    const slides = [...sl.querySelectorAll('.alum-slide')];
+    const dots = [...document.querySelectorAll('.alum-dots button')];
+    let cur = 0, timer;
+    const show = (n) => {
+      cur = (n + slides.length) % slides.length;
+      slides.forEach((el, i) => el.classList.toggle('on', i === cur));
+      dots.forEach((d, i) => { d.classList.toggle('on', i === cur); d.setAttribute('aria-selected', i === cur ? 'true' : 'false'); });
+      slides[cur].querySelectorAll('.rv').forEach((el) => el.classList.add('in'));
+    };
+    const start = () => { clearInterval(timer); if (slides.length > 1) timer = setInterval(() => show(cur + 1), 8000); };
+    dots.forEach((d, i) => d.addEventListener('click', () => { show(i); start(); }));
+    start();
+  }
 })();

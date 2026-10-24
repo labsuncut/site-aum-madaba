@@ -845,6 +845,78 @@
     "madabaCta": {
       "en": "See more",
       "ar": "اعرف المزيد"
+    },
+    "heroVidKicker": {
+      "en": "Be an AUMer",
+      "ar": "كن واحدًا من طلبة الجامعة"
+    },
+    "heroVidT": {
+      "en": "Your creative career starts here.",
+      "ar": "مسيرتك الإبداعية تبدأ من هنا."
+    },
+    "heroVidD": {
+      "en": "Join a vibrant community dedicated to your success. At the American University of Madaba you will find the support, resources and inspiration you need to achieve your dreams.",
+      "ar": "انضم إلى مجتمع نابض بالحياة مكرّس لنجاحك. في الجامعة الأميركية في مادبا تجد الدعم والموارد والإلهام التي تحتاجها لتحقيق أحلامك."
+    },
+    "al2Q": {
+      "en": "Graduating with excellence in Computer Science from AUM in 2024 was a defining milestone in my career. I am deeply thankful to my professors at AUM for their support and mentorship throughout my academic journey.",
+      "ar": "كان تخرجي بامتياز في علم الحاسوب من الجامعة الأميركية في مادبا عام 2024 محطة فارقة في مسيرتي. أنا ممتن بعمق لأساتذتي في الجامعة على دعمهم وإرشادهم طوال رحلتي الأكاديمية."
+    },
+    "al2N": {
+      "en": "Hussein Mansour",
+      "ar": "حسين منصور"
+    },
+    "al2R": {
+      "en": "Computer Science graduate, Class of 2024",
+      "ar": "خريج علم الحاسوب، دفعة 2024"
+    },
+    "al3Q": {
+      "en": "Graduating with a degree in Computer Science from AUM in 2024 laid the foundation for my career. Currently, I serve as the CEO of HiTech and a Project Manager at Elective Services Ltd. My experiences have driven my passion for technology and leadership. I am grateful to my AUM professors for their invaluable guidance.",
+      "ar": "وضع تخرجي في علم الحاسوب من الجامعة الأميركية في مادبا عام 2024 الأساس لمسيرتي المهنية. أعمل حاليًا رئيسًا تنفيذيًا لشركة HiTech ومدير مشاريع في Elective Services Ltd. وقد غذّت تجاربي شغفي بالتكنولوجيا والقيادة. أنا ممتن لأساتذتي في الجامعة على توجيههم الثمين."
+    },
+    "al3N": {
+      "en": "Abdalraheem Al-Majali",
+      "ar": "عبد الرحيم المجالي"
+    },
+    "al3R": {
+      "en": "Computer Science graduate, Class of 2024",
+      "ar": "خريج علم الحاسوب، دفعة 2024"
+    },
+    "al4Q": {
+      "en": "Graduating with excellence in Computer Science from AUM in 2024 was a pivotal moment in my journey. It provided me with the skills and knowledge to co-found HiTech and excel as a Full Stack Developer. I am grateful to my professors at AUM for their unwavering support and guidance.",
+      "ar": "كان تخرجي بامتياز في علم الحاسوب من الجامعة الأميركية في مادبا عام 2024 لحظة محورية في رحلتي. فقد زوّدني بالمهارات والمعرفة للمشاركة في تأسيس شركة HiTech والتميّز كمطوّر ويب متكامل. أنا ممتن لأساتذتي في الجامعة على دعمهم وتوجيههم الدائمين."
+    },
+    "al4N": {
+      "en": "Abdullah Hasanein",
+      "ar": "عبد الله حسنين"
+    },
+    "al4R": {
+      "en": "Computer Science graduate, Class of 2024",
+      "ar": "خريج علم الحاسوب، دفعة 2024"
+    },
+    "alumniDot": {
+      "en": "Alumni story",
+      "ar": "قصة خريج"
+    },
+    "storiesT": {
+      "en": "Our success stories",
+      "ar": "قصص نجاحنا"
+    },
+    "storiesD": {
+      "en": "Watch on YouTube",
+      "ar": "شاهد على يوتيوب"
+    },
+    "campusT": {
+      "en": "Find your way around campus",
+      "ar": "اعرف طريقك في الحرم الجامعي"
+    },
+    "campusD": {
+      "en": "The official campus map, building by building.",
+      "ar": "خريطة الحرم الجامعي الرسمية، مبنى مبنى."
+    },
+    "campusCta": {
+      "en": "Open the map",
+      "ar": "افتح الخريطة"
     }
   },
   "academics": {

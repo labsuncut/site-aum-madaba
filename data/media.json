@@ -1,25 +1,99 @@
 {
-  "_note": "Files live in assets/img/aum/. Each entry is used only if the file exists; otherwise the page shows a marked placeholder. Fill src/url from /mnt/project-files/aum/images/sources.md.",
-  "hero": { "file": "hero-neche.jpg", "source": "" },
+  "_note": "Files live in assets/img/aum/ (resized copies of AUM's own media; originals and sources in /mnt/project-files/aum/images/sources.md). Each entry is used only if the file exists; otherwise the page shows a marked placeholder. Private, non-indexed preview only until AUM agrees.",
+  "heroVideo": {
+    "src": "hero-loop.mp4",
+    "poster": "hero-loop-poster.jpg",
+    "source": "https://www.aum.edu.jo/storage/Images/home/sliders/home.mp4"
+  },
+  "hero": {
+    "file": "hero-neche.jpg",
+    "source": "https://www.aum.edu.jo/storage/Images/home/sliders/s-2.jpg"
+  },
   "news": [
-    { "file": "news-ieee.jpg", "url": "https://aum.edu.jo/news", "source": "" },
-    { "file": "news-italian.jpg", "url": "https://aum.edu.jo/news", "source": "" },
-    { "file": "news-spotlight.jpg", "url": "https://aum.edu.jo/news", "source": "" }
+    {
+      "file": "news-ieee.jpg",
+      "url": "https://www.aum.edu.jo/news/aum-participates-in-ieee-day-celebrations-and-leadership-summit-at-hashemite-university"
+    },
+    {
+      "file": "news-italian.jpg",
+      "url": "https://www.aum.edu.jo/news/aum-celebrates-italian-language-week-with-a-special-cultural-session"
+    },
+    {
+      "file": "news-spotlight.jpg",
+      "url": "https://www.aum.edu.jo/news/aum-spotlight-28"
+    }
   ],
   "announcements": [
-    { "url": "https://aum.edu.jo/announcements" },
-    { "url": "https://aum.edu.jo/announcements" },
-    { "url": "https://aum.edu.jo/announcements" }
+    {
+      "url": "https://www.aum.edu.jo/announcements/gayz-alhsn-bn-tlal-lltmyz-alaalmy-llaaam-2027-fy-mgalat-altaalym-oalbhth-alaalmy-oalabtkar"
+    },
+    {
+      "url": "https://www.aum.edu.jo/announcements/student-communities-academic-year-20262027"
+    },
+    {
+      "url": "https://www.aum.edu.jo/announcements/academic-job-vacancy-faculty-of-architecture-design-design-and-visual-communication-department"
+    }
   ],
   "events": [
-    { "file": "event-italian.jpg", "url": "https://www.aum.edu.jo/events" },
-    { "file": "event-openday-oct.jpg", "url": "https://www.aum.edu.jo/events" },
-    { "file": "event-openday-aug29.jpg", "url": "https://www.aum.edu.jo/events" },
-    { "file": "event-openday-aug1.jpg", "url": "https://www.aum.edu.jo/events" }
+    {
+      "file": "event-italian.jpg",
+      "url": "https://www.aum.edu.jo/events/session-celebrating-italian-language-week"
+    },
+    {
+      "file": "event-openday-oct.jpg",
+      "url": "https://www.aum.edu.jo/events/aums-open-day-1"
+    },
+    {
+      "file": "event-openday-aug29.jpg",
+      "url": "https://www.aum.edu.jo/events/aums-open-day-2"
+    },
+    {
+      "file": "event-openday-aug1.jpg",
+      "url": "https://www.aum.edu.jo/events/aums-open-day"
+    }
   ],
-  "alumni": [ { "file": "alumni-ammar.jpg" } ],
-  "reels": [],
+  "alumni": [
+    {
+      "file": "alumni-ammar.jpg"
+    },
+    {
+      "file": "alumni-hussein.jpg"
+    },
+    {
+      "file": "alumni-abdalraheem.jpg"
+    },
+    {
+      "file": "alumni-abdullah.jpg"
+    }
+  ],
+  "reels": [
+    {
+      "src": "reel-2.mp4",
+      "poster": "reel-2-poster.jpg",
+      "source": "https://www.aum.edu.jo/storage/Images/home/reels/videos/instagram_reel_vid_68b02202e1b80_algamaa-alamryky-fy-madba.mp4"
+    },
+    {
+      "src": "reel-1.mp4",
+      "poster": "reel-1-poster.jpg",
+      "source": "https://www.aum.edu.jo/storage/Images/home/reels/videos/1.mp4"
+    }
+  ],
+  "stories": "https://www.youtube.com/watch?v=-TZhUSjl5gk",
   "tour": "",
-  "madaba": { "url": "", "file": "madaba.jpg" },
-  "social": { "facebook": "", "x": "", "youtube": "", "instagram": "", "linkedin": "", "whatsapp": "" }
+  "campusMap": {
+    "url": "https://www.aum.edu.jo/about/overview/campus-map",
+    "file": "campus-map.jpg"
+  },
+  "madaba": {
+    "url": "https://www.aum.edu.jo/about/overview/madaba-overview%20?subject_id=7",
+    "file": "madaba.jpg"
+  },
+  "social": {
+    "facebook": "https://www.facebook.com/AUMMadaba",
+    "x": "https://x.com/AUM_Madaba",
+    "youtube": "https://www.youtube.com/@americanuniversityofmadaba",
+    "instagram": "https://www.instagram.com/aummadaba/",
+    "linkedin": "https://www.linkedin.com/school/aummadaba",
+    "whatsapp": "https://wa.me/962771000200"
+  }
 }

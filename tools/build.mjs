@@ -17,6 +17,8 @@ function pic(R, file, cls, alt) {
   return `<div class="${cls} ph"><div class="tesserae" data-count="40"></div><span>${esc(PH)}</span></div>`;
 }
 let PH = '';
+const has = (file) => !!file && existsSync(join(ROOT, 'assets/img/aum', file));
+const mp = (R, file) => `${R}assets/img/aum/${file}`;
 const SITE = 'https://labsuncut.github.io/site-aum-madaba/';
 
 const LINKS = {
@@ -298,10 +300,18 @@ function home(ctx) {
   const ann = [1, 2, 3].map((i) => `<a class="card ann rv d${i - 1}" href="${M.announcements[i - 1].url}" target="_blank" rel="noopener"><span class="card-top"><img src="${R}assets/img/seal.png" width="56" height="56" alt=""><span>${esc(c('siteName'))}</span></span><h3>${esc(t('ann' + i + 'T'))}</h3><span class="date">${esc(t('ann' + i + 'D'))}</span></a>`).join('');
   const news = [1, 2, 3].map((i) => { const n = M.news[i - 1]; return `<a class="card rv d${i - 1}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'card-img', t('news' + i + 'T'))}<h3>${esc(t('news' + i + 'T'))}</h3><span class="date">${esc(t('news' + i + 'D'))}</span></a>`; }).join('');
   const events = [1, 2, 3, 4].map((i) => { const e = M.events[i - 1]; return `<a class="event rv d${(i - 1) % 4}" href="${e.url}" target="_blank" rel="noopener">${pic(R, e.file, 'event-img', t('ev' + i + 'T'))}<span class="event-date"><b>${esc(t('ev' + i + 'D'))}</b><small>${esc(t('ev' + i + 'M'))}</small></span><span class="event-body"><h3>${esc(t('ev' + i + 'T'))}</h3><span class="time">${esc(t('ev' + i + 'H'))}</span></span></a>`; }).join('');
+  const alumniN = Math.min((M.alumni || []).length, 4);
+  const alumni = Array.from({ length: alumniN }, (_, i) => {
+    const n = i + 1;
+    return `<div class="alum alum-slide${i ? '' : ' on'}"><div class="rv"><span class="kicker">${esc(t('alumniKicker'))}</span><h2>${esc(t('alumniTitle'))}</h2><blockquote>“${esc(t('al' + n + 'Q'))}”</blockquote><p class="who"><b>${esc(t('al' + n + 'N'))}</b><span>${esc(t('al' + n + 'R'))}</span></p><a class="btn btn-light" href="${LINKS.alumni}" target="_blank" rel="noopener">${esc(t('alumniMore'))} <span class="arr">→</span></a></div><div class="rv d1">${pic(R, M.alumni[i].file, 'alum-img', t('al' + n + 'N'))}</div></div>`;
+  }).join('');
   const life = [['bus', 'Bus'], ['home', 'Housing'], ['clubs', 'Clubs'], ['intl', 'Intl']].map(([ic, k], i) =>
     `<a class="tile rv d${i}" href="${R + PAGES.life}#${k.toLowerCase()}">${icon(ic)}<h3>${esc(t('life' + k + 'T'))}</h3><p>${esc(t('life' + k + 'D'))}</p><span class="link">${esc(c('learnMore'))}</span></a>`).join('');
-  const reels = (M.reels || []).filter((r) => r.src).map((r, i) => `<video class="reel rv d${i % 4}" src="${r.src}"${r.poster ? ` poster="${r.poster}"` : ''} controls muted playsinline preload="none"></video>`).join('');
-  const banners = `${M.tour ? `<a class="banner rv" href="${M.tour}" target="_blank" rel="noopener"><span><b>${esc(t('tourT'))}</b>${esc(t('tourD'))}</span><span class="btn btn-light">${esc(t('tourCta'))} <span class="arr">→</span></span></a>` : ''}${M.madaba && M.madaba.url ? `<a class="banner alt rv d1" href="${M.madaba.url}" target="_blank" rel="noopener"><span><b>${esc(t('madabaT'))}</b>${esc(t('madabaD'))}</span><span class="btn btn-light">${esc(t('madabaCta'))} <span class="arr">→</span></span></a>` : ''}`;
+  const reelList = (M.reels || []).filter((r) => has(r.src));
+  const reels = reelList.map((r, i) => `<video class="reel rv d${i % 4}" src="${mp(R, r.src)}"${has(r.poster) ? ` poster="${mp(R, r.poster)}"` : ''} controls muted playsinline preload="none"></video>`).join('')
+    + (reelList.length && M.stories ? `<a class="reel reel-more rv d${reelList.length % 4}" href="${M.stories}" target="_blank" rel="noopener"><span class="play"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><b>${esc(t('storiesT'))}</b><span>${esc(t('storiesD'))}</span></a>` : '');
+  const bannerBg = (o) => (o && has(o.file) ? ` style="background-image:url(${mp(R, o.file)})"` : '');
+  const banners = `${M.tour ? `<a class="banner rv" href="${M.tour}" target="_blank" rel="noopener"><span><b>${esc(t('tourT'))}</b>${esc(t('tourD'))}</span><span class="btn btn-light">${esc(t('tourCta'))} <span class="arr">→</span></span></a>` : ''}${M.campusMap && M.campusMap.url ? `<a class="banner rv${has(M.campusMap.file) ? ' img' : ''}" href="${M.campusMap.url}" target="_blank" rel="noopener"${bannerBg(M.campusMap)}><span><b>${esc(t('campusT'))}</b>${esc(t('campusD'))}</span><span class="btn btn-light">${esc(t('campusCta'))} <span class="arr">→</span></span></a>` : ''}${M.madaba && M.madaba.url ? `<a class="banner alt rv d1${has(M.madaba.file) ? ' img' : ''}" href="${M.madaba.url}" target="_blank" rel="noopener"${bannerBg(M.madaba)}><span><b>${esc(t('madabaT'))}</b>${esc(t('madabaD'))}</span><span class="btn btn-light">${esc(t('madabaCta'))} <span class="arr">→</span></span></a>` : ''}`;
 
   return `
 <section class="hero">
@@ -329,7 +339,11 @@ ${mosaicRule()}
 </section>
 <section class="section featured">
   <div class="wrap">
-    <a class="feat rv" href="${LINKS.news}" target="_blank" rel="noopener">
+    ${M.heroVideo && has(M.heroVideo.src) ? `<a class="feat vid rv" href="${LINKS.apply}" target="_blank" rel="noopener">
+      <video class="feat-img" src="${mp(R, M.heroVideo.src)}"${has(M.heroVideo.poster) ? ` poster="${mp(R, M.heroVideo.poster)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-label="${esc(t('heroVidT'))}"></video>
+      <span class="feat-body"><span class="kicker">${esc(t('heroVidKicker'))}</span><h2>${esc(t('heroVidT'))}</h2><p>${esc(t('heroVidD'))}</p><span class="link">${esc(c('apply'))}</span></span>
+    </a>` : ''}
+    <a class="feat rev rv d1" href="${LINKS.news}" target="_blank" rel="noopener">
       ${pic(R, M.hero.file, 'feat-img', t('feat1T'))}
       <span class="feat-body"><span class="kicker">${esc(t('featuredKicker'))}</span><h2>${esc(t('feat1T'))}</h2><p>${esc(t('feat1D'))}</p><span class="link">${esc(c('learnMore'))}</span></span>
     </a>
@@ -373,9 +387,9 @@ ${mosaicRule()}
   </div>
 </section>
 <section class="section dark" id="alumni">
-  <div class="wrap alum">
-    <div class="rv"><span class="kicker">${esc(t('alumniKicker'))}</span><h2>${esc(t('alumniTitle'))}</h2><blockquote>“${esc(t('al1Q'))}”</blockquote><p class="who"><b>${esc(t('al1N'))}</b><span>${esc(t('al1R'))}</span></p><a class="btn btn-light" href="${LINKS.alumni}" target="_blank" rel="noopener">${esc(t('alumniMore'))} <span class="arr">→</span></a></div>
-    <div class="rv d1">${pic(R, M.alumni[0].file, 'alum-img', t('al1N'))}</div>
+  <div class="wrap">
+    <div data-slides>${alumni}</div>
+    ${alumniN > 1 ? `<div class="alum-dots" role="tablist">${Array.from({ length: alumniN }, (_, i) => `<button type="button" role="tab" class="${i ? '' : 'on'}" aria-selected="${i ? 'false' : 'true'}" aria-label="${esc(t('alumniDot'))} ${i + 1}"></button>`).join('')}</div>` : ''}
   </div>
 </section>
 <section class="section" id="events">
