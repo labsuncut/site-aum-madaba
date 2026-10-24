@@ -305,6 +305,7 @@ function home(ctx) {
     const n = i + 1;
     return `<div class="alum alum-slide${i ? '' : ' on'}"><div class="rv"><span class="kicker">${esc(t('alumniKicker'))}</span><h2>${esc(t('alumniTitle'))}</h2><blockquote>“${esc(t('al' + n + 'Q'))}”</blockquote><p class="who"><b>${esc(t('al' + n + 'N'))}</b><span>${esc(t('al' + n + 'R'))}</span></p><a class="btn btn-light" href="${LINKS.alumni}" target="_blank" rel="noopener">${esc(t('alumniMore'))} <span class="arr">→</span></a></div><div class="rv d1">${pic(R, M.alumni[i].file, 'alum-img', t('al' + n + 'N'))}</div></div>`;
   }).join('');
+  const orient = (M.orientation && M.orientation.url ? (M.orientation.files || []).filter(has) : []).map((f, i) => `<a class="rv d${i % 3}" href="${M.orientation.url}" target="_blank" rel="noopener"><img src="${mp(R, f)}" alt="${esc(t('galTitle'))}" loading="lazy"></a>`).join('');
   const life = [['bus', 'Bus'], ['home', 'Housing'], ['clubs', 'Clubs'], ['intl', 'Intl']].map(([ic, k], i) =>
     `<a class="tile rv d${i}" href="${R + PAGES.life}#${k.toLowerCase()}">${icon(ic)}<h3>${esc(t('life' + k + 'T'))}</h3><p>${esc(t('life' + k + 'D'))}</p><span class="link">${esc(c('learnMore'))}</span></a>`).join('');
   const reelList = (M.reels || []).filter((r) => has(r.src));
@@ -386,6 +387,12 @@ ${mosaicRule()}
     <div class="cards">${news}</div>
   </div>
 </section>
+${orient ? `<section class="section tint" id="campus-life">
+  <div class="wrap">
+    <div class="row-head rv"><div><span class="kicker">${esc(t('galKicker'))}</span><h2>${esc(t('galTitle'))}</h2><p class="lead" style="margin:6px 0 0">${esc(t('galLead'))}</p></div><a class="btn btn-ghost" href="${M.orientation.url}" target="_blank" rel="noopener">${esc(t('galCta'))} <span class="arr">→</span></a></div>
+    <div class="gallery">${orient}</div>
+  </div>
+</section>` : ''}
 <section class="section dark" id="alumni">
   <div class="wrap">
     <div data-slides>${alumni}</div>
@@ -479,20 +486,30 @@ ${applyCta(ctx)}`;
 
 function science(ctx) {
   const { R, t, c, lang } = ctx;
+  const SM = M.science || {};
   const labs = [1, 2, 3, 4, 5, 6, 7, 8].map((i) => `<div class="lab rv d${i % 4}"><b>${esc(t('lab' + i + 'T'))}</b><span>${esc(t('lab' + i + 'D'))}</span></div>`).join('');
   const careers = [1, 2, 3, 4].map((i) => `<span class="pill">${esc(S.biotech['car' + i][lang])}</span>`).join('');
+  const portrait = (o, initials) => (o && has(o.file) ? `<img class="portrait" src="${mp(R, o.file)}" alt="" width="480" height="669">` : `<div class="portrait" aria-hidden="true">${initials}</div>`);
+  const hl = (SM.highlights || []).length ? `<p class="kicker" style="margin-top:16px">${esc(t('hlKicker'))}</p><ul class="list small">${[1, 2, 3].map((i) => `<li><a href="${SM.highlights[i - 1]}" target="_blank" rel="noopener">${esc(t('hl' + i))}</a></li>`).join('')}</ul>` : '';
+  const video = SM.video && has(SM.video.src)
+    ? `<div class="photo vid rv"><video src="${mp(R, SM.video.src)}"${has(SM.video.poster) ? ` poster="${mp(R, SM.video.poster)}"` : ''} controls playsinline preload="metadata"></video></div>`
+    : `<div class="photo rv"><div class="tesserae" data-count="70"></div><p class="note">${esc(t('photoNote'))}</p></div>`;
+  const news = (SM.news || []).slice(0, 6).map((n, i) => `<a class="card rv d${i % 3}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'card-img', t('n' + (i + 1) + 'T'))}<h3>${esc(t('n' + (i + 1) + 'T'))}</h3><span class="date">${esc(t('n' + (i + 1) + 'D'))}</span></a>`).join('');
+  const gallery = (SM.gallery || []).filter((g) => has(g.file)).map((g, i) => `<a class="rv d${i % 3}" href="${g.url}" target="_blank" rel="noopener"><img src="${mp(R, g.file)}" alt="${esc(t('g' + (i + 1)))}" loading="lazy"></a>`).join('');
+  const people = (SM.staff || []).map((p, i) => `<div class="person rv d${i % 5}">${has(p.file) ? `<img src="${mp(R, p.file)}" alt="${esc(p.name)}" loading="lazy" width="480" height="669">` : `<div class="ph"></div>`}<b>${esc(p.name)}</b><span>${esc(t('st_' + p.id))}</span></div>`).join('');
   return `
 ${phero(ctx, t('kicker'), t('h1a'), t('lead'), t('h1b'))}
 <section class="section">
   <div class="wrap">
-    <div class="dean rv">
-      <div class="portrait" aria-hidden="true">${lang === 'ar' ? 'و' : 'WA'}</div>
-      <div>
-        <span class="kicker">${esc(t('deanKicker'))}</span>
-        <blockquote>“${esc(t('deanQuote'))}”</blockquote>
-        <div class="who"><b>${esc(t('deanName'))}</b><span>${esc(t('deanRole'))}</span></div>
-        <p class="bio">${esc(t('deanBio'))}</p>
-        <p class="fine">${esc(t('deanQuoteNote'))}</p>
+    ${head(ctx, t('leadKicker'), '', '')}
+    <div class="leaders">
+      <div class="dean rv">
+        ${portrait(SM.dean, lang === 'ar' ? 'ع' : 'WA')}
+        <div><span class="kicker">${esc(t('deanKicker'))}</span><div class="who"><b>${esc(t('deanName'))}</b><span>${esc(t('deanRole'))}</span></div><p class="bio">${esc(t('deanBio'))}</p><p class="fine"><a class="link" href="${SM.page || LINKS.science}" target="_blank" rel="noopener">${esc(c('opensAum'))}</a></p></div>
+      </div>
+      <div class="dean rv d1">
+        ${portrait(SM.head, lang === 'ar' ? 'و' : 'WA')}
+        <div><span class="kicker">${esc(t('headKicker'))}</span><div class="who"><b>${esc(t('headName'))}</b><span>${esc(t('headRole'))}</span></div><p class="bio">${esc(t('headBio'))}</p>${hl}</div>
       </div>
     </div>
   </div>
@@ -511,15 +528,33 @@ ${mosaicRule()}
   <div class="wrap">
     ${head(ctx, t('labsKicker'), t('labsTitle'), t('labsLead'))}
     <div class="spot">
-      <div class="photo rv"><div class="tesserae" data-count="70"></div><p class="note">${esc(t('photoNote'))}</p></div>
+      <div>${video}<p class="fine light">${esc(t('videoNote'))}</p></div>
       <div class="labs">${labs}</div>
     </div>
   </div>
 </section>
-<section class="section">
+${news ? `<section class="section" id="news">
+  <div class="wrap">
+    <div class="row-head rv"><div><span class="kicker">${esc(t('newsKicker'))}</span><h2>${esc(t('newsTitle'))}</h2></div><a class="btn btn-ghost" href="${SM.page || LINKS.news}" target="_blank" rel="noopener">${esc(c('viewAll'))} <span class="arr">→</span></a></div>
+    <div class="cards">${news}</div>
+  </div>
+</section>` : ''}
+${gallery ? `<section class="section tint">
+  <div class="wrap">
+    ${head(ctx, t('galKicker'), t('galTitle'))}
+    <div class="gallery">${gallery}</div>
+  </div>
+</section>` : ''}
+${people ? `<section class="section">
+  <div class="wrap">
+    ${head(ctx, t('staffKicker'), t('staffTitle'), t('staffLead'))}
+    <div class="people">${people}</div>
+  </div>
+</section>` : ''}
+<section class="section tint">
   <div class="wrap two">
     <div class="rv"><span class="kicker">${esc(t('careersKicker'))}</span><h2>${esc(t('careersTitle'))}</h2><p class="lead">${esc(t('careersLead'))}</p><div class="pills">${careers}</div></div>
-    <div class="tile rv d1">${icon('user')}<h3>${esc(t('staffKicker'))}</h3><p>${esc(t('staffLead'))}</p></div>
+    <a class="tile rv d1" href="${SM.page || LINKS.science}" target="_blank" rel="noopener">${icon('book')}<h3>${esc(t('offT'))}</h3><p>${esc(t('offD'))}</p><span class="link">${esc(c('opensAum'))}</span></a>
   </div>
 </section>
 ${applyCta(ctx, `<a class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.5)" href="${R + PAGES.biotech}">${esc(t('dept1Cta'))}</a>`)}`;
@@ -553,7 +588,7 @@ ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
 <section class="section">
   <div class="wrap two">
     <div class="rv"><span class="kicker">${esc(t('careersKicker'))}</span><h2>${esc(t('careersTitle'))}</h2><ul class="list">${careers}</ul></div>
-    <div class="photo gold rv d1"><div class="tesserae" data-count="60"></div><p class="note">${esc(S.science.photoNote[lang])}</p></div>
+    ${(M.science && M.science.gallery && has(M.science.gallery[0].file)) ? `<a class="photo-link rv d1" href="${M.science.gallery[0].url}" target="_blank" rel="noopener"><img src="${mp(R, M.science.gallery[0].file)}" alt="${esc(S.science.fieldCap[lang])}" loading="lazy"><span>${esc(S.science.fieldCap[lang])}</span></a>` : `<div class="photo gold rv d1"><div class="tesserae" data-count="60"></div><p class="note">${esc(S.science.photoNote[lang])}</p></div>`}
   </div>
 </section>
 <section class="section tint">

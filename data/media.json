@@ -95,5 +95,139 @@
     "instagram": "https://www.instagram.com/aummadaba/",
     "linkedin": "https://www.linkedin.com/school/aummadaba",
     "whatsapp": "https://wa.me/962771000200"
+  },
+  "science": {
+    "page": "https://www.aum.edu.jo/academics/faculties/faculty-of-science",
+    "dean": {
+      "file": "staff-wesam-ghazi-ammari.jpg"
+    },
+    "head": {
+      "file": "staff-wajdy-al-awaida.jpg"
+    },
+    "video": {
+      "src": "biotech-video.mp4",
+      "poster": "biotech-video-poster.jpg",
+      "source": "https://www.aum.edu.jo/storage/Images/Academic_Departments/videos/PIOLOGY%20VIDEO.mp4"
+    },
+    "highlights": [
+      "https://www.aum.edu.jo/news/aum-spotlight-25",
+      "https://www.aum.edu.jo/news/aum-shines-globally-three-medals-at-the-international-financial-security-olympiad",
+      "https://www.aum.edu.jo/news/aum-spotlight-13"
+    ],
+    "staff": [
+      {
+        "id": "ammari",
+        "name": "Prof. Wesam Ghazi Ammari",
+        "file": "staff-wesam-ghazi-ammari.jpg"
+      },
+      {
+        "id": "awaida",
+        "name": "Prof. Wajdy Al-Awaida",
+        "file": "staff-wajdy-al-awaida.jpg"
+      },
+      {
+        "id": "khoury",
+        "name": "Prof. Fares Khoury",
+        "file": "staff-fares-khoury.jpg"
+      },
+      {
+        "id": "fattash",
+        "name": "Dr. Isam Fattash",
+        "file": "staff-isam-fattash.jpg"
+      },
+      {
+        "id": "abualshaar",
+        "name": "Dr. Aseel Abu-Alshaar",
+        "file": "staff-aseel-abu-alshaar.jpg"
+      },
+      {
+        "id": "hourani",
+        "name": "Dr. Awni Al-Hourani",
+        "file": "staff-awni-al-hourani.jpg"
+      },
+      {
+        "id": "sawadeh",
+        "name": "Mr. Bakr Sawadeh",
+        "file": "staff-bakr-sawadeh.jpg"
+      },
+      {
+        "id": "fakhouri",
+        "name": "Mr. Hemam Fakhouri",
+        "file": "staff-hemam-fakhouri.jpg"
+      },
+      {
+        "id": "alshmaseen",
+        "name": "Mrs. Oraib Alshmaseen",
+        "file": "staff-oraib-alshmaseen.jpg"
+      },
+      {
+        "id": "ajolin",
+        "name": "Ms. Bayan Ajolin",
+        "file": "staff-bayan-ajolin.jpg"
+      }
+    ],
+    "news": [
+      {
+        "file": "sci-news-smoking.jpg",
+        "url": "https://www.aum.edu.jo/news/aum-organizes-awareness-lectures-on-the-hazards-of-smoking-through-its-local-community-service-committee"
+      },
+      {
+        "file": "sci-news-editorial.jpg",
+        "url": "https://www.aum.edu.jo/news/aum-spotlight-25"
+      },
+      {
+        "file": "sci-news-medals.jpg",
+        "url": "https://www.aum.edu.jo/news/aum-shines-globally-three-medals-at-the-international-financial-security-olympiad"
+      },
+      {
+        "file": "sci-news-redlist.jpg",
+        "url": "https://www.aum.edu.jo/news/aum-spotlight-21"
+      },
+      {
+        "file": "sci-news-dibbeen.jpg",
+        "url": "https://www.aum.edu.jo/news/exploring-biodiversity-aum-students-ecology-field-study-at-dibbeen-forest-reserve"
+      },
+      {
+        "file": "sci-news-kidney.jpg",
+        "url": "https://www.aum.edu.jo/news/innovative-project-the-artificial-kidney"
+      }
+    ],
+    "gallery": [
+      {
+        "file": "sci-gal-1.jpg",
+        "url": "https://www.aum.edu.jo/news/exploring-biodiversity-aum-students-ecology-field-study-at-dibbeen-forest-reserve"
+      },
+      {
+        "file": "sci-gal-2.jpg",
+        "url": "https://www.aum.edu.jo/news/exploring-biodiversity-aum-students-ecology-field-study-at-dibbeen-forest-reserve"
+      },
+      {
+        "file": "sci-gal-3.jpg",
+        "url": "https://www.aum.edu.jo/news/aum-organizes-awareness-lectures-on-the-hazards-of-smoking-through-its-local-community-service-committee"
+      },
+      {
+        "file": "sci-gal-4.jpg",
+        "url": "https://www.aum.edu.jo/news/aum-life-skills-students-visited-the-jordanian-parliament"
+      },
+      {
+        "file": "sci-gal-5.jpg",
+        "url": "https://www.aum.edu.jo/news/female-inter-university-swimming-championship"
+      },
+      {
+        "file": "sci-gal-6.jpg",
+        "url": "https://www.aum.edu.jo/news/no-smoking-awareness-session"
+      }
+    ]
+  },
+  "orientation": {
+    "url": "https://www.aum.edu.jo/news/aum-welcomes-new-students-at-an-interactive-orientation-event",
+    "files": [
+      "orient-02.jpg",
+      "orient-01.jpg",
+      "orient-08.jpg",
+      "orient-10.jpg",
+      "orient-06.jpg",
+      "orient-14.jpg"
+    ]
   }
 }
