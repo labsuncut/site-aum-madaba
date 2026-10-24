@@ -243,6 +243,82 @@
     "toolLibrary": {
       "en": "Library",
       "ar": "المكتبة"
+    },
+    "fax": {
+      "en": "Fax",
+      "ar": "فاكس"
+    },
+    "faxN": {
+      "en": "+962 5 329 4440",
+      "ar": "+962 5 329 4440"
+    },
+    "hours": {
+      "en": "Working hours",
+      "ar": "ساعات الدوام"
+    },
+    "hoursV": {
+      "en": "Saturday 9:00 to 15:00 · Monday to Thursday 8:30 to 16:30",
+      "ar": "السبت 9:00 إلى 15:00 · الاثنين إلى الخميس 8:30 إلى 16:30"
+    },
+    "mail": {
+      "en": "Email",
+      "ar": "البريد الإلكتروني"
+    },
+    "visit": {
+      "en": "Visit AUM",
+      "ar": "زيارة الجامعة"
+    },
+    "followUs": {
+      "en": "Follow us",
+      "ar": "تابعنا"
+    },
+    "footerFaculties": {
+      "en": "Faculties",
+      "ar": "الكليات"
+    },
+    "footerAbout": {
+      "en": "About AUM",
+      "ar": "عن الجامعة"
+    },
+    "footerAdmission": {
+      "en": "Admission",
+      "ar": "القبول"
+    },
+    "undergraduate": {
+      "en": "Undergraduate",
+      "ar": "البكالوريوس"
+    },
+    "graduate": {
+      "en": "Graduate",
+      "ar": "الدراسات العليا"
+    },
+    "linkVacancies": {
+      "en": "Job vacancies",
+      "ar": "الوظائف الشاغرة"
+    },
+    "linkCampusMap": {
+      "en": "Campus map",
+      "ar": "خريطة الحرم"
+    },
+    "linkStrategic": {
+      "en": "Strategic plan",
+      "ar": "الخطة الاستراتيجية"
+    },
+    "linkMemberships": {
+      "en": "Memberships and partnerships",
+      "ar": "العضويات والشراكات"
+    },
+    "linkMission": {
+      "en": "Mission, vision and values",
+      "ar": "الرسالة والرؤية والقيم"
+    },
+    "nonDiscrimination": {
+      "en": "Non-discrimination policy",
+      "ar": "سياسة عدم التمييز"
+    },
+    "photoSlot": {
+      "en": "Photo from aum.edu.jo goes here",
+      "ar": "صورة من موقع الجامعة توضع هنا"
     }
   },
   "home": {
@@ -419,32 +495,32 @@
       "ar": "الأخبار"
     },
     "newsTitle": {
-      "en": "News, events and announcements",
-      "ar": "الأخبار والفعاليات والإعلانات"
+      "en": "Our latest news",
+      "ar": "آخر الأخبار"
     },
     "news1T": {
-      "en": "The 11th graduating class celebrated in Amman",
-      "ar": "تخريج الدفعة الحادية عشرة في عمّان"
+      "en": "AUM takes part in IEEE Day celebrations and the Leadership Summit at the Hashemite University",
+      "ar": "الجامعة تشارك في احتفالات يوم IEEE وقمة القيادة في الجامعة الهاشمية"
     },
     "news1D": {
-      "en": "September 2025 · The Class of 2025 graduated at the Cultural Palace, with the Latin Patriarch of Jerusalem giving the address.",
-      "ar": "أيلول 2025 · احتفلت الجامعة بتخريج دفعة 2025 في قصر الثقافة، وألقى بطريرك القدس للاتين كلمة الحفل."
+      "en": "23 October 2026",
+      "ar": "23 تشرين الأول 2026"
     },
     "news2T": {
-      "en": "Partnership signed with Westcliff University, USA",
-      "ar": "توقيع شراكة مع جامعة ويستكليف الأميركية"
+      "en": "AUM celebrates Italian Language Week with a special cultural session",
+      "ar": "الجامعة تحتفل بأسبوع اللغة الإيطالية بجلسة ثقافية خاصة"
     },
     "news2D": {
-      "en": "September 2025 · A memorandum covering joint research and exchange of students, professors and staff.",
-      "ar": "أيلول 2025 · مذكرة تفاهم تشمل البحث المشترك وتبادل الطلبة والأساتذة والموظفين."
+      "en": "22 October 2026",
+      "ar": "22 تشرين الأول 2026"
     },
     "news3T": {
-      "en": "IEEE AUM student branch officially opened",
-      "ar": "افتتاح فرع IEEE الطلابي رسميًا"
+      "en": "AUM Spotlight: a newly published research paper by Prof. Shahla Ujayli, Faculty of Languages and Communication, in Al-Abhath, the journal of the American University of Beirut",
+      "ar": "أضواء الجامعة: ورقة بحثية جديدة للأستاذة الدكتورة شهلا العجيلي، كلية اللغات والاتصال، في مجلة الأبحاث الصادرة عن الجامعة الأميركية في بيروت"
     },
     "news3D": {
-      "en": "November 2025 · A new home for engineering and IT students in the world's largest technical association.",
-      "ar": "تشرين الثاني 2025 · بيت جديد لطلبة الهندسة وتكنولوجيا المعلومات في أكبر جمعية تقنية في العالم."
+      "en": "22 October 2026",
+      "ar": "22 تشرين الأول 2026"
     },
     "news4T": {
       "en": "Candidate for accreditation with NECHE",
@@ -525,6 +601,250 @@
     "alumniD": {
       "en": "An annual career day, training workshops and an alumni network.",
       "ar": "يوم مهني سنوي وورش تدريبية وشبكة للخريجين."
+    },
+    "featuredKicker": {
+      "en": "Latest",
+      "ar": "الأحدث"
+    },
+    "feat1T": {
+      "en": "AUM welcomes the NECHE candidacy evaluation",
+      "ar": "الجامعة تستقبل فريق تقييم الترشح لاعتماد NECHE"
+    },
+    "feat1D": {
+      "en": "A comprehensive evaluation visit by a team from the New England Commission of Higher Education, one of the leading accrediting commissions in the United States, with meetings with the Board of Trustees, the President and the Council.",
+      "ar": "زيارة تقييم شاملة من فريق لجنة نيو إنغلاند للتعليم العالي، إحدى أبرز هيئات الاعتماد في الولايات المتحدة، شملت لقاءات مع مجلس الأمناء والرئيس ومجلس الجامعة."
+    },
+    "whyKicker": {
+      "en": "Why AUM",
+      "ar": "لماذا الجامعة الأميركية في مادبا"
+    },
+    "whyTitle": {
+      "en": "Seven reasons students choose Madaba.",
+      "ar": "سبعة أسباب يختار الطلبة مادبا لأجلها."
+    },
+    "why1": {
+      "en": "E-learning system",
+      "ar": "نظام تعلّم إلكتروني"
+    },
+    "why2": {
+      "en": "Scholarships available",
+      "ar": "منح دراسية متاحة"
+    },
+    "why3": {
+      "en": "Female student dorm",
+      "ar": "سكن للطالبات"
+    },
+    "why4": {
+      "en": "Study abroad programme",
+      "ar": "برنامج دراسة في الخارج"
+    },
+    "why5": {
+      "en": "Transportation available",
+      "ar": "مواصلات جامعية"
+    },
+    "why6": {
+      "en": "Four-day academic week",
+      "ar": "أسبوع دراسي من أربعة أيام"
+    },
+    "why7": {
+      "en": "Registered in the USA",
+      "ar": "مسجّلة في الولايات المتحدة"
+    },
+    "statMajorsN": {
+      "en": "22",
+      "ar": "22"
+    },
+    "statMajors": {
+      "en": "majors",
+      "ar": "تخصصًا"
+    },
+    "statNatN": {
+      "en": "40",
+      "ar": "40"
+    },
+    "statNat": {
+      "en": "nationalities",
+      "ar": "جنسية"
+    },
+    "statGradN": {
+      "en": "3,508",
+      "ar": "3,508"
+    },
+    "statGrad": {
+      "en": "graduates",
+      "ar": "خريجًا"
+    },
+    "statWeekN": {
+      "en": "4",
+      "ar": "4"
+    },
+    "statWeek": {
+      "en": "day academic week",
+      "ar": "أيام دراسية في الأسبوع"
+    },
+    "annKicker": {
+      "en": "Announcements",
+      "ar": "الإعلانات"
+    },
+    "annTitle": {
+      "en": "Our latest announcements",
+      "ar": "آخر إعلاناتنا"
+    },
+    "ann1T": {
+      "en": "Al-Hassan bin Talal Award for Scientific Excellence 2027 in education, scientific research and innovation",
+      "ar": "جائزة الحسن بن طلال للتميز العلمي للعام 2027 في مجالات التعليم والبحث العلمي والابتكار"
+    },
+    "ann1D": {
+      "en": "17 October 2026",
+      "ar": "17 تشرين الأول 2026"
+    },
+    "ann2T": {
+      "en": "Student communities, academic year 2026/2027",
+      "ar": "المجتمعات الطلابية للعام الجامعي 2026/2027"
+    },
+    "ann2D": {
+      "en": "17 October 2026",
+      "ar": "17 تشرين الأول 2026"
+    },
+    "ann3T": {
+      "en": "Academic job vacancy: Faculty of Architecture and Design, Design and Visual Communication Department",
+      "ar": "وظيفة أكاديمية شاغرة: كلية العمارة والتصميم، قسم التصميم والاتصال البصري"
+    },
+    "ann3D": {
+      "en": "15 October 2026",
+      "ar": "15 تشرين الأول 2026"
+    },
+    "alumniKicker": {
+      "en": "Our alumni",
+      "ar": "خريجونا"
+    },
+    "alumniTitle": {
+      "en": "Where AUM graduates go.",
+      "ar": "إلى أين يصل خريجو الجامعة."
+    },
+    "al1Q": {
+      "en": "Graduating with excellence in Computer Science from AUM in 2024 was a turning point in my career. The knowledge and skills I gained were instrumental in co-founding HiTech Company and becoming a Full Stack Developer. I am truly grateful to my professors at AUM for their support and guidance.",
+      "ar": "كان تخرجي بامتياز في علم الحاسوب من الجامعة الأميركية في مادبا عام 2024 نقطة تحوّل في مسيرتي. المعرفة والمهارات التي اكتسبتها كانت أساسًا في المشاركة بتأسيس شركة HiTech وفي أن أصبح مطوّر ويب متكاملًا. أنا ممتن حقًا لأساتذتي في الجامعة على دعمهم وتوجيههم."
+    },
+    "al1N": {
+      "en": "Ammar Al-Batayneh",
+      "ar": "عمّار البطاينة"
+    },
+    "al1R": {
+      "en": "Computer Science graduate, Class of 2024",
+      "ar": "خريج علم الحاسوب، دفعة 2024"
+    },
+    "alumniMore": {
+      "en": "More alumni stories",
+      "ar": "المزيد من قصص الخريجين"
+    },
+    "eventsKicker": {
+      "en": "Events",
+      "ar": "الفعاليات"
+    },
+    "eventsTitle": {
+      "en": "Our latest events",
+      "ar": "آخر الفعاليات"
+    },
+    "ev1T": {
+      "en": "Session celebrating Italian Language Week",
+      "ar": "جلسة احتفالية بأسبوع اللغة الإيطالية"
+    },
+    "ev1D": {
+      "en": "22",
+      "ar": "22"
+    },
+    "ev1M": {
+      "en": "Oct 2026",
+      "ar": "تشرين الأول 2026"
+    },
+    "ev1H": {
+      "en": "1:00 pm",
+      "ar": "1:00 ظهرًا"
+    },
+    "ev2T": {
+      "en": "AUM's Open Day",
+      "ar": "اليوم المفتوح في الجامعة"
+    },
+    "ev2D": {
+      "en": "10",
+      "ar": "10"
+    },
+    "ev2M": {
+      "en": "Oct 2026",
+      "ar": "تشرين الأول 2026"
+    },
+    "ev2H": {
+      "en": "4:00 pm to 8:30 pm",
+      "ar": "4:00 إلى 8:30 مساءً"
+    },
+    "ev3T": {
+      "en": "AUM's Open Day",
+      "ar": "اليوم المفتوح في الجامعة"
+    },
+    "ev3D": {
+      "en": "29",
+      "ar": "29"
+    },
+    "ev3M": {
+      "en": "Aug 2026",
+      "ar": "آب 2026"
+    },
+    "ev3H": {
+      "en": "4:00 pm to 8:30 pm",
+      "ar": "4:00 إلى 8:30 مساءً"
+    },
+    "ev4T": {
+      "en": "AUM's Open Day",
+      "ar": "اليوم المفتوح في الجامعة"
+    },
+    "ev4D": {
+      "en": "1",
+      "ar": "1"
+    },
+    "ev4M": {
+      "en": "Aug 2026",
+      "ar": "آب 2026"
+    },
+    "ev4H": {
+      "en": "4:00 pm to 8:30 pm",
+      "ar": "4:00 إلى 8:30 مساءً"
+    },
+    "reelsKicker": {
+      "en": "AUM reels",
+      "ar": "ريلز الجامعة"
+    },
+    "reelsTitle": {
+      "en": "The latest moments on campus.",
+      "ar": "آخر اللحظات في الحرم الجامعي."
+    },
+    "reelsLead": {
+      "en": "Short videos from the university’s official channels.",
+      "ar": "مقاطع قصيرة من القنوات الرسمية للجامعة."
+    },
+    "tourT": {
+      "en": "Take the 360-degree tour",
+      "ar": "جولة افتراضية 360 درجة"
+    },
+    "tourD": {
+      "en": "Walk through the campus from wherever you are.",
+      "ar": "تجوّل في الحرم الجامعي من حيث أنت."
+    },
+    "tourCta": {
+      "en": "Go now",
+      "ar": "ابدأ الجولة"
+    },
+    "madabaT": {
+      "en": "Madaba overview",
+      "ar": "مادبا في لمحة"
+    },
+    "madabaD": {
+      "en": "The biblical Moabite city of Madaba: land of history, handcrafts and the capital of mosaic.",
+      "ar": "مادبا، مدينة مؤاب التوراتية: أرض التاريخ والحرف اليدوية وعاصمة الفسيفساء."
+    },
+    "madabaCta": {
+      "en": "See more",
+      "ar": "اعرف المزيد"
     }
   },
   "academics": {

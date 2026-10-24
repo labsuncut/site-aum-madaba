@@ -1,0 +1,25 @@
+{
+  "_note": "Files live in assets/img/aum/. Each entry is used only if the file exists; otherwise the page shows a marked placeholder. Fill src/url from /mnt/project-files/aum/images/sources.md.",
+  "hero": { "file": "hero-neche.jpg", "source": "" },
+  "news": [
+    { "file": "news-ieee.jpg", "url": "https://aum.edu.jo/news", "source": "" },
+    { "file": "news-italian.jpg", "url": "https://aum.edu.jo/news", "source": "" },
+    { "file": "news-spotlight.jpg", "url": "https://aum.edu.jo/news", "source": "" }
+  ],
+  "announcements": [
+    { "url": "https://aum.edu.jo/announcements" },
+    { "url": "https://aum.edu.jo/announcements" },
+    { "url": "https://aum.edu.jo/announcements" }
+  ],
+  "events": [
+    { "file": "event-italian.jpg", "url": "https://www.aum.edu.jo/events" },
+    { "file": "event-openday-oct.jpg", "url": "https://www.aum.edu.jo/events" },
+    { "file": "event-openday-aug29.jpg", "url": "https://www.aum.edu.jo/events" },
+    { "file": "event-openday-aug1.jpg", "url": "https://www.aum.edu.jo/events" }
+  ],
+  "alumni": [ { "file": "alumni-ammar.jpg" } ],
+  "reels": [],
+  "tour": "",
+  "madaba": { "url": "", "file": "madaba.jpg" },
+  "social": { "facebook": "", "x": "", "youtube": "", "instagram": "", "linkedin": "", "whatsapp": "" }
+}

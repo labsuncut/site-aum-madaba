@@ -9,6 +9,14 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const S = JSON.parse(readFileSync(join(ROOT, 'data/strings.json'), 'utf8'));
 const D = JSON.parse(readFileSync(join(ROOT, 'data/programmes.json'), 'utf8'));
+const M = JSON.parse(readFileSync(join(ROOT, 'data/media.json'), 'utf8'));
+import { existsSync } from 'node:fs';
+// Their photo if we have the file, otherwise a marked placeholder block.
+function pic(R, file, cls, alt) {
+  if (file && existsSync(join(ROOT, 'assets/img/aum', file))) return `<img class="${cls}" src="${R}assets/img/aum/${file}" alt="${esc(alt || '')}" loading="lazy">`;
+  return `<div class="${cls} ph"><div class="tesserae" data-count="40"></div><span>${esc(PH)}</span></div>`;
+}
+let PH = '';
 const SITE = 'https://labsuncut.github.io/site-aum-madaba/';
 
 const LINKS = {
@@ -51,6 +59,8 @@ const LINKS = {
   licensing: 'https://www.aum.edu.jo/about/licensing-and-accreditation',
   adminDepts: 'https://aum.edu.jo/about/administrative-departments',
   glance: 'https://aum.edu.jo/about/overview/aum-at-a-glance',
+  nonDiscrimination: 'https://aum.edu.jo/',
+  undergrad: 'https://aum.edu.jo/academics/programs/program-type/undergraduates',
   transport: 'https://www.aum.edu.jo/life-at-aum/transportation',
   aum: 'https://aum.edu.jo/'
 };
@@ -143,6 +153,10 @@ const icon = (k) => `<span class="icon" aria-hidden="true"><svg viewBox="0 0 24 
 /* ---------- page shell ---------- */
 function shell(ctx, page, body) {
   const { lang, R, t, c } = ctx; const sec = S[page] || {};
+  PH = c('photoSlot');
+  const social = Object.entries(M.social || {}).filter(([, u]) => u);
+  const SOC = { facebook: 'M14 8h2.5V4.5H14c-2.5 0-4 1.6-4 4V11H7.5v3.5H10V21h3.5v-6.5H16l.5-3.5h-3V8.8c0-.5.3-.8.5-.8Z', x: 'M4 4l16 16M20 4 4 20', youtube: 'M3 8.5c0-1.4 1.1-2.5 2.5-2.5h13C19.9 6 21 7.1 21 8.5v7c0 1.4-1.1 2.5-2.5 2.5h-13A2.5 2.5 0 0 1 3 15.5v-7Zm7 1.5v4l4-2-4-2Z', instagram: 'M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm5 5.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7ZM17.5 6.5h.01', linkedin: 'M6 9v12M6 5v.01M11 21v-7a3 3 0 0 1 6 0v7M11 9v12', whatsapp: 'M4 20l1.3-3.8A8 8 0 1 1 8.3 19L4 20Zm5-9c.5 2 2 3.5 4 4l1-1 2 1c0 1-1 1.5-2 1.5-3 0-6.5-3.5-6.5-6.5 0-1 .5-2 1.5-2l1 2-1 1Z' };
+  const socialHtml = social.length ? `<div class="social" aria-label="${esc(c('followUs'))}">${social.map(([k, u]) => `<a href="${u}" target="_blank" rel="noopener" aria-label="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${SOC[k]}"/></svg></a>`).join('')}</div>` : '';
   const dir = lang === 'ar' ? 'rtl' : 'ltr';
   const file = PAGES[page];
   const other = lang === 'ar' ? R + file : R + 'ar/' + file;
@@ -196,7 +210,7 @@ function shell(ctx, page, body) {
 <div class="tools">
   <div class="wrap">
     <span class="tools-label">${esc(c('tools'))}</span>
-    <nav class="tools-links" aria-label="${esc(c('tools'))}">${toolLinks()}<a href="${R + PAGES.tools}" class="tools-all">${esc(c('allTools'))}</a></nav>
+    <nav class="tools-links" aria-label="${esc(c('tools'))}">${toolLinks()}<a href="${LINKS.announcements}" target="_blank" rel="noopener">${esc(c('linkVacancies'))}</a><a href="${R + PAGES.tools}" class="tools-all">${esc(c('allTools'))}</a></nav>
     <a class="lang" href="${other}" lang="${lang === 'ar' ? 'en' : 'ar'}" hreflang="${lang === 'ar' ? 'en' : 'ar'}" aria-label="${esc(c('langSwitchLabel'))}">${esc(c('langSwitch'))}</a>
   </div>
 </div>
@@ -212,16 +226,23 @@ ${body}
 </main>
 <footer>
   <div class="wrap">
+    <div class="cstrip">
+      <a href="${LINKS.tel}">${icon('phone')}<span><b>${esc(c('phone'))}</b>${esc(c('phoneAdmissions'))}</span></a>
+      <div>${icon('file')}<span><b>${esc(c('faxN'))}</b>${esc(c('fax'))}</span></div>
+      <a href="${LINKS.email}">${icon('mail')}<span><b>info@aum.edu.jo</b>${esc(c('mail'))}</span></a>
+      <div>${icon('calendar')}<span><b>${esc(c('hours'))}</b>${esc(c('hoursV'))}</span></div>
+    </div>
     <div class="foot">
       <div>
         ${brand()}
         <p>${esc(c('address'))}</p>
-        <p><a href="${LINKS.tel}">${esc(c('phone'))}</a><br>${esc(c('phoneAdmissions'))}</p>
-        <p><a href="${LINKS.email}">info@aum.edu.jo</a></p>
+        ${socialHtml}
       </div>
-      <div><h4>${esc(c('footerSitemap'))}</h4><ul>${navItems.map(([p, l]) => `<li><a href="${R + PAGES[p]}">${esc(l)}</a></li>`).join('')}<li><a href="${R + PAGES.science}">${esc(c('navScience'))}</a></li><li><a href="${R}index.html#finder">${esc(c('findProgramme'))}</a></li></ul></div>
-      <div><h4>${esc(c('footerStudents'))}</h4><ul>${tools.map(([h, l]) => `<li><a href="${h}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join('')}<li><a href="${R + PAGES.tools}">${esc(c('allTools'))}</a></li></ul></div>
-      <div><h4>${esc(c('footerUniversity'))}</h4><ul>${uni.map(([h, l]) => `<li><a href="${h}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join('')}<li><a href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))}</a></li><li><a href="${other}" lang="${lang === 'ar' ? 'en' : 'ar'}">${esc(c('langSwitch'))}</a></li></ul></div>
+      <div><h4>${esc(c('footerFaculties'))}</h4><ul>${D.faculties.map((f) => `<li><a href="${f.id === 'science' ? R + PAGES.science : R + PAGES.academics + '#' + f.id}">${esc(f[lang])}</a></li>`).join('')}<li><a href="${R}index.html#finder">${esc(c('findProgramme'))}</a></li></ul></div>
+      <div><h4>${esc(c('footerAbout'))}</h4><ul>${[[R + PAGES.about, c('navAbout')], [LINKS.president, S.about.l1[lang]], [LINKS.glance, S.about.l6[lang]], [LINKS.contact, c('linkContact')], [LINKS.board, S.about.l2[lang]], [LINKS.council, S.about.l3[lang]], [LINKS.licensing, S.about.l4[lang]], [LINKS.adminDepts, S.about.l5[lang]]].map(([h, l]) => `<li><a href="${h}"${h.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>${esc(l)}</a></li>`).join('')}</ul></div>
+      <div><h4>${esc(c('footerStudents'))}</h4><ul>${tools.map(([h, l]) => `<li><a href="${h}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join('')}<li><a href="${R + PAGES.tools}">${esc(c('allTools'))}</a></li></ul>
+        <h4 style="margin-top:22px">${esc(c('footerAdmission'))}</h4><ul><li><a href="${R + PAGES.admissions}">${esc(c('undergraduate'))}</a></li><li><a href="${R + PAGES.academics}#graduate">${esc(c('graduate'))}</a></li><li><a href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))}</a></li></ul></div>
+      <div><h4>${esc(c('footerUniversity'))}</h4><ul>${uni.map(([h, l]) => `<li><a href="${h}" target="_blank" rel="noopener">${esc(l)}</a></li>`).join('')}<li><a href="${R + PAGES.life}">${esc(c('navLife'))}</a></li><li><a href="${other}" lang="${lang === 'ar' ? 'en' : 'ar'}">${esc(c('langSwitch'))}</a></li></ul></div>
     </div>
     <div class="foot-bottom">
       <span class="badge">${esc(c('concept'))}</span>
@@ -268,13 +289,19 @@ function toolCard(ctx, id, group, ic, url, i) {
 function home(ctx) {
   const { R, t, c, lang, T } = ctx;
   const seal = R + 'assets/img/seal.png';
-  const stats = [['statFacultiesN', 'statFaculties'], ['statLangN', 'statLang'], ['statSinceN', 'statSince'], ['statNecheN', 'statNeche']]
+  const stats = [['statFacultiesN', 'statFaculties'], ['statMajorsN', 'statMajors'], ['statNatN', 'statNat'], ['statGradN', 'statGrad'], ['statWeekN', 'statWeek']]
     .map(([n, l]) => `<div class="stat"><b>${esc(t(n))}</b><span>${esc(t(l))}</span></div>`).join('');
   const quick = HOME_TOOLS.map((id, i) => { const tl = TOOLS.find((x) => x[0] === id); return `<a class="quick rv d${i % 4}" href="${tl[3]}" target="_blank" rel="noopener">${icon(tl[2])}<b>${esc(T('tools', 't_' + id))}</b></a>`; }).join('');
   const chips = D.faculties.map((f) => `<button type="button" class="fchip" data-fac="${f.id}">${esc(f[lang])}</button>`).join('');
+  const why = [['laptop', 'why1', LINKS.elearning], ['award', 'why2', LINKS.scholarships], ['home', 'why3', LINKS.dorms], ['intl', 'why4', LINKS.abroad], ['bus', 'why5', LINKS.transport], ['calendar', 'why6', LINKS.calendar], ['shield', 'why7', LINKS.licensing]]
+    .map(([ic, k, h], i) => `<a class="hex rv d${i % 4}" href="${h}" target="_blank" rel="noopener"><span class="hex-in">${icon(ic)}<b>${esc(t(k))}</b></span></a>`).join('');
+  const ann = [1, 2, 3].map((i) => `<a class="card ann rv d${i - 1}" href="${M.announcements[i - 1].url}" target="_blank" rel="noopener"><span class="card-top"><img src="${R}assets/img/seal.png" width="56" height="56" alt=""><span>${esc(c('siteName'))}</span></span><h3>${esc(t('ann' + i + 'T'))}</h3><span class="date">${esc(t('ann' + i + 'D'))}</span></a>`).join('');
+  const news = [1, 2, 3].map((i) => { const n = M.news[i - 1]; return `<a class="card rv d${i - 1}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'card-img', t('news' + i + 'T'))}<h3>${esc(t('news' + i + 'T'))}</h3><span class="date">${esc(t('news' + i + 'D'))}</span></a>`; }).join('');
+  const events = [1, 2, 3, 4].map((i) => { const e = M.events[i - 1]; return `<a class="event rv d${(i - 1) % 4}" href="${e.url}" target="_blank" rel="noopener">${pic(R, e.file, 'event-img', t('ev' + i + 'T'))}<span class="event-date"><b>${esc(t('ev' + i + 'D'))}</b><small>${esc(t('ev' + i + 'M'))}</small></span><span class="event-body"><h3>${esc(t('ev' + i + 'T'))}</h3><span class="time">${esc(t('ev' + i + 'H'))}</span></span></a>`; }).join('');
   const life = [['bus', 'Bus'], ['home', 'Housing'], ['clubs', 'Clubs'], ['intl', 'Intl']].map(([ic, k], i) =>
     `<a class="tile rv d${i}" href="${R + PAGES.life}#${k.toLowerCase()}">${icon(ic)}<h3>${esc(t('life' + k + 'T'))}</h3><p>${esc(t('life' + k + 'D'))}</p><span class="link">${esc(c('learnMore'))}</span></a>`).join('');
-  const news = [1, 2, 3].map((i) => `<article class="rv d${i - 1}"><h3>${esc(t('news' + i + 'T'))}</h3><p>${esc(t('news' + i + 'D'))}</p></article>`).join('');
+  const reels = (M.reels || []).filter((r) => r.src).map((r, i) => `<video class="reel rv d${i % 4}" src="${r.src}"${r.poster ? ` poster="${r.poster}"` : ''} controls muted playsinline preload="none"></video>`).join('');
+  const banners = `${M.tour ? `<a class="banner rv" href="${M.tour}" target="_blank" rel="noopener"><span><b>${esc(t('tourT'))}</b>${esc(t('tourD'))}</span><span class="btn btn-light">${esc(t('tourCta'))} <span class="arr">→</span></span></a>` : ''}${M.madaba && M.madaba.url ? `<a class="banner alt rv d1" href="${M.madaba.url}" target="_blank" rel="noopener"><span><b>${esc(t('madabaT'))}</b>${esc(t('madabaD'))}</span><span class="btn btn-light">${esc(t('madabaCta'))} <span class="arr">→</span></span></a>` : ''}`;
 
   return `
 <section class="hero">
@@ -287,6 +314,7 @@ function home(ctx) {
       <div class="hero-cta rv d3">
         <a class="btn" href="#finder">${esc(c('findProgramme'))} <span class="arr">→</span></a>
         <a class="btn btn-ghost" href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))}</a>
+        <a class="btn btn-ghost" href="${LINKS.maps}" target="_blank" rel="noopener">${esc(c('visit'))}</a>
       </div>
     </div>
     <div class="hero-seal rv d2">${ring('hero-ring')}<img src="${seal}" width="239" height="239" alt="${esc(c('siteName'))}"></div>
@@ -299,7 +327,21 @@ ${mosaicRule()}
     <div class="quick-grid">${quick}</div>
   </div>
 </section>
-<section class="stats"><div class="wrap">${stats}</div></section>
+<section class="section featured">
+  <div class="wrap">
+    <a class="feat rv" href="${LINKS.news}" target="_blank" rel="noopener">
+      ${pic(R, M.hero.file, 'feat-img', t('feat1T'))}
+      <span class="feat-body"><span class="kicker">${esc(t('featuredKicker'))}</span><h2>${esc(t('feat1T'))}</h2><p>${esc(t('feat1D'))}</p><span class="link">${esc(c('learnMore'))}</span></span>
+    </a>
+  </div>
+</section>
+<section class="section tint">
+  <div class="wrap">
+    ${head(ctx, t('whyKicker'), t('whyTitle'), '', true)}
+    <div class="hexes">${why}</div>
+  </div>
+</section>
+<section class="stats"><div class="wrap five">${stats}</div></section>
 
 <section class="section" id="finder">
   <div class="wrap">
@@ -317,7 +359,33 @@ ${mosaicRule()}
     </div>
   </div>
 </section>
-
+${mosaicRule()}
+<section class="section tint" id="announcements">
+  <div class="wrap">
+    <div class="row-head rv"><div><span class="kicker">${esc(t('annKicker'))}</span><h2>${esc(t('annTitle'))}</h2></div><a class="btn btn-ghost" href="${LINKS.announcements}" target="_blank" rel="noopener">${esc(c('viewAll'))} <span class="arr">→</span></a></div>
+    <div class="cards">${ann}</div>
+  </div>
+</section>
+<section class="section" id="news">
+  <div class="wrap">
+    <div class="row-head rv"><div><span class="kicker">${esc(t('newsKicker'))}</span><h2>${esc(t('newsTitle'))}</h2></div><a class="btn btn-ghost" href="${LINKS.news}" target="_blank" rel="noopener">${esc(c('viewAll'))} <span class="arr">→</span></a></div>
+    <div class="cards">${news}</div>
+  </div>
+</section>
+<section class="section dark" id="alumni">
+  <div class="wrap alum">
+    <div class="rv"><span class="kicker">${esc(t('alumniKicker'))}</span><h2>${esc(t('alumniTitle'))}</h2><blockquote>“${esc(t('al1Q'))}”</blockquote><p class="who"><b>${esc(t('al1N'))}</b><span>${esc(t('al1R'))}</span></p><a class="btn btn-light" href="${LINKS.alumni}" target="_blank" rel="noopener">${esc(t('alumniMore'))} <span class="arr">→</span></a></div>
+    <div class="rv d1">${pic(R, M.alumni[0].file, 'alum-img', t('al1N'))}</div>
+  </div>
+</section>
+<section class="section" id="events">
+  <div class="wrap">
+    <div class="row-head rv"><div><span class="kicker">${esc(t('eventsKicker'))}</span><h2>${esc(t('eventsTitle'))}</h2></div><a class="btn btn-ghost" href="${LINKS.events}" target="_blank" rel="noopener">${esc(c('viewAll'))} <span class="arr">→</span></a></div>
+    <div class="events">${events}</div>
+  </div>
+</section>
+${reels ? `<section class="section tint" id="reels"><div class="wrap reels-wrap"><div class="rv"><span class="kicker">${esc(t('reelsKicker'))}</span><h2>${esc(t('reelsTitle'))}</h2><p class="lead">${esc(t('reelsLead'))}</p>${M.social.instagram ? `<a class="btn" href="${M.social.instagram}" target="_blank" rel="noopener">${esc(c('followUs'))}</a>` : ''}</div><div class="reels">${reels}</div></div></section>` : ''}
+${banners ? `<section class="section banners"><div class="wrap">${banners}</div></section>` : ''}
 <section class="section tint">
   <div class="wrap">
     ${head(ctx, t('lifeKicker'), t('lifeTitle'))}
@@ -329,14 +397,6 @@ ${mosaicRule()}
   <div class="wrap two">
     <div>${head(ctx, t('researchKicker'), t('researchTitle'), t('researchLead'))}<p class="rv d1"><a class="btn btn-light" href="${R + PAGES.academics}#graduate">${esc(S.academics.graduate[lang])} <span class="arr">→</span></a></p></div>
     <div class="labs rv d1"><a class="lab" href="${LINKS.alumni}" target="_blank" rel="noopener"><b>${esc(t('alumniT'))}</b><span>${esc(t('alumniD'))}</span></a><a class="lab" href="${LINKS.events}" target="_blank" rel="noopener"><b>${esc(t('eventsT'))}</b><span>${esc(t('eventsD'))}</span></a><a class="lab" href="${LINKS.announcements}" target="_blank" rel="noopener"><b>${esc(t('annT'))}</b><span>${esc(t('annD'))}</span></a><a class="lab" href="${LINKS.library}" target="_blank" rel="noopener"><b>${esc(c('linkLibrary'))}</b><span>${esc(T('tools', 'd_library'))}</span></a></div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrap">
-    <div class="section-head rv"><span class="kicker">${esc(t('newsKicker'))}</span><h2>${esc(t('newsTitle'))}</h2><p class="lead">${esc(t('newsLead'))}</p></div>
-    <div class="news">${news}<article class="rv d3"><h3>${esc(t('news4T'))}</h3><p>${esc(t('news4D'))}</p></article></div>
-    <p class="rv" style="margin-top:22px"><a class="link" href="${LINKS.news}" target="_blank" rel="noopener">${esc(c('linkNews'))}</a> &nbsp;·&nbsp; <a class="link" href="${LINKS.events}" target="_blank" rel="noopener">${esc(c('linkEvents'))}</a> &nbsp;·&nbsp; <a class="link" href="${LINKS.announcements}" target="_blank" rel="noopener">${esc(c('linkAnnouncements'))}</a></p>
   </div>
 </section>
 ${contactTiles(ctx, t('visitKicker'), t('visitTitle'), t('visitLead'))}
@@ -648,6 +708,7 @@ for (const lang of ['en', 'ar']) {
       c: (k) => { const v = S.common[k]; if (!v) throw new Error(`missing common string ${k}`); return v[lang] || v.en; },
       T: (s, k) => { const v = S[s] && S[s][k]; if (!v) throw new Error(`missing string ${s}.${k}`); return v[lang] || v.en; }
     };
+    PH = ctx.c('photoSlot');
     const html = shell(ctx, page, BUILDERS[page](ctx));
     const out = join(ROOT, lang === 'ar' ? 'ar' : '', PAGES[page]);
     mkdirSync(dirname(out), { recursive: true });
