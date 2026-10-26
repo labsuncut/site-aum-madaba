@@ -340,7 +340,7 @@ function home(ctx) {
   const why = [['laptop', 'why1', LINKS.elearning], ['award', 'why2', LINKS.scholarships], ['home', 'why3', LINKS.dorms], ['intl', 'why4', LINKS.abroad], ['bus', 'why5', LINKS.transport], ['calendar', 'why6', LINKS.calendar], ['shield', 'why7', LINKS.licensing]]
     .map(([ic, k, h], i) => `<a class="hex rv d${i % 4}" href="${h}" target="_blank" rel="noopener"><span class="hex-in">${icon(ic)}<b>${esc(t(k))}</b></span></a>`).join('');
   const ann = [1, 2, 3].map((i) => `<a class="card ann rv d${i - 1}" href="${M.announcements[i - 1].url}" target="_blank" rel="noopener"><span class="card-top">${icon(M.announcements[i - 1].icon || 'megaphone')}<span>${esc(t('annCat' + i))}</span></span><h3>${esc(t('ann' + i + 'T'))}</h3><span class="date">${esc(t('ann' + i + 'D'))}</span></a>`).join('');
-  const news = [1, 2, 3].map((i) => { const n = M.news[i - 1]; return `<a class="card rv d${i - 1}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'card-img', t('news' + i + 'T'))}<h3>${esc(t('news' + i + 'T'))}</h3><span class="date">${esc(t('news' + i + 'D'))}</span></a>`; }).join('');
+  const news = [1, 2, 3].map((i) => { const n = M.news[i - 1]; return `<a class="card rv d${i - 1}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'card-img', t('news' + i + 'T'))}<h3>${esc(t('news' + i + 'T'))}</h3><span class="date">${esc(t('news' + i + 'D'))}</span><span class="link card-link">${esc(c('learnMore'))}</span></a>`; }).join('');
   const events = [1, 2, 3, 4].map((i) => { const e = M.events[i - 1]; return `<a class="event rv d${(i - 1) % 4}" href="${e.url}" target="_blank" rel="noopener">${pic(R, e.file, 'event-img', t('ev' + i + 'T'))}<span class="event-date"><b>${esc(t('ev' + i + 'D'))}</b><small>${esc(t('ev' + i + 'M'))}</small></span><span class="event-body"><h3>${esc(t('ev' + i + 'T'))}</h3><span class="time">${esc(t('ev' + i + 'H'))}</span></span></a>`; }).join('');
   const alumniN = Math.min((M.alumni || []).length, 4);
   const alumni = Array.from({ length: alumniN }, (_, i) => {
@@ -375,7 +375,7 @@ function home(ctx) {
   </div>
 </section>
 <section class="quickbar" aria-label="${esc(t('toolsKicker'))}">
-  <div class="wrap"><div class="quick-card rv">
+  <div class="wrap"><div class="quick-card rv"><div class="tesserae" data-count="26" aria-hidden="true"></div>
     <div class="quick-head"><span class="kicker">${esc(t('toolsKicker'))}</span><a class="link" href="${R + PAGES.tools}">${esc(c('allTools'))}</a></div>
     <div class="quick-grid">${quick}</div>
   </div></div>
@@ -441,7 +441,7 @@ ${mosaicRule()}
 ${orient ? `<section class="section tint" id="campus-life">
   <div class="wrap">
     <div class="row-head rv"><div><span class="kicker">${esc(t('galKicker'))}</span><h2>${esc(t('galTitle'))}</h2><p class="lead" style="margin:6px 0 0">${esc(t('galLead'))}</p></div><a class="btn btn-ghost" href="${M.orientation.url}" target="_blank" rel="noopener">${esc(t('galCta'))} <span class="arr">→</span></a></div>
-    <div class="gallery">${orient}</div>
+    <div class="gallery collage">${orient}</div>
   </div>
 </section>` : ''}
 <section class="section dark" id="alumni">
@@ -456,7 +456,7 @@ ${orient ? `<section class="section tint" id="campus-life">
     <div class="events">${events}</div>
   </div>
 </section>
-${reels ? `<section class="section tint" id="reels"><div class="wrap reels-wrap"><div class="rv"><span class="kicker">${esc(t('reelsKicker'))}</span><h2>${esc(t('reelsTitle'))}</h2><p class="lead">${esc(t('reelsLead'))}</p>${M.social.instagram ? `<a class="btn" href="${M.social.instagram}" target="_blank" rel="noopener">${esc(c('followUs'))}</a>` : ''}</div><div class="reels">${reels}</div></div></section>` : ''}
+${reels ? `<section class="section dark" id="reels"><div class="tesserae" data-count="46" aria-hidden="true"></div><div class="wrap reels-wrap"><div class="rv"><span class="kicker">${esc(t('reelsKicker'))}</span><h2>${esc(t('reelsTitle'))}</h2><p class="lead">${esc(t('reelsLead'))}</p>${M.social.instagram ? `<a class="btn btn-light" href="${M.social.instagram}" target="_blank" rel="noopener">${esc(c('followUs'))}</a>` : ''}</div><div class="reels">${reels}</div></div></section>` : ''}
 ${banners ? `<section class="section banners"><div class="wrap">${banners}</div></section>` : ''}
 <section class="section tint">
   <div class="wrap">
@@ -513,7 +513,7 @@ function academics(ctx) {
     const nm = count(f.id, 'master');
     const masters = nm ? `<h4 class="sub">${esc(t('masterIn'))}</h4><div class="plist" data-programmes="${f.id}" data-level="master"></div>` : '';
     const meta = [n ? `${n} ${esc(c('bachelor'))}` : '', nm ? `${nm} ${esc(c('master'))}` : ''].filter(Boolean).join(' · ');
-    return `<div class="facblock rv" id="${f.id}"><div class="facblock-head">${icon(facultyIcon[f.id])}<div><h3>${esc(f[lang])}</h3>${meta ? `<span class="fac-meta">${meta}</span>` : ''}</div>${extra}</div>${n ? `<h4 class="sub">${esc(t('bachelorIn'))}</h4>` : ''}${list}${masters}</div>`;
+    return `<details class="facblock rv" id="${f.id}"><summary class="facblock-head">${icon(facultyIcon[f.id])}<div><h3>${esc(f[lang])}</h3>${meta ? `<span class="fac-meta">${meta}</span>` : ''}</div></summary><div class="facblock-body">${extra ? `<p class="fac-extra">${extra}</p>` : ''}${n ? `<h4 class="sub">${esc(t('bachelorIn'))}</h4>` : ''}${list}${masters}</div></details>`;
   }).join('');
   const findex = `<div class="facindex rv"><span class="kicker">${esc(t('indexKicker'))}</span><div class="fchips">${D.faculties.map((f) => `<a class="fchip" href="#${f.id}">${esc(f[lang])}</a>`).join('')}</div></div>`;
   return `
@@ -550,7 +550,7 @@ function science(ctx) {
   const video = SM.video && has(SM.video.src)
     ? `<div class="photo vid rv"><video src="${mp(R, SM.video.src)}"${has(SM.video.poster) ? ` poster="${mp(R, SM.video.poster)}"` : ''} controls playsinline preload="metadata"></video></div>`
     : `<div class="photo rv"><div class="tesserae" data-count="70"></div><p class="note">${esc(t('photoNote'))}</p></div>`;
-  const news = (SM.news || []).slice(0, 6).map((n, i) => `<a class="card rv d${i % 3}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'card-img', t('n' + (i + 1) + 'T'))}<h3>${esc(t('n' + (i + 1) + 'T'))}</h3><span class="date">${esc(t('n' + (i + 1) + 'D'))}</span></a>`).join('');
+  const news = (SM.news || []).slice(0, 6).map((n, i) => `<a class="card rv d${i % 3}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'card-img', t('n' + (i + 1) + 'T'))}<h3>${esc(t('n' + (i + 1) + 'T'))}</h3><span class="date">${esc(t('n' + (i + 1) + 'D'))}</span><span class="link card-link">${esc(c('learnMore'))}</span></a>`).join('');
   const gallery = (SM.gallery || []).filter((g) => has(g.file)).map((g, i) => `<a class="rv d${i % 3}" href="${g.url}" target="_blank" rel="noopener"><img src="${mp(R, g.file)}" alt="${esc(t('g' + (i + 1)))}" loading="lazy"></a>`).join('');
   const people = (SM.staff || []).map((p, i) => `<div class="person rv d${i % 5}">${has(p.file) ? `<img src="${mp(R, p.file)}" alt="${esc(p.name)}" loading="lazy" width="480" height="669">` : `<div class="ph"></div>`}<b>${esc(p.name)}</b><span>${esc(t('st_' + p.id))}</span></div>`).join('');
   return `
@@ -598,7 +598,7 @@ ${news ? `<section class="section" id="news">
 ${gallery ? `<section class="section tint">
   <div class="wrap">
     ${head(ctx, t('galKicker'), t('galTitle'))}
-    <div class="gallery">${gallery}</div>
+    <div class="gallery collage">${gallery}</div>
   </div>
 </section>` : ''}
 ${people ? `<section class="section">
@@ -735,7 +735,8 @@ function plans(ctx) {
       return `<a class="pcard plan-card" href="${R}plans/${P.slug}.html"><span class="fac">${esc(prog ? c(prog.level) : c('bachelor'))}</span><h3>${esc(name)}</h3><div class="meta">${credits ? `<span class="chip gold">${esc(credits)} ${esc(c('credits'))}</span>` : ''}${P.guidance.length ? `<span class="chip">${esc(t('guidanceT'))}</span>` : ''}</div><span class="go" aria-hidden="true">→</span></a>`;
     }).join('');
     if (!items) return '';
-    return `<div class="facblock rv" id="${f.id}"><div class="facblock-head">${icon(facultyIcon[f.id])}<div><h3>${esc(f[lang])}</h3></div></div><div class="plist compact">${items}</div></div>`;
+    const n = Object.values(PLANS).filter((P) => P.faculty === f.id).length;
+    return `<details class="facblock rv" id="${f.id}"><summary class="facblock-head">${icon(facultyIcon[f.id])}<div><h3>${esc(f[lang])}</h3><span class="fac-meta">${n} ${esc(S.academics.programmesN[lang])}</span></div></summary><div class="facblock-body"><div class="plist compact">${items}</div></div></details>`;
   }).join('');
   const findex = `<div class="facindex rv"><span class="kicker">${esc(S.academics.indexKicker[lang])}</span><div class="fchips">${D.faculties.map((f) => `<a class="fchip" href="#${f.id}">${esc(f[lang])}</a>`).join('')}</div></div>`;
   return `

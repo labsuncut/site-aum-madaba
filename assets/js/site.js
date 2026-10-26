@@ -228,4 +228,10 @@
     form.addEventListener('submit', function (e) { e.preventDefault(); var q = input.value.trim(); if (!q) return; input.value = ''; answer(q); });
     panel.querySelectorAll('.guide-chips button').forEach(function (b) { b.addEventListener('click', function () { answer(b.dataset.q); }); });
   }
+
+  // v4b: faculty blocks fold; a jump chip or a #hash opens the one it points at
+  function openTarget(id) { var d = id && doc.getElementById(id.replace(/^#/, '')); if (d && d.tagName === 'DETAILS') d.open = true; }
+  openTarget(location.hash);
+  window.addEventListener('hashchange', function () { openTarget(location.hash); });
+  doc.querySelectorAll('a.fchip[href^="#"]').forEach(function (a) { a.addEventListener('click', function () { openTarget(a.getAttribute('href')); }); });
 })();
