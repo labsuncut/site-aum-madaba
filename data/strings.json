@@ -339,6 +339,10 @@
     "programmesN": {
       "en": "programmes",
       "ar": "برامج"
+    },
+    "programmeOne": {
+      "en": "1 programme",
+      "ar": "برنامج واحد"
     }
   },
   "home": {
@@ -541,14 +545,6 @@
     "news3D": {
       "en": "22 October 2026",
       "ar": "22 تشرين الأول 2026"
-    },
-    "news4T": {
-      "en": "Candidate for accreditation with NECHE",
-      "ar": "مرشّحة للاعتماد من هيئة NECHE"
-    },
-    "news4D": {
-      "en": "November 2024 · After an on-campus evaluation in May 2024, the New England Commission of Higher Education granted candidacy status.",
-      "ar": "تشرين الثاني 2024 · بعد تقييم ميداني في أيار 2024، منحت هيئة نيو إنغلاند للتعليم العالي الجامعة صفة المرشّح للاعتماد."
     },
     "visitKicker": {
       "en": "Visit",
@@ -1057,6 +1053,30 @@
     "newsAll": {
       "en": "All news",
       "ar": "كل الأخبار"
+    },
+    "news5T": {
+      "en": "AUM master’s student Zelal Mehmetoglu presents cybersecurity research at ICFT 2026",
+      "ar": "طالبة الماجستير زلال محمد أوغلو تعرض بحثها في الأمن السيبراني في مؤتمر ICFT 2026"
+    },
+    "news5D": {
+      "en": "22 October 2026",
+      "ar": "22 تشرين الأول 2026"
+    },
+    "news6T": {
+      "en": "AUM Spotlight: Dr. Margo Haddad, Faculty of Architecture and Design, appointed Chair of the Documentary Film Jury at the Palestinian Film Festival in Sweden",
+      "ar": "أضواء الجامعة: الدكتورة مارغو حداد، كلية العمارة والتصميم، رئيسةً للجنة تحكيم الأفلام الوثائقية في مهرجان الفيلم الفلسطيني في السويد"
+    },
+    "news6D": {
+      "en": "22 October 2026",
+      "ar": "22 تشرين الأول 2026"
+    },
+    "whyBandCap": {
+      "en": "New students on campus, welcome day, October 2026",
+      "ar": "طلبة جدد في الحرم الجامعي، يوم الاستقبال، تشرين الأول 2026"
+    },
+    "finderHint": {
+      "en": "Open a faculty to see its programmes. Tap any programme for its study plan.",
+      "ar": "افتح الكلية لترى برامجها. اضغط على أي برنامج لترى خطته الدراسية."
     }
   },
   "academics": {

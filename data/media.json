@@ -239,7 +239,7 @@
     "source": "https://www.aum.edu.jo/storage/Images/home/sliders/slider_img_6adc8fa0080e1_c83a1482.JPG"
   },
   "why": {
-    "file": "orient-28.jpg",
+    "file": "orient-24.jpg",
     "url": "https://www.aum.edu.jo/news/aum-welcomes-new-students-at-an-interactive-orientation-event"
   },
   "lifeHero": {
@@ -278,5 +278,27 @@
   "health": {
     "file": "health-centre.jpg",
     "source": "https://aum.edu.jo/storage/Images/pages/mc0001.png.JPG"
-  }
+  },
+  "newsMore": [
+    {
+      "file": "news-italian.jpg",
+      "url": "https://www.aum.edu.jo/news/aum-celebrates-italian-language-week-with-a-special-cultural-session",
+      "key": "news2"
+    },
+    {
+      "file": "news-icft.jpg",
+      "url": "https://www.aum.edu.jo/news/aum-masters-student-presents-cybersecurity-research-at-icft-2026",
+      "key": "news5"
+    },
+    {
+      "file": "news-spotlight.jpg",
+      "url": "https://www.aum.edu.jo/news/aum-spotlight-28",
+      "key": "news3"
+    },
+    {
+      "file": "news-spotlight27.jpg",
+      "url": "https://www.aum.edu.jo/news/aum-spotlight-27",
+      "key": "news6"
+    }
+  ]
 }

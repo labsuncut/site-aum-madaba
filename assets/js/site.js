@@ -67,7 +67,8 @@
     var href = p.page ? root + p.page : planHref(p) || (root + 'academics.html#' + p.faculty);
     var plan = planHref(p);
     var planLink = plan ? '<a class="plan" href="' + plan + '"' + (p.plan ? '' : ' target="_blank" rel="noopener"') + '>' + esc(t('studyPlan')) + (p.plan ? '' : ' ↗') + '</a>' : '';
-    return '<div class="pcard"><a class="pmain" href="' + href + '"><span class="fac">' + esc(fac) + '</span><h3>' + esc(name) + '</h3></a><div class="meta">' + chips.join('') + planLink + '</div><span class="go" aria-hidden="true">→</span></div>';
+    var DT = window.AUM_DEPT || {}, thumb = p.plan && DT[p.plan] ? '<img class="pthumb" src="' + DT[p.plan] + '" alt="" loading="lazy" width="52" height="52">' : '';
+    return '<div class="pcard' + (thumb ? ' has-thumb' : '') + '">' + thumb + '<a class="pmain" href="' + href + '"><span class="fac">' + esc(fac) + '</span><h3>' + esc(name) + '</h3></a><div class="meta">' + chips.join('') + planLink + '</div><span class="go" aria-hidden="true">→</span></div>';
   }
 
   // Finder (home)
@@ -93,12 +94,13 @@
       if (fac || needle) { list.innerHTML = out.map(card).join(''); return; }
       // No filter: group the cards by faculty so the list reads as a map of the university
       // v4c: one drop-down per faculty, so the whole university fits on one screen
-      var FI = window.AUM_FICONS || {};
+      var FI = window.AUM_FAC || {};
       list.innerHTML = D.faculties.map(function (f) {
         var ps = out.filter(function (p) { return p.faculty === f.id; });
         if (!ps.length) return '';
         var names = ps.slice(0, 3).map(function (p) { return p[lang] || p.en; }).join(' · ') + (ps.length > 3 ? ' · …' : '');
-        return '<details class="fgroup-d" id="fg-' + f.id + '"><summary>' + (FI[f.id] || '') + '<span class="fg-text"><span class="fg-name">' + esc(f[lang] || f.en) + '</span><span class="fg-peek">' + esc(names) + '</span></span><small>' + fmt(ps.length) + ' ' + esc(t('programmesN')) + '</small></summary><div class="fg-body">' + ps.map(card).join('') + '</div></details>';
+        var fi = FI[f.id] || {}, face = fi.img ? '<span class="fg-img"><img src="' + fi.img + '" alt="" loading="lazy" width="64" height="64"></span>' : (fi.icon || '');
+        return '<details class="fgroup-d" id="fg-' + f.id + '"' + (fi.color ? ' style="--fc:' + fi.color + '"' : '') + '><summary>' + face + '<span class="fg-text"><span class="fg-name">' + esc(f[lang] || f.en) + '</span><span class="fg-peek">' + esc(names) + '</span></span><small>' + (ps.length === 1 ? esc(t('programmeOne')) : fmt(ps.length) + ' ' + esc(t('programmesN'))) + '</small></summary><div class="fg-body">' + ps.map(card).join('') + '</div></details>';
       }).join('');
     }
     var fchips = [].slice.call(finder.querySelectorAll('.fchip'));

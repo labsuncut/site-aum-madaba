@@ -246,7 +246,7 @@ function shell(ctx, page, body) {
 <link rel="alternate" hreflang="x-default" href="${SITE}${file}">
 <link rel="preload" href="${R}assets/fonts/${lang === 'ar' ? 'amiri-arabic-bold' : 'cormorant-latin'}.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${R}assets/css/site.css?v=${V.css}">
-<script>window.AUM_STRINGS=${JSON.stringify(strings)};window.AUM_DATA=${JSON.stringify(D)};window.AUM_FICONS=${JSON.stringify(Object.fromEntries(D.faculties.map((f) => [f.id, icon(facultyIcon[f.id])])))};</script>
+<script>window.AUM_STRINGS=${JSON.stringify(strings)};window.AUM_DATA=${JSON.stringify(D)};window.AUM_FAC=${JSON.stringify(facData(R))};window.AUM_DEPT=${JSON.stringify(deptThumbs(R))};</script>
 </head>
 <body>
 <div class="intro" id="intro" aria-hidden="true">
@@ -333,6 +333,10 @@ const contactTiles = (ctx, kicker, title, lead) => {
 };
 
 const facultyIcon = { engineering: 'engineering', science: 'science', health: 'health', it: 'it', business: 'business', design: 'design', languages: 'languages' };
+// v4d: each faculty gets its own photo (AUM's department card images), a colour edge and the icon as fallback
+const facultyColor = { engineering: '#9a4a2a', science: '#5e6b3a', health: '#8b0a12', it: '#5a3d2b', business: '#b8862b', design: '#560309', languages: '#c08a2e' };
+const facData = (R) => Object.fromEntries(D.faculties.map((f) => [f.id, { icon: icon(facultyIcon[f.id]), img: has(`dept/fac-${f.id}.jpg`) ? mp(R, `dept/fac-${f.id}.jpg`) : '', color: facultyColor[f.id] || '#8b0a12' }]));
+const deptThumbs = (R) => Object.fromEntries(D.programmes.filter((p) => p.plan && has(`dept/${p.plan}.jpg`)).map((p) => [p.plan, mp(R, `dept/${p.plan}.jpg`)]));
 const count = (fid, level) => D.programmes.filter((p) => p.faculty === fid && p.level === level).length;
 
 /* ---------- pages ---------- */
@@ -351,13 +355,12 @@ function home(ctx) {
   const chips = D.faculties.map((f) => `<button type="button" class="fchip" data-fac="${f.id}">${esc(f[lang])}</button>`).join('');
   const why = [['laptop', 'why1', LINKS.elearning], ['award', 'why2', LINKS.scholarships], ['home', 'why3', LINKS.dorms], ['intl', 'why4', LINKS.abroad], ['bus', 'why5', LINKS.transport], ['calendar', 'why6', LINKS.calendar], ['shield', 'why7', LINKS.licensing]]
     .map(([ic, k, h], i) => `<a class="stone rv d${i % 4}" href="${h}" target="_blank" rel="noopener"><span class="stone-n">${String(i + 1).padStart(2, '0')}</span>${icon(ic)}<b>${esc(t(k))}</b><p>${esc(t(k + 'D'))}</p><span class="stone-go">${esc(c('opensAum'))} <span class="arr">↗</span></span></a>`).join('');
-  const whyPhoto = M.why && has(M.why.file)
-    ? `<a class="stone-photo rv" href="${M.why.url}" target="_blank" rel="noopener"><img src="${mp(R, M.why.file)}" alt="${esc(t('whyPhotoAlt'))}" loading="lazy"><span>${esc(t('whyPhotoAlt'))}</span></a>`
-    : `<div class="stone-photo ph"><div class="tesserae" data-count="40"></div><span>${esc(PH)}</span></div>`;
+  const whyBand = M.why && has(M.why.file)
+    ? `<a class="why-band rv" href="${M.why.url}" target="_blank" rel="noopener"><img src="${mp(R, M.why.file)}" alt="${esc(t('whyPhotoAlt'))}" loading="lazy"><span class="why-cap">${esc(t('whyBandCap'))} <span class="arr">↗</span></span></a>`
+    : `<div class="why-band ph"><div class="tesserae" data-count="40"></div><span>${esc(PH)}</span></div>`;
   const notices = [1, 2, 3].map((i) => `<a class="notice" href="${M.announcements[i - 1].url}" target="_blank" rel="noopener">${icon(M.announcements[i - 1].icon || 'megaphone')}<span><small>${esc(t('annCat' + i))} · ${esc(t('ann' + i + 'D'))}</small><b>${esc(t('ann' + i + 'T'))}</b></span></a>`).join('');
   const leadStory = (() => { const n = M.news[0]; return `<a class="lead-story rv" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'lead-img', t('news1T'))}<span class="lead-body"><span class="tag">${esc(t('newsLeadLabel'))}</span><h3>${esc(t('news1T'))}</h3><span class="date">${esc(t('news1D'))}</span><span class="link">${esc(c('learnMore'))} <span class="arr">→</span></span></span></a>`; })();
-  const stories = [2, 3].map((i) => { const n = M.news[i - 1]; return `<a class="story" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'story-img', t('news' + i + 'T'))}<span><h3>${esc(t('news' + i + 'T'))}</h3><span class="date">${esc(t('news' + i + 'D'))}</span></span></a>`; }).join('')
-    + `<a class="story text" href="${LINKS.licensing}" target="_blank" rel="noopener"><span><h3>${esc(t('news4T'))}</h3><span class="date">${esc(t('news4D'))}</span></span></a>`;
+  const stories = (M.newsMore || []).map((n, i) => `<a class="story rv d${i % 4}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'story-img', t(n.key + 'T'))}<span class="story-body"><h3>${esc(t(n.key + 'T'))}</h3><span class="date">${esc(t(n.key + 'D'))}</span></span></a>`).join('');
   const events = [1, 2, 3, 4].map((i) => { const e = M.events[i - 1]; return `<a class="event rv d${(i - 1) % 4}" href="${e.url}" target="_blank" rel="noopener">${pic(R, e.file, 'event-img', t('ev' + i + 'T'))}<span class="event-date"><b>${esc(t('ev' + i + 'D'))}</b><small>${esc(t('ev' + i + 'M'))}</small></span><span class="event-body"><h3>${esc(t('ev' + i + 'T'))}</h3><span class="time">${esc(t('ev' + i + 'H'))}</span></span></a>`; }).join('');
   const alumniN = Math.min((M.alumni || []).length, 4);
   const alumni = Array.from({ length: alumniN }, (_, i) => {
@@ -412,7 +415,8 @@ function home(ctx) {
 <section class="section tint why" id="why">
   <div class="wrap">
     ${head(ctx, t('whyKicker'), t('whyTitle'), t('whyLead'))}
-    <div class="stones">${whyPhoto}${why}</div>
+    ${whyBand}
+    <div class="stones">${why}</div>
   </div>
 </section>
 <section class="stats"><div class="wrap five">${stats}</div></section>
@@ -427,7 +431,7 @@ function home(ctx) {
         <label class="field">${esc(t('finderFaculty'))}<select id="f-fac"><option value="">${esc(t('finderAll'))}</option></select></label>
         <label class="field">${esc(t('finderLevel'))}<select id="f-level"><option value="">${esc(t('finderAllLevels'))}</option><option value="bachelor">${esc(c('bachelor'))}</option><option value="master">${esc(c('master'))}</option></select></label>
       </div>
-      <div class="finder-meta"><span id="f-count"></span><a class="link" href="${R + PAGES.academics}">${esc(t('finderAllFaculties'))}</a></div>
+      <div class="finder-meta"><span id="f-count"></span><span class="finder-hint">${esc(t('finderHint'))}</span><a class="link" href="${R + PAGES.academics}">${esc(t('finderAllFaculties'))}</a></div>
       <div class="plist compact" id="f-list"></div>
       <p class="finder-note">${esc(t('finderNote'))}</p>
     </div>
@@ -442,9 +446,9 @@ ${mosaicRule()}
     </div>
     <div class="paper">
       ${leadStory}
-      <div class="stories rv d1"><h4 class="col-head">${esc(t('newsMore'))}</h4>${stories}</div>
-      <aside class="notices rv d2" id="announcements"><h4 class="col-head">${esc(t('noticesLabel'))}</h4>${notices}<a class="link" href="${LINKS.announcements}" target="_blank" rel="noopener">${esc(t('noticesAll'))} <span class="arr">→</span></a></aside>
+      <div class="stories"><h4 class="col-head rv">${esc(t('newsMore'))}</h4>${stories}</div>
     </div>
+    <aside class="notices rv" id="announcements"><div class="notices-head"><h4 class="col-head">${esc(t('noticesLabel'))}</h4><a class="link" href="${LINKS.announcements}" target="_blank" rel="noopener">${esc(t('noticesAll'))} <span class="arr">→</span></a></div><div class="notices-row">${notices}</div></aside>
   </div>
 </section>
 ${orient ? `<section class="section tint" id="campus-life">
