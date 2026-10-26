@@ -1,4 +1,4 @@
-// AUM concept site: menu, scroll reveals, mosaic ornaments, programme finder and fee table. No libraries.
+// AUM concept site: menu, scroll reveals, mosaic ornaments, programme finder, fee table, slider, reels, study-plan tabs and the built-in guide. No libraries.
 (function () {
   var doc = document, html = doc.documentElement;
   html.classList.add('js');
@@ -58,13 +58,16 @@
   function estimate(p) { return (p.credits && p.feePerCredit) ? p.credits * p.feePerCredit : null; }
   var root = html.dataset.root || '';
 
+  function planHref(p) { return p.plan ? root + 'plans/' + p.plan + '.html' : (p.dept || ''); }
   function card(p) {
     var name = p[lang] || p.en, fac = FAC[p.faculty] ? (FAC[p.faculty][lang] || FAC[p.faculty].en) : '';
     var chips = ['<span class="chip gold">' + esc(t(p.level)) + '</span>'];
     if (p.credits) chips.push('<span class="chip">' + fmt(p.credits) + ' ' + esc(t('credits')) + '</span>');
     if (p.minAverage) chips.push('<span class="chip">' + fmt(p.minAverage) + '% ' + esc(t('minAverage')) + '</span>');
-    var href = p.page ? root + p.page : (root + 'academics.html#' + p.faculty);
-    return '<a class="pcard" href="' + href + '"><span class="fac">' + esc(fac) + '</span><h3>' + esc(name) + '</h3><div class="meta">' + chips.join('') + '</div><span class="go" aria-hidden="true">→</span></a>';
+    var href = p.page ? root + p.page : planHref(p) || (root + 'academics.html#' + p.faculty);
+    var plan = planHref(p);
+    var planLink = plan ? '<a class="plan" href="' + plan + '"' + (p.plan ? '' : ' target="_blank" rel="noopener"') + '>' + esc(t('studyPlan')) + (p.plan ? '' : ' ↗') + '</a>' : '';
+    return '<div class="pcard"><a class="pmain" href="' + href + '"><span class="fac">' + esc(fac) + '</span><h3>' + esc(name) + '</h3></a><div class="meta">' + chips.join('') + planLink + '</div><span class="go" aria-hidden="true">→</span></div>';
   }
 
   // Finder (home)
@@ -85,7 +88,15 @@
         return hay.indexOf(needle) !== -1;
       });
       count.textContent = fmt(out.length) + ' ' + t('finderCount');
-      list.innerHTML = out.length ? out.map(card).join('') : '<p class="empty">' + esc(t('finderEmpty')) + '</p>';
+      if (!out.length) { list.innerHTML = '<p class="empty">' + esc(t('finderEmpty')) + '</p>'; return; }
+      list.classList.toggle('grouped', !fac && !needle);
+      if (fac || needle) { list.innerHTML = out.map(card).join(''); return; }
+      // No filter: group the cards by faculty so the list reads as a map of the university
+      list.innerHTML = D.faculties.map(function (f) {
+        var ps = out.filter(function (p) { return p.faculty === f.id; });
+        if (!ps.length) return '';
+        return '<h4 class="fgroup"><span>' + esc(f[lang] || f.en) + '</span><small>' + fmt(ps.length) + '</small></h4>' + ps.map(card).join('');
+      }).join('');
     }
     var fchips = [].slice.call(finder.querySelectorAll('.fchip'));
     function syncChips() { fchips.forEach(function (b) { b.classList.toggle('on', b.dataset.fac === fs.value); }); }
@@ -132,5 +143,89 @@
     const start = () => { clearInterval(timer); if (slides.length > 1) timer = setInterval(() => show(cur + 1), 8000); };
     dots.forEach((d, i) => d.addEventListener('click', () => { show(i); start(); }));
     start();
+  }
+
+  // v4: "Latest" slider (swipe, dots, arrows, gentle auto-advance while in view)
+  doc.querySelectorAll('[data-slider]').forEach(function (box) {
+    var track = box.querySelector('.slides'), items = [].slice.call(track.children), dotsBox = box.querySelector('.sdots');
+    if (items.length < 2) { var nav = box.querySelector('.slider-nav'); if (nav) nav.hidden = true; return; }
+    var dots = items.map(function (_, i) { var b = doc.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-label', (i + 1) + ' / ' + items.length); b.addEventListener('click', function () { go(i); rest(); }); dotsBox.appendChild(b); return b; });
+    var cur = 0, timer, restUntil = 0, visible = false;
+    function mark(i) { cur = i; dots.forEach(function (d, j) { d.classList.toggle('on', j === i); d.setAttribute('aria-selected', j === i ? 'true' : 'false'); }); }
+    function go(i) { i = (i + items.length) % items.length; track.scrollTo({ left: items[i].offsetLeft - items[0].offsetLeft, behavior: 'smooth' }); mark(i); }
+    function rest() { restUntil = Date.now() + 12000; }
+    box.querySelector('.prev').addEventListener('click', function () { go(cur - 1); rest(); });
+    box.querySelector('.next').addEventListener('click', function () { go(cur + 1); rest(); });
+    var raf; track.addEventListener('scroll', function () { cancelAnimationFrame(raf); raf = requestAnimationFrame(function () { var w = items[0].offsetWidth + 18; var i = Math.round(Math.abs(track.scrollLeft) / w); if (i !== cur && i >= 0 && i < items.length) mark(i); }); });
+    ['pointerdown', 'touchstart', 'focusin', 'mouseenter'].forEach(function (ev) { box.addEventListener(ev, rest, { passive: true }); });
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: .4 }).observe(box); else visible = true;
+    timer = setInterval(function () { if (!visible || doc.hidden || Date.now() < restUntil) return; go(cur + 1); }, 6000);
+    mark(0);
+  });
+
+  // v4: reels play on their own while on screen; one tap turns the sound on
+  var reels = [].slice.call(doc.querySelectorAll('video[data-autoplay]'));
+  if (reels.length) {
+    var play = function (v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+    if ('IntersectionObserver' in window) {
+      var rio = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) play(en.target); else en.target.pause(); }); }, { threshold: .5 });
+      reels.forEach(function (v) { rio.observe(v); });
+    } else reels.forEach(play);
+    doc.querySelectorAll('.reel-sound').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var v = b.parentNode.querySelector('video'), on = v.muted;
+        reels.forEach(function (o) { if (o !== v) { o.muted = true; o.parentNode.classList.remove('sound'); var ob = o.parentNode.querySelector('.reel-sound'); if (ob) ob.setAttribute('aria-label', ob.dataset.off); } });
+        v.muted = !on; b.parentNode.classList.toggle('sound', on); b.setAttribute('aria-label', on ? b.dataset.on : b.dataset.off); if (on) play(v);
+      });
+    });
+  }
+
+  // v4: study plan version tabs
+  doc.querySelectorAll('.plan-versions').forEach(function (bar) {
+    var btns = [].slice.call(bar.querySelectorAll('[data-ver]'));
+    btns.forEach(function (b) { b.addEventListener('click', function () {
+      btns.forEach(function (o) { o.classList.toggle('on', o === b); o.setAttribute('aria-selected', o === b ? 'true' : 'false'); var panel = doc.getElementById(o.dataset.ver); if (panel) panel.hidden = o !== b; });
+    }); });
+  });
+
+  // v4: built-in guide (keyword matching against this site's own pages; nothing leaves the browser)
+  var G = window.AUM_GUIDE, fab = doc.querySelector('.guide-fab'), panel = doc.getElementById('guide');
+  if (G && fab && panel) {
+    var log = doc.getElementById('guide-log'), form = doc.getElementById('guide-form'), input = doc.getElementById('guide-q'), greeted = false;
+    function gnorm(s) { return String(s).toLowerCase().replace(/[ً-ْـ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim(); }
+    function bubble(cls, html) { var d = doc.createElement('div'); d.className = 'g-msg ' + cls; d.innerHTML = html; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+    function links(l) { return l && l.length ? '<div class="g-links">' + l.map(function (x) { return '<a class="g-link" href="' + esc(x[1]) + '"' + (x[2] ? ' target="_blank" rel="noopener"' : '') + '>' + esc(x[0]) + (x[2] ? ' ↗' : '') + '</a>'; }).join('') + '</div>' : ''; }
+    function open(o) { panel.hidden = !o; fab.setAttribute('aria-expanded', o ? 'true' : 'false'); doc.body.classList.toggle('guide-open', o); if (o) { if (!greeted) { greeted = true; bubble('g-bot', esc(G.hi)); } setTimeout(function () { input.focus(); }, 50); } else fab.focus(); }
+    fab.addEventListener('click', function () { open(panel.hidden); });
+    panel.querySelector('.guide-close').addEventListener('click', function () { open(false); });
+    doc.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) open(false); });
+    var STOP = ['what', 'can', 'how', 'where', 'the', 'you', 'are', 'for', 'and', 'with', 'your', 'any', 'who', 'when', 'does', 'there', 'some', 'get', 'need', 'want', 'know', 'about', 'find', 'هل', 'ماذا', 'كيف', 'اين', 'متى', 'ما', 'في', 'من', 'على', 'عن'];
+    function answer(q) {
+      var n = gnorm(q); if (!n) return;
+      bubble('g-me', esc(q));
+      // 1. a programme named in the question
+      var progs = (D ? D.programmes : []).filter(function (p) {
+        var en = gnorm(p.en), ar = gnorm(p.ar || '');
+        return (en.length > 3 && (n.indexOf(en) !== -1 || en.indexOf(n) !== -1 && n.length > 4)) || (ar.length > 3 && (n.indexOf(ar) !== -1 || ar.indexOf(n) !== -1 && n.length > 3));
+      }).slice(0, 4);
+      if (progs.length) {
+        bubble('g-bot', esc(G.progFound) + progs.map(function (p) {
+          var l = [[G.details, p.page ? root + p.page : root + 'academics.html#' + p.faculty]];
+          var ph = planHref(p); if (ph) l.push([G.studyPlan, ph, !p.plan]);
+          return '<div class="g-card"><b>' + esc(p[lang] || p.en) + '</b>' + links(l) + '</div>';
+        }).join(''));
+        return;
+      }
+      // 2. the best keyword entry
+      var best = null, bestScore = 0;
+      G.entries.forEach(function (e) {
+        var score = 0; gnorm(e.k).split(' ').forEach(function (k) { if (k.length >= 3 && STOP.indexOf(k) === -1 && n.indexOf(k) !== -1) score += k.length; });
+        if (score > bestScore) { bestScore = score; best = e; }
+      });
+      if (best) bubble('g-bot', esc(best.a) + links(best.l));
+      else bubble('g-bot', esc(G.fallback));
+    }
+    form.addEventListener('submit', function (e) { e.preventDefault(); var q = input.value.trim(); if (!q) return; input.value = ''; answer(q); });
+    panel.querySelectorAll('.guide-chips button').forEach(function (b) { b.addEventListener('click', function () { answer(b.dataset.q); }); });
   }
 })();

@@ -25,13 +25,16 @@
   ],
   "announcements": [
     {
-      "url": "https://www.aum.edu.jo/announcements/gayz-alhsn-bn-tlal-lltmyz-alaalmy-llaaam-2027-fy-mgalat-altaalym-oalbhth-alaalmy-oalabtkar"
+      "url": "https://www.aum.edu.jo/announcements/gayz-alhsn-bn-tlal-lltmyz-alaalmy-llaaam-2027-fy-mgalat-altaalym-oalbhth-alaalmy-oalabtkar",
+      "icon": "award"
     },
     {
-      "url": "https://www.aum.edu.jo/announcements/student-communities-academic-year-20262027"
+      "url": "https://www.aum.edu.jo/announcements/student-communities-academic-year-20262027",
+      "icon": "users"
     },
     {
-      "url": "https://www.aum.edu.jo/announcements/academic-job-vacancy-faculty-of-architecture-design-design-and-visual-communication-department"
+      "url": "https://www.aum.edu.jo/announcements/academic-job-vacancy-faculty-of-architecture-design-design-and-visual-communication-department",
+      "icon": "briefcase"
     }
   ],
   "events": [
@@ -229,5 +232,10 @@
       "orient-06.jpg",
       "orient-14.jpg"
     ]
+  },
+  "hero2": {
+    "file": "hero-graduation.jpg",
+    "url": "https://aum.edu.jo/alumni/graduation-ceremony?subject_id=329",
+    "source": "https://www.aum.edu.jo/storage/Images/home/sliders/slider_img_6adc8fa0080e1_c83a1482.JPG"
   }
 }

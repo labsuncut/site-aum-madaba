@@ -2,7 +2,7 @@
 //   node tools/build.mjs
 // English pages land at the repo root, Arabic pages under ar/. Text comes from data/strings.json,
 // programme figures from data/programmes.json. GitHub Pages serves the output as-is; nothing runs there.
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -10,6 +10,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const S = JSON.parse(readFileSync(join(ROOT, 'data/strings.json'), 'utf8'));
 const D = JSON.parse(readFileSync(join(ROOT, 'data/programmes.json'), 'utf8'));
 const M = JSON.parse(readFileSync(join(ROOT, 'data/media.json'), 'utf8'));
+// Study plans copied from AUM's department pages (data/plans/<slug>.json, see /mnt/project-files/aum/study-plans/README.md)
+const PLANS = {};
+for (const f of readdirSync(join(ROOT, 'data/plans')).filter((x) => x.endsWith('.json')).sort()) PLANS[f.slice(0, -5)] = JSON.parse(readFileSync(join(ROOT, 'data/plans', f), 'utf8'));
 import { existsSync } from 'node:fs';
 // Their photo if we have the file, otherwise a marked placeholder block.
 function pic(R, file, cls, alt) {
@@ -70,13 +73,13 @@ const LINKS = {
 const PAGES = {
   home: 'index.html', academics: 'academics.html', science: 'faculty-of-science.html',
   biotech: 'biology-and-biotechnology.html', admissions: 'admissions.html', life: 'life-at-aum.html',
-  about: 'about.html', tools: 'student-tools.html', notfound: '404.html'
+  about: 'about.html', tools: 'student-tools.html', plans: 'study-plans.html', notfound: '404.html'
 };
 
 // Student tools: id, group, icon, url. Text lives in strings.json (tools.t_<id>, tools.d_<id>).
 const TOOLS = [
   ['elearning', 'gStudy', 'laptop', LINKS.elearning], ['registration', 'gStudy', 'edit', LINKS.registration],
-  ['courseFinder', 'gStudy', 'grid', LINKS.courseFinder], ['studyPlans', 'gStudy', 'list', LINKS.studyPlans],
+  ['courseFinder', 'gStudy', 'grid', LINKS.courseFinder], ['studyPlans', 'gStudy', 'list', '@plans'],
   ['calendar', 'gStudy', 'calendar', LINKS.calendar], ['grading', 'gStudy', 'percent', LINKS.grading],
   ['exams', 'gStudy', 'file', LINKS.exams], ['genEd', 'gStudy', 'book', LINKS.genEd],
   ['bus', 'gCampus', 'bus', LINKS.bus], ['library', 'gCampus', 'library', LINKS.library],
@@ -148,11 +151,48 @@ const ICONS = {
   swap: '<path d="M7 7h13l-3-3"/><path d="M17 17H4l3 3"/>',
   megaphone: '<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z"/><path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/>',
   flag: '<path d="M5 21V4"/><path d="M5 4h12l-2 4 2 4H5"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16M2 13h20"/>',
+  chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/>',
   star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/>'
 };
 const icon = (k) => `<span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg></span>`;
 
 /* ---------- page shell ---------- */
+function guideHtml(ctx) {
+  const { lang, R, c } = ctx; const G = S.guide; const g = (k) => G[k][lang];
+  const tl = (id) => (S.tools['t_' + id] ? S.tools['t_' + id][lang] : id);
+  const E = (k, a, l) => ({ k, a, l });
+  const entries = [
+    E('apply admission admissions register enrol enroll tawjihi requirements قدم قدّم تقديم قبول تسجيل توجيهي شروط', g('a_apply'), [[c('apply'), LINKS.apply, 1], [c('howToApply'), R + PAGES.admissions]]),
+    E('study plan plans courses semester prerequisite prerequisites خطة خطتي دراسية الخطة مساقات فصل متطلب', g('a_plan'), [[c('allPlans'), R + PAGES.plans], [c('findProgramme'), R + 'index.html#finder']]),
+    E('bus buses transport transportation schedule amman zarqa karak fuhais باص باصات مواصلات جدول عمان الزرقاء الكرك', g('a_bus'), [[tl('bus'), LINKS.bus, 1]]),
+    E('fee fees tuition cost price pay payment scholarship scholarships discount رسوم رسم تكلفة سعر دفع منحة منح خصم', g('a_fees'), [[tl('fees'), LINKS.fees, 1], [c('navAdmissions'), R + PAGES.admissions], [tl('scholarships'), LINKS.scholarships, 1]]),
+    E('calendar dates date semester start begin exam exams holiday holidays تقويم مواعيد موعد بداية امتحان امتحانات عطلة عطل', g('a_calendar'), [[c('toolCalendar'), LINKS.calendar, 1]]),
+    E('contact phone call email mail number talk someone تواصل هاتف اتصال اتصل بريد رقم', g('a_contact'), [[c('phone'), LINKS.tel], ['info@aum.edu.jo', LINKS.email]]),
+    E('programme programmes program programs major majors faculty faculties degree degrees study تخصص تخصصات كلية كليات برنامج برامج درجة ادرس', g('a_programmes'), [[c('findProgramme'), R + 'index.html#finder'], [c('navAcademics'), R + PAGES.academics]]),
+    E('elearning e-learning moodle lms grades marks registration system portal login password تعلم الكتروني إلكتروني علامات نظام التسجيل بوابة دخول كلمة', g('a_elearning'), [[c('toolElearning'), LINKS.elearning, 1], [c('toolRegistration'), LINKS.registration, 1]]),
+    E('housing dorm dorms accommodation room live stay سكن سكن الطالبات غرفة إقامة', g('a_housing'), [[S.home.lifeHousingT[lang], R + PAGES.life + '#housing']]),
+    E('library books book database databases borrow مكتبة كتب كتاب قواعد بيانات استعارة', g('a_library'), [[c('toolLibrary'), LINKS.library, 1]]),
+    E('grading grade gpa average transfer rules regulations exam policy نظام العلامات علامة معدل تحويل تعليمات أنظمة', g('a_grading'), [[S.admissions.gradeT[lang], LINKS.grading, 1]]),
+    E('where location located map directions madaba address campus reach get there أين موقع خريطة اتجاهات مادبا عنوان حرم أصل', g('a_location'), [[c('directions'), LINKS.maps, 1], [c('linkCampusMap'), (M.campusMap && M.campusMap.url) || LINKS.glance, 1]]),
+    E('science biology biotechnology biotech lab labs dean علوم أحياء تكنولوجيا حيوية مختبر مختبرات عميد', g('a_science'), [[S.science.kicker[lang], R + PAGES.science], [S.biotech.h1[lang], R + PAGES.biotech]]),
+    E('news events announcements event announcement happening أخبار فعاليات إعلانات فعالية إعلان', g('a_news'), [[c('linkNews'), LINKS.news, 1], [c('linkEvents'), LINKS.events, 1]]),
+    E('tools links link student email outlook wifi أدوات روابط رابط بريد الطالب', g('a_tools'), [[c('allTools'), R + PAGES.tools]]),
+  ];
+  const chips = ['q_apply', 'q_programmes', 'q_plan', 'q_bus', 'q_fees', 'q_calendar', 'q_contact'].map((k) => `<button type="button" data-q="${esc(g(k))}">${esc(g(k))}</button>`).join('');
+  const data = { hi: g('hi'), fallback: g('fallback'), progFound: g('progFound'), studyPlan: c('studyPlan'), details: c('programmeDetails'), entries };
+  return `<button class="guide-fab" type="button" aria-expanded="false" aria-controls="guide">${icon('chat')}<span>${esc(g('open'))}</span></button>
+<section class="guide" id="guide" hidden aria-label="${esc(g('title'))}">
+  <header><img src="${R}assets/img/seal.png" width="34" height="34" alt=""><b>${esc(g('title'))}</b><button class="guide-close" type="button" aria-label="${esc(g('close'))}">×</button></header>
+  <div class="guide-log" id="guide-log" aria-live="polite"></div>
+  <div class="guide-chips">${chips}</div>
+  <form class="guide-form" id="guide-form"><input id="guide-q" type="text" placeholder="${esc(g('placeholder'))}" autocomplete="off" aria-label="${esc(g('title'))}"><button class="btn" type="submit">${esc(g('send'))}</button></form>
+  <p class="guide-note">${esc(g('note'))}</p>
+</section>
+<script>window.AUM_GUIDE=${JSON.stringify(data)};</script>`;
+}
+
 function shell(ctx, page, body) {
   const { lang, R, t, c } = ctx; const sec = S[page] || {};
   PH = c('photoSlot');
@@ -160,7 +200,7 @@ function shell(ctx, page, body) {
   const SOC = { facebook: 'M14 8h2.5V4.5H14c-2.5 0-4 1.6-4 4V11H7.5v3.5H10V21h3.5v-6.5H16l.5-3.5h-3V8.8c0-.5.3-.8.5-.8Z', x: 'M4 4l16 16M20 4 4 20', youtube: 'M3 8.5c0-1.4 1.1-2.5 2.5-2.5h13C19.9 6 21 7.1 21 8.5v7c0 1.4-1.1 2.5-2.5 2.5h-13A2.5 2.5 0 0 1 3 15.5v-7Zm7 1.5v4l4-2-4-2Z', instagram: 'M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm5 5.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7ZM17.5 6.5h.01', linkedin: 'M6 9v12M6 5v.01M11 21v-7a3 3 0 0 1 6 0v7M11 9v12', whatsapp: 'M4 20l1.3-3.8A8 8 0 1 1 8.3 19L4 20Zm5-9c.5 2 2 3.5 4 4l1-1 2 1c0 1-1 1.5-2 1.5-3 0-6.5-3.5-6.5-6.5 0-1 .5-2 1.5-2l1 2-1 1Z' };
   const socialHtml = social.length ? `<div class="social" aria-label="${esc(c('followUs'))}">${social.map(([k, u]) => `<a href="${u}" target="_blank" rel="noopener" aria-label="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${SOC[k]}"/></svg></a>`).join('')}</div>` : '';
   const dir = lang === 'ar' ? 'rtl' : 'ltr';
-  const file = PAGES[page];
+  const file = ctx.file || PAGES[page];
   const other = lang === 'ar' ? R + file : R + 'ar/' + file;
   const seal = R + 'assets/img/seal.png';
   const strings = {};
@@ -187,8 +227,8 @@ function shell(ctx, page, body) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(t('title'))}</title>
-<meta name="description" content="${esc(sec.description ? t('description') : t('lead'))}">
+<title>${esc(ctx.title || t('title'))}</title>
+<meta name="description" content="${esc(ctx.description || (sec.description ? t('description') : t('lead')))}">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#8b0a12">
 <link rel="icon" href="${R}assets/img/favicon-48.png" sizes="48x48">
@@ -252,6 +292,7 @@ ${body}
     </div>
   </div>
 </footer>
+${guideHtml(ctx)}
 <script src="${R}assets/js/site.js" defer></script>
 </body>
 </html>
@@ -263,7 +304,7 @@ const head = (ctx, kicker, title, lead, center) =>
   `<div class="section-head${center ? ' center' : ''} rv">${kicker ? `<span class="kicker">${esc(kicker)}</span>` : ''}<h2>${esc(title)}</h2>${lead ? `<p class="lead">${esc(lead)}</p>` : ''}</div>`;
 
 const phero = (ctx, kicker, h1, lead, h1em) =>
-  `<section class="phero"><div class="wrap"><div class="phero-band">${ring('')}</div><span class="kicker rv">${esc(kicker)}</span><h1 class="rv d1">${esc(h1)}${h1em ? ` <em>${esc(h1em)}</em>` : ''}</h1><p class="lead rv d2">${esc(lead)}</p></div></section>${mosaicRule()}`;
+  `<section class="phero"><div class="wrap"><div class="phero-band">${ring('')}<img class="phero-seal" src="${ctx.R}assets/img/seal.png" width="239" height="239" alt=""></div><span class="kicker rv">${esc(kicker)}</span><h1 class="rv d1">${esc(h1)}${h1em ? ` <em>${esc(h1em)}</em>` : ''}</h1><p class="lead rv d2">${esc(lead)}</p></div></section>${mosaicRule()}`;
 
 const applyCta = (ctx, extraLink) => {
   const { R, c, T } = ctx;
@@ -285,7 +326,8 @@ const count = (fid, level) => D.programmes.filter((p) => p.faculty === fid && p.
 /* ---------- pages ---------- */
 function toolCard(ctx, id, group, ic, url, i) {
   const { T, c } = ctx;
-  return `<a class="tool rv d${i % 4}" href="${url}" target="_blank" rel="noopener" data-group="${group}" data-text="${esc((T('tools', 't_' + id) + ' ' + T('tools', 'd_' + id)).toLowerCase())}">${icon(ic)}<span class="tool-body"><b>${esc(T('tools', 't_' + id))}</b><span>${esc(T('tools', 'd_' + id))}</span></span><span class="tool-go" aria-hidden="true">↗</span></a>`;
+  const internal = url === '@plans'; if (internal) url = ctx.R + PAGES.plans;
+  return `<a class="tool rv d${i % 4}" href="${url}"${internal ? '' : ' target="_blank" rel="noopener"'} data-group="${group}" data-text="${esc((T('tools', 't_' + id) + ' ' + T('tools', 'd_' + id)).toLowerCase())}">${icon(ic)}<span class="tool-body"><b>${esc(T('tools', 't_' + id))}</b><span>${esc(T('tools', 'd_' + id))}</span></span><span class="tool-go" aria-hidden="true">↗</span></a>`;
 }
 
 function home(ctx) {
@@ -297,7 +339,7 @@ function home(ctx) {
   const chips = D.faculties.map((f) => `<button type="button" class="fchip" data-fac="${f.id}">${esc(f[lang])}</button>`).join('');
   const why = [['laptop', 'why1', LINKS.elearning], ['award', 'why2', LINKS.scholarships], ['home', 'why3', LINKS.dorms], ['intl', 'why4', LINKS.abroad], ['bus', 'why5', LINKS.transport], ['calendar', 'why6', LINKS.calendar], ['shield', 'why7', LINKS.licensing]]
     .map(([ic, k, h], i) => `<a class="hex rv d${i % 4}" href="${h}" target="_blank" rel="noopener"><span class="hex-in">${icon(ic)}<b>${esc(t(k))}</b></span></a>`).join('');
-  const ann = [1, 2, 3].map((i) => `<a class="card ann rv d${i - 1}" href="${M.announcements[i - 1].url}" target="_blank" rel="noopener"><span class="card-top"><img src="${R}assets/img/seal.png" width="56" height="56" alt=""><span>${esc(c('siteName'))}</span></span><h3>${esc(t('ann' + i + 'T'))}</h3><span class="date">${esc(t('ann' + i + 'D'))}</span></a>`).join('');
+  const ann = [1, 2, 3].map((i) => `<a class="card ann rv d${i - 1}" href="${M.announcements[i - 1].url}" target="_blank" rel="noopener"><span class="card-top">${icon(M.announcements[i - 1].icon || 'megaphone')}<span>${esc(t('annCat' + i))}</span></span><h3>${esc(t('ann' + i + 'T'))}</h3><span class="date">${esc(t('ann' + i + 'D'))}</span></a>`).join('');
   const news = [1, 2, 3].map((i) => { const n = M.news[i - 1]; return `<a class="card rv d${i - 1}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'card-img', t('news' + i + 'T'))}<h3>${esc(t('news' + i + 'T'))}</h3><span class="date">${esc(t('news' + i + 'D'))}</span></a>`; }).join('');
   const events = [1, 2, 3, 4].map((i) => { const e = M.events[i - 1]; return `<a class="event rv d${(i - 1) % 4}" href="${e.url}" target="_blank" rel="noopener">${pic(R, e.file, 'event-img', t('ev' + i + 'T'))}<span class="event-date"><b>${esc(t('ev' + i + 'D'))}</b><small>${esc(t('ev' + i + 'M'))}</small></span><span class="event-body"><h3>${esc(t('ev' + i + 'T'))}</h3><span class="time">${esc(t('ev' + i + 'H'))}</span></span></a>`; }).join('');
   const alumniN = Math.min((M.alumni || []).length, 4);
@@ -309,14 +351,15 @@ function home(ctx) {
   const life = [['bus', 'Bus'], ['home', 'Housing'], ['clubs', 'Clubs'], ['intl', 'Intl']].map(([ic, k], i) =>
     `<a class="tile rv d${i}" href="${R + PAGES.life}#${k.toLowerCase()}">${icon(ic)}<h3>${esc(t('life' + k + 'T'))}</h3><p>${esc(t('life' + k + 'D'))}</p><span class="link">${esc(c('learnMore'))}</span></a>`).join('');
   const reelList = (M.reels || []).filter((r) => has(r.src));
-  const reels = reelList.map((r, i) => `<video class="reel rv d${i % 4}" src="${mp(R, r.src)}"${has(r.poster) ? ` poster="${mp(R, r.poster)}"` : ''} controls muted playsinline preload="none"></video>`).join('')
+  const reels = reelList.map((r, i) => `<div class="reel-box rv d${i % 4}"><video class="reel" src="${mp(R, r.src)}"${has(r.poster) ? ` poster="${mp(R, r.poster)}"` : ''} muted loop playsinline preload="metadata" data-autoplay></video><button class="reel-sound" type="button" aria-label="${esc(t('soundOn'))}" data-on="${esc(t('soundOff'))}" data-off="${esc(t('soundOn'))}"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path class="wave" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/><path class="cross" d="m16 9 5 6m0-6-5 6"/></svg></button></div>`).join('')
     + (reelList.length && M.stories ? `<a class="reel reel-more rv d${reelList.length % 4}" href="${M.stories}" target="_blank" rel="noopener"><span class="play"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><b>${esc(t('storiesT'))}</b><span>${esc(t('storiesD'))}</span></a>` : '');
   const bannerBg = (o) => (o && has(o.file) ? ` style="background-image:url(${mp(R, o.file)})"` : '');
   const banners = `${M.tour ? `<a class="banner rv" href="${M.tour}" target="_blank" rel="noopener"><span><b>${esc(t('tourT'))}</b>${esc(t('tourD'))}</span><span class="btn btn-light">${esc(t('tourCta'))} <span class="arr">→</span></span></a>` : ''}${M.campusMap && M.campusMap.url ? `<a class="banner rv${has(M.campusMap.file) ? ' img' : ''}" href="${M.campusMap.url}" target="_blank" rel="noopener"${bannerBg(M.campusMap)}><span><b>${esc(t('campusT'))}</b>${esc(t('campusD'))}</span><span class="btn btn-light">${esc(t('campusCta'))} <span class="arr">→</span></span></a>` : ''}${M.madaba && M.madaba.url ? `<a class="banner alt rv d1${has(M.madaba.file) ? ' img' : ''}" href="${M.madaba.url}" target="_blank" rel="noopener"${bannerBg(M.madaba)}><span><b>${esc(t('madabaT'))}</b>${esc(t('madabaD'))}</span><span class="btn btn-light">${esc(t('madabaCta'))} <span class="arr">→</span></span></a>` : ''}`;
 
   return `
-<section class="hero">
-  <div class="hero-wall tesserae" data-count="110"></div>
+<section class="hero${M.heroVideo && has(M.heroVideo.src) ? ' has-video' : ''}">
+  ${M.heroVideo && has(M.heroVideo.src) ? `<video class="hero-video" src="${mp(R, M.heroVideo.src)}"${has(M.heroVideo.poster) ? ` poster="${mp(R, M.heroVideo.poster)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video><div class="hero-veil" aria-hidden="true"></div>` : ''}
+  <div class="hero-wall tesserae" data-count="90"></div>
   <div class="wrap hero-grid">
     <div>
       <span class="kicker rv">${esc(t('kicker'))}</span>
@@ -331,23 +374,31 @@ function home(ctx) {
     <div class="hero-seal rv d2">${ring('hero-ring')}<img src="${seal}" width="239" height="239" alt="${esc(c('siteName'))}"></div>
   </div>
 </section>
-${mosaicRule()}
 <section class="quickbar" aria-label="${esc(t('toolsKicker'))}">
-  <div class="wrap">
+  <div class="wrap"><div class="quick-card rv">
     <div class="quick-head"><span class="kicker">${esc(t('toolsKicker'))}</span><a class="link" href="${R + PAGES.tools}">${esc(c('allTools'))}</a></div>
     <div class="quick-grid">${quick}</div>
-  </div>
+  </div></div>
 </section>
-<section class="section featured">
+<section class="section featured" aria-label="${esc(t('latestLabel'))}">
   <div class="wrap">
-    ${M.heroVideo && has(M.heroVideo.src) ? `<a class="feat vid rv" href="${LINKS.apply}" target="_blank" rel="noopener">
-      <video class="feat-img" src="${mp(R, M.heroVideo.src)}"${has(M.heroVideo.poster) ? ` poster="${mp(R, M.heroVideo.poster)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-label="${esc(t('heroVidT'))}"></video>
-      <span class="feat-body"><span class="kicker">${esc(t('heroVidKicker'))}</span><h2>${esc(t('heroVidT'))}</h2><p>${esc(t('heroVidD'))}</p><span class="link">${esc(c('apply'))}</span></span>
-    </a>` : ''}
-    <a class="feat rev rv d1" href="${LINKS.news}" target="_blank" rel="noopener">
-      ${pic(R, M.hero.file, 'feat-img', t('feat1T'))}
-      <span class="feat-body"><span class="kicker">${esc(t('featuredKicker'))}</span><h2>${esc(t('feat1T'))}</h2><p>${esc(t('feat1D'))}</p><span class="link">${esc(c('learnMore'))}</span></span>
-    </a>
+    <div class="slider rv" data-slider>
+      <div class="slides" id="latest">
+        ${M.heroVideo && has(M.heroVideo.src) ? `<a class="slide feat vid" href="${LINKS.apply}" target="_blank" rel="noopener">
+          <video class="feat-img" src="${mp(R, M.heroVideo.src)}"${has(M.heroVideo.poster) ? ` poster="${mp(R, M.heroVideo.poster)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-label="${esc(t('heroVidT'))}"></video>
+          <span class="feat-body"><span class="kicker">${esc(t('heroVidKicker'))}</span><h2>${esc(t('heroVidT'))}</h2><p>${esc(t('heroVidD'))}</p><span class="link">${esc(c('apply'))}</span></span>
+        </a>` : ''}
+        <a class="slide feat" href="${LINKS.news}" target="_blank" rel="noopener">
+          ${pic(R, M.hero.file, 'feat-img', t('feat1T'))}
+          <span class="feat-body"><span class="kicker">${esc(t('featuredKicker'))}</span><h2>${esc(t('feat1T'))}</h2><p>${esc(t('feat1D'))}</p><span class="link">${esc(c('learnMore'))}</span></span>
+        </a>
+        ${M.hero2 && has(M.hero2.file) ? `<a class="slide feat" href="${M.hero2.url}" target="_blank" rel="noopener">
+          ${pic(R, M.hero2.file, 'feat-img', t('feat2T'))}
+          <span class="feat-body"><span class="kicker">${esc(t('featuredKicker'))}</span><h2>${esc(t('feat2T'))}</h2><p>${esc(t('feat2D'))}</p><span class="link">${esc(c('learnMore'))}</span></span>
+        </a>` : ''}
+      </div>
+      <div class="slider-nav"><button class="sbtn prev" type="button" aria-label="${esc(t('slidePrev'))}"><span class="arr">←</span></button><div class="sdots" role="tablist"></div><button class="sbtn next" type="button" aria-label="${esc(t('slideNext'))}"><span class="arr">→</span></button></div>
+    </div>
   </div>
 </section>
 <section class="section tint">
@@ -459,13 +510,18 @@ function academics(ctx) {
     const list = n ? `<div class="plist" data-programmes="${f.id}" data-level="bachelor"></div>`
       : `<p class="empty" style="text-align:start;padding:18px 0">${esc(lang === 'ar' ? 'لم تُنشر تفاصيل البرامج بعد في هذه المعاينة؛ تُضاف من الكلية.' : 'Programme details are not yet in this preview; they will be added from the faculty.')}</p>`;
     const extra = f.id === 'science' ? ` <a class="link" href="${R + PAGES.science}">${esc(c('facultyPage'))}</a>` : '';
-    return `<div class="facblock rv" id="${f.id}"><div class="facblock-head">${icon(facultyIcon[f.id])}<h3>${esc(f[lang])}</h3>${extra}</div>${list}</div>`;
+    const nm = count(f.id, 'master');
+    const masters = nm ? `<h4 class="sub">${esc(t('masterIn'))}</h4><div class="plist" data-programmes="${f.id}" data-level="master"></div>` : '';
+    const meta = [n ? `${n} ${esc(c('bachelor'))}` : '', nm ? `${nm} ${esc(c('master'))}` : ''].filter(Boolean).join(' · ');
+    return `<div class="facblock rv" id="${f.id}"><div class="facblock-head">${icon(facultyIcon[f.id])}<div><h3>${esc(f[lang])}</h3>${meta ? `<span class="fac-meta">${meta}</span>` : ''}</div>${extra}</div>${n ? `<h4 class="sub">${esc(t('bachelorIn'))}</h4>` : ''}${list}${masters}</div>`;
   }).join('');
+  const findex = `<div class="facindex rv"><span class="kicker">${esc(t('indexKicker'))}</span><div class="fchips">${D.faculties.map((f) => `<a class="fchip" href="#${f.id}">${esc(f[lang])}</a>`).join('')}</div></div>`;
   return `
 ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
 <section class="section">
   <div class="wrap">
     ${head(ctx, '', t('byFaculty'), c('verify'))}
+    ${findex}
     ${blocks}
   </div>
 </section>
@@ -579,6 +635,13 @@ ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
     <p class="finder-note rv">${esc(c('estimate'))}: <b>${est.toLocaleString(lang === 'ar' ? 'ar-JO' : 'en-GB')} JD</b> (${esc(c('estimateNote'))}). ${esc(c('verify'))}</p>
   </div>
 </section>
+<section class="section tint" id="plan">
+  <div class="wrap two">
+    <div class="rv"><span class="kicker">${esc(t('planKicker'))}</span><h2>${esc(t('planTitle'))}</h2><p class="lead">${esc(t('planLead'))}</p><div class="hero-cta"><a class="btn" href="${R}plans/${p.plan}.html">${esc(t('planCta'))} <span class="arr">→</span></a><a class="btn btn-ghost" href="${LINKS.courseFinder}" target="_blank" rel="noopener">${esc(t('planFinder'))}</a></div><p class="finder-note">${esc(c('studyPlanNote'))}</p></div>
+    <div class="steps rv d1 compact">${[1, 2, 3].map((i) => `<div class="step"><h3>${esc(t('ps' + i + 'T'))}</h3><p>${esc(t('ps' + i + 'D'))}</p></div>`).join('')}</div>
+  </div>
+  <div class="wrap">${PLANS[p.plan] ? planVersions(ctx, PLANS[p.plan].guidance, 'guidance', true) : ''}</div>
+</section>
 <section class="section tint">
   <div class="wrap two">
     <div class="rv"><span class="kicker">${esc(t('coversKicker'))}</span><h2>${esc(t('coversTitle'))}</h2><div class="pills">${fields}</div></div>
@@ -596,6 +659,95 @@ ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
     <div class="cta rv"><div><span class="kicker">${esc(t('applyKicker'))}</span><h2>${esc(t('applyTitle'))}</h2><p>${esc(t('applyLead'))}</p></div><div class="actions"><a class="btn btn-light" href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))} <span class="arr">→</span></a><a class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.5)" href="${R + PAGES.science}">${esc(t('backToFaculty'))}</a></div></div>
   </div>
 </section>`;
+}
+
+/* ---------- study plans (copied from AUM's department pages) ---------- */
+const planId = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+function planBlock(ctx, b) {
+  const { T } = ctx;
+  if (b[0] === 't') return `<p class="plan-text${(/semester|credit hours?$/i.test(b[1]) && b[1].length < 70) ? ' plan-sem' : ''}">${esc(b[1])}</p>`;
+  const [, headers, rows] = b;
+  const nCols = headers.length;
+  const isNum = (i) => /cr|hours|credit/i.test(headers[i] || '') && !/course|title|name/i.test(headers[i] || '');
+  const th = headers.map((h, i) => `<th${isNum(i) ? ' class="num"' : ''}>${esc(h)}</th>`).join('');
+  const tr = rows.map((r) => {
+    const total = /total/i.test(r[0] + ' ' + (r[1] || '')) && !r[0].match(/^\d{5,}/);
+    return `<tr${total ? ' class="total"' : ''}>${r.slice(0, nCols).map((v, i) => `<td${isNum(i) ? ' class="num"' : ''}>${esc(v || (i === 0 ? '' : '—'))}</td>`).join('')}</tr>`;
+  }).join('');
+  return `<div class="tablewrap plan-table"><table dir="ltr" data-cols="${nCols}"><thead><tr>${th}</tr></thead><tbody>${tr}</tbody></table></div>`;
+}
+function planSections(ctx, plan, kind) {
+  // guidance plans: one <details> per year, open by default; study plans: one per requirement group
+  return plan.sections.map((sec, i) => {
+    const body = sec.blocks.map((b) => planBlock(ctx, b)).join('');
+    const credits = (sec.title.match(/(\d+)\s*credit/i) || [])[1];
+    return `<details class="plan-sec"${kind === 'guidance' || i === 0 ? ' open' : ''}><summary><span class="plan-n">${i + 1}</span><span class="plan-sec-title">${esc(sec.title.replace(/:\s*\d+\s*credit hours?/i, ''))}</span>${credits ? `<span class="chip gold">${esc(credits)} ${esc(ctx.c('credits'))}</span>` : ''}</summary><div class="plan-sec-body">${body}</div></details>`;
+  }).join('');
+}
+function planVersions(ctx, plans, kind, compact) {
+  const { T } = ctx;
+  if (!plans.length) return `<p class="empty" style="text-align:start">${esc(T('plans', 'noGuidance'))}</p>`;
+  const id = kind + '-' + Math.random().toString(36).slice(2, 7);
+  const tabs = plans.length > 1 ? `<div class="plan-versions" role="tablist" aria-label="${esc(T('plans', 'version'))}">${plans.map((p, i) => `<button type="button" role="tab" class="${i ? '' : 'on'}" aria-selected="${i ? 'false' : 'true'}" data-ver="${id}-${i}">${esc(p.label.replace(/^Course Curriculum\s*/i, '').replace(/^\(([^)]*)\):\s*/, '$1: '))}</button>`).join('')}</div>` : '';
+  const panels = plans.map((p, i) => `<div class="plan-ver" id="${id}-${i}"${i ? ' hidden' : ''}>${planSections(ctx, p, kind)}</div>`).join('');
+  return `<div class="plan rv${compact ? ' compact' : ''}">${tabs}${panels}<p class="finder-note plan-legend">${esc(T('plans', 'legend'))}</p></div>`;
+}
+function planPage(ctx, slug) {
+  const { R, t, c, lang, T } = ctx; const P = PLANS[slug];
+  const prog = D.programmes.find((p) => p.plan === slug);
+  const fac = D.faculties.find((f) => f.id === P.faculty);
+  const name = prog ? (prog[lang] || prog.en) : P.department;
+  const credits = (P.guidance[0] && P.guidance[0].credits) || (P.study[0] && P.study[0].credits) || (prog && prog.credits) || '';
+  const facts = [credits ? `<span class="chip gold">${esc(credits)} ${esc(c('credits'))}</span>` : '', `<span class="chip">${esc(prog ? c(prog.level) : c('bachelor'))}</span>`, `<span class="chip">${esc(fac ? fac[lang] : '')}</span>`].join('');
+  const links = [`<a class="btn btn-ghost" href="${P.source}" target="_blank" rel="noopener">${esc(t('official'))} ↗</a>`, prog && prog.page ? `<a class="btn btn-ghost" href="${R + prog.page}">${esc(t('programmePage'))}</a>` : '', `<a class="btn btn-ghost" href="${R + PAGES.plans}">${esc(t('back'))}</a>`].join('');
+  return `
+${phero(ctx, `${t('pageTitle')} · ${fac ? fac[lang] : ''}`, name, t('pageLead'))}
+<section class="section" id="guidance">
+  <div class="wrap">
+    <div class="plan-top rv"><div class="pills">${facts}</div><div class="hero-cta">${links}</div></div>
+    <p class="finder-note plan-note rv">${esc(c('studyPlanNote'))}</p>
+    ${head(ctx, t('kicker'), t('guidanceT'), t('guidanceD'))}
+    ${planVersions(ctx, P.guidance, 'guidance')}
+  </div>
+</section>
+<section class="section tint" id="study">
+  <div class="wrap">
+    ${head(ctx, t('kicker'), t('studyT'), t('studyD'))}
+    ${planVersions(ctx, P.study, 'study')}
+  </div>
+</section>
+<section class="section">
+  <div class="wrap">
+    ${head(ctx, '', t('tipsKicker'), '')}
+    <div class="steps compact rv">${[1, 2, 3].map((i) => `<div class="step"><h3>${esc(t('tip' + i + 'T'))}</h3><p>${esc(t('tip' + i + 'D'))}</p></div>`).join('')}</div>
+    <p class="rv d1" style="margin-top:22px"><a class="btn" href="${LINKS.calendar}" target="_blank" rel="noopener">${esc(c('toolCalendar'))} ↗</a> <a class="btn btn-ghost" href="${LINKS.registration}" target="_blank" rel="noopener">${esc(c('toolRegistration'))} ↗</a></p>
+  </div>
+</section>
+${applyCta(ctx)}`;
+}
+function plans(ctx) {
+  const { R, t, c, lang } = ctx;
+  const blocks = D.faculties.map((f) => {
+    const items = Object.values(PLANS).filter((P) => P.faculty === f.id).map((P) => {
+      const prog = D.programmes.find((p) => p.plan === P.slug);
+      const name = prog ? (prog[lang] || prog.en) : P.department;
+      const credits = (P.guidance[0] && P.guidance[0].credits) || (P.study[0] && P.study[0].credits) || '';
+      return `<a class="pcard plan-card" href="${R}plans/${P.slug}.html"><span class="fac">${esc(prog ? c(prog.level) : c('bachelor'))}</span><h3>${esc(name)}</h3><div class="meta">${credits ? `<span class="chip gold">${esc(credits)} ${esc(c('credits'))}</span>` : ''}${P.guidance.length ? `<span class="chip">${esc(t('guidanceT'))}</span>` : ''}</div><span class="go" aria-hidden="true">→</span></a>`;
+    }).join('');
+    if (!items) return '';
+    return `<div class="facblock rv" id="${f.id}"><div class="facblock-head">${icon(facultyIcon[f.id])}<div><h3>${esc(f[lang])}</h3></div></div><div class="plist compact">${items}</div></div>`;
+  }).join('');
+  const findex = `<div class="facindex rv"><span class="kicker">${esc(S.academics.indexKicker[lang])}</span><div class="fchips">${D.faculties.map((f) => `<a class="fchip" href="#${f.id}">${esc(f[lang])}</a>`).join('')}</div></div>`;
+  return `
+${phero(ctx, t('kicker'), t('h1'), t('lead'))}
+<section class="section">
+  <div class="wrap">
+    ${findex}
+    <p class="finder-note plan-note rv">${esc(t('indexNote'))}</p>
+    ${blocks}
+  </div>
+</section>
+${applyCta(ctx)}`;
 }
 
 function admissions(ctx) {
@@ -743,7 +895,7 @@ ${phero(ctx, '404', t('h1'), t('lead'))}
 <section class="section"><div class="wrap"><p class="rv"><a class="btn" href="${R}index.html">${esc(t('home'))} <span class="arr">→</span></a></p></div></section>`;
 }
 
-const BUILDERS = { home, academics, science, biotech, admissions, life, about, tools, notfound };
+const BUILDERS = { home, academics, science, biotech, admissions, life, about, tools, plans, notfound };
 
 /* ---------- run ---------- */
 let n = 0;
@@ -760,6 +912,26 @@ for (const lang of ['en', 'ar']) {
     PH = ctx.c('photoSlot');
     const html = shell(ctx, page, BUILDERS[page](ctx));
     const out = join(ROOT, lang === 'ar' ? 'ar' : '', PAGES[page]);
+    mkdirSync(dirname(out), { recursive: true });
+    writeFileSync(out, html);
+    n++;
+  }
+  // one page per department study plan: plans/<slug>.html (EN) and ar/plans/<slug>.html (AR)
+  for (const slug of Object.keys(PLANS)) {
+    const sec = S.plans; const R2 = R + '../';
+    const prog = D.programmes.find((p) => p.plan === slug);
+    const name = prog ? (prog[lang] || prog.en) : PLANS[slug].department;
+    const ctx = {
+      lang, R: R2, file: `plans/${slug}.html`,
+      title: `${name} · ${sec.pageTitle[lang]} | ${S.common.siteName[lang]}`,
+      description: `${name}: ${sec.guidanceD[lang]}`,
+      t: (k) => { const v = (sec[k] || S.common[k]); if (!v) throw new Error(`missing string plans.${k}`); return v[lang] || v.en; },
+      c: (k) => { const v = S.common[k]; if (!v) throw new Error(`missing common string ${k}`); return v[lang] || v.en; },
+      T: (s, k) => { const v = S[s] && S[s][k]; if (!v) throw new Error(`missing string ${s}.${k}`); return v[lang] || v.en; }
+    };
+    PH = ctx.c('photoSlot');
+    const html = shell(ctx, 'plans', planPage(ctx, slug));
+    const out = join(ROOT, lang === 'ar' ? 'ar' : '', 'plans', `${slug}.html`);
     mkdirSync(dirname(out), { recursive: true });
     writeFileSync(out, html);
     n++;
