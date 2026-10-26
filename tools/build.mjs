@@ -154,7 +154,10 @@ const ICONS = {
   users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
   briefcase: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16M2 13h20"/>',
   chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/>',
-  star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/>'
+  star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/>',
+  trophy: '<path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4a1 1 0 0 0-1 1 4 4 0 0 0 4 4M17 6h3a1 1 0 0 1 1 1 4 4 0 0 1-4 4"/>',
+  waves: '<path d="M2 8c2 0 2-1.5 4-1.5S8 8 10 8s2-1.5 4-1.5S16 8 18 8s2-1.5 4-1.5"/><path d="M2 13c2 0 2-1.5 4-1.5S8 13 10 13s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 18c2 0 2-1.5 4-1.5S8 18 10 18s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/>',
+  camera: '<path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/>'
 };
 const icon = (k) => `<span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg></span>`;
 
@@ -239,7 +242,7 @@ function shell(ctx, page, body) {
 <link rel="alternate" hreflang="x-default" href="${SITE}${file}">
 <link rel="preload" href="${R}assets/fonts/${lang === 'ar' ? 'amiri-arabic-bold' : 'cormorant-latin'}.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${R}assets/css/site.css">
-<script>window.AUM_STRINGS=${JSON.stringify(strings)};window.AUM_DATA=${JSON.stringify(D)};</script>
+<script>window.AUM_STRINGS=${JSON.stringify(strings)};window.AUM_DATA=${JSON.stringify(D)};window.AUM_FICONS=${JSON.stringify(Object.fromEntries(D.faculties.map((f) => [f.id, icon(facultyIcon[f.id])])))};</script>
 </head>
 <body>
 <div class="intro" id="intro" aria-hidden="true">
@@ -306,6 +309,11 @@ const head = (ctx, kicker, title, lead, center) =>
 const phero = (ctx, kicker, h1, lead, h1em) =>
   `<section class="phero"><div class="wrap"><div class="phero-band">${ring('')}<img class="phero-seal" src="${ctx.R}assets/img/seal.png" width="239" height="239" alt=""></div><span class="kicker rv">${esc(kicker)}</span><h1 class="rv d1">${esc(h1)}${h1em ? ` <em>${esc(h1em)}</em>` : ''}</h1><p class="lead rv d2">${esc(lead)}</p></div></section>${mosaicRule()}`;
 
+const pheroPhoto = (ctx, kicker, h1, lead, media, alt) => {
+  const img = media && has(media.file) ? `<img src="${mp(ctx.R, media.file)}" alt="${esc(alt)}" loading="eager">` : `<div class="ph"><div class="tesserae" data-count="40"></div><span>${esc(PH)}</span></div>`;
+  return `<section class="phero photo-hero"><div class="tesserae" data-count="36" aria-hidden="true"></div><div class="wrap phero-split"><div><span class="kicker rv">${esc(kicker)}</span><h1 class="rv d1">${esc(h1)}</h1><p class="lead rv d2">${esc(lead)}</p></div><div class="phero-pic rv d2">${img}</div></div></section>`;
+};
+
 const applyCta = (ctx, extraLink) => {
   const { R, c, T } = ctx;
   return `<section class="section"><div class="wrap"><div class="cta rv"><div><span class="kicker">${esc(T('biotech', 'applyKicker'))}</span><h2>${esc(T('biotech', 'applyTitle'))}</h2><p>${esc(c('applyNote'))}</p></div><div class="actions"><a class="btn btn-light" href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))} <span class="arr">→</span></a><a class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.5)" href="${R + PAGES.admissions}">${esc(c('howToApply'))}</a>${extraLink || ''}</div></div></div></section>`;
@@ -338,9 +346,14 @@ function home(ctx) {
   const quick = HOME_TOOLS.map((id, i) => { const tl = TOOLS.find((x) => x[0] === id); return `<a class="quick rv d${i % 4}" href="${tl[3]}" target="_blank" rel="noopener">${icon(tl[2])}<b>${esc(T('tools', 't_' + id))}</b></a>`; }).join('');
   const chips = D.faculties.map((f) => `<button type="button" class="fchip" data-fac="${f.id}">${esc(f[lang])}</button>`).join('');
   const why = [['laptop', 'why1', LINKS.elearning], ['award', 'why2', LINKS.scholarships], ['home', 'why3', LINKS.dorms], ['intl', 'why4', LINKS.abroad], ['bus', 'why5', LINKS.transport], ['calendar', 'why6', LINKS.calendar], ['shield', 'why7', LINKS.licensing]]
-    .map(([ic, k, h], i) => `<a class="hex rv d${i % 4}" href="${h}" target="_blank" rel="noopener"><span class="hex-in">${icon(ic)}<b>${esc(t(k))}</b></span></a>`).join('');
-  const ann = [1, 2, 3].map((i) => `<a class="card ann rv d${i - 1}" href="${M.announcements[i - 1].url}" target="_blank" rel="noopener"><span class="card-top">${icon(M.announcements[i - 1].icon || 'megaphone')}<span>${esc(t('annCat' + i))}</span></span><h3>${esc(t('ann' + i + 'T'))}</h3><span class="date">${esc(t('ann' + i + 'D'))}</span></a>`).join('');
-  const news = [1, 2, 3].map((i) => { const n = M.news[i - 1]; return `<a class="card rv d${i - 1}" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'card-img', t('news' + i + 'T'))}<h3>${esc(t('news' + i + 'T'))}</h3><span class="date">${esc(t('news' + i + 'D'))}</span><span class="link card-link">${esc(c('learnMore'))}</span></a>`; }).join('');
+    .map(([ic, k, h], i) => `<a class="stone rv d${i % 4}" href="${h}" target="_blank" rel="noopener"><span class="stone-n">${String(i + 1).padStart(2, '0')}</span>${icon(ic)}<b>${esc(t(k))}</b><p>${esc(t(k + 'D'))}</p><span class="stone-go">${esc(c('opensAum'))} <span class="arr">↗</span></span></a>`).join('');
+  const whyPhoto = M.why && has(M.why.file)
+    ? `<a class="stone-photo rv" href="${M.why.url}" target="_blank" rel="noopener"><img src="${mp(R, M.why.file)}" alt="${esc(t('whyPhotoAlt'))}" loading="lazy"><span>${esc(t('whyPhotoAlt'))}</span></a>`
+    : `<div class="stone-photo ph"><div class="tesserae" data-count="40"></div><span>${esc(PH)}</span></div>`;
+  const notices = [1, 2, 3].map((i) => `<a class="notice" href="${M.announcements[i - 1].url}" target="_blank" rel="noopener">${icon(M.announcements[i - 1].icon || 'megaphone')}<span><small>${esc(t('annCat' + i))} · ${esc(t('ann' + i + 'D'))}</small><b>${esc(t('ann' + i + 'T'))}</b></span></a>`).join('');
+  const leadStory = (() => { const n = M.news[0]; return `<a class="lead-story rv" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'lead-img', t('news1T'))}<span class="lead-body"><span class="tag">${esc(t('newsLeadLabel'))}</span><h3>${esc(t('news1T'))}</h3><span class="date">${esc(t('news1D'))}</span><span class="link">${esc(c('learnMore'))} <span class="arr">→</span></span></span></a>`; })();
+  const stories = [2, 3].map((i) => { const n = M.news[i - 1]; return `<a class="story" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'story-img', t('news' + i + 'T'))}<span><h3>${esc(t('news' + i + 'T'))}</h3><span class="date">${esc(t('news' + i + 'D'))}</span></span></a>`; }).join('')
+    + `<a class="story text" href="${LINKS.licensing}" target="_blank" rel="noopener"><span><h3>${esc(t('news4T'))}</h3><span class="date">${esc(t('news4D'))}</span></span></a>`;
   const events = [1, 2, 3, 4].map((i) => { const e = M.events[i - 1]; return `<a class="event rv d${(i - 1) % 4}" href="${e.url}" target="_blank" rel="noopener">${pic(R, e.file, 'event-img', t('ev' + i + 'T'))}<span class="event-date"><b>${esc(t('ev' + i + 'D'))}</b><small>${esc(t('ev' + i + 'M'))}</small></span><span class="event-body"><h3>${esc(t('ev' + i + 'T'))}</h3><span class="time">${esc(t('ev' + i + 'H'))}</span></span></a>`; }).join('');
   const alumniN = Math.min((M.alumni || []).length, 4);
   const alumni = Array.from({ length: alumniN }, (_, i) => {
@@ -382,29 +395,20 @@ function home(ctx) {
 </section>
 <section class="section featured" aria-label="${esc(t('latestLabel'))}">
   <div class="wrap">
-    <div class="slider rv" data-slider>
-      <div class="slides" id="latest">
-        ${M.heroVideo && has(M.heroVideo.src) ? `<a class="slide feat vid" href="${LINKS.apply}" target="_blank" rel="noopener">
-          <video class="feat-img" src="${mp(R, M.heroVideo.src)}"${has(M.heroVideo.poster) ? ` poster="${mp(R, M.heroVideo.poster)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-label="${esc(t('heroVidT'))}"></video>
-          <span class="feat-body"><span class="kicker">${esc(t('heroVidKicker'))}</span><h2>${esc(t('heroVidT'))}</h2><p>${esc(t('heroVidD'))}</p><span class="link">${esc(c('apply'))}</span></span>
-        </a>` : ''}
-        <a class="slide feat" href="${LINKS.news}" target="_blank" rel="noopener">
-          ${pic(R, M.hero.file, 'feat-img', t('feat1T'))}
-          <span class="feat-body"><span class="kicker">${esc(t('featuredKicker'))}</span><h2>${esc(t('feat1T'))}</h2><p>${esc(t('feat1D'))}</p><span class="link">${esc(c('learnMore'))}</span></span>
-        </a>
-        ${M.hero2 && has(M.hero2.file) ? `<a class="slide feat" href="${M.hero2.url}" target="_blank" rel="noopener">
-          ${pic(R, M.hero2.file, 'feat-img', t('feat2T'))}
-          <span class="feat-body"><span class="kicker">${esc(t('featuredKicker'))}</span><h2>${esc(t('feat2T'))}</h2><p>${esc(t('feat2D'))}</p><span class="link">${esc(c('learnMore'))}</span></span>
-        </a>` : ''}
-      </div>
-      <div class="slider-nav"><button class="sbtn prev" type="button" aria-label="${esc(t('slidePrev'))}"><span class="arr">←</span></button><div class="sdots" role="tablist"></div><button class="sbtn next" type="button" aria-label="${esc(t('slideNext'))}"><span class="arr">→</span></button></div>
-    </div>
+    ${M.heroVideo && has(M.heroVideo.src) ? `<a class="feat vid rv" href="${LINKS.apply}" target="_blank" rel="noopener">
+      <video class="feat-img" src="${mp(R, M.heroVideo.src)}"${has(M.heroVideo.poster) ? ` poster="${mp(R, M.heroVideo.poster)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-label="${esc(t('heroVidT'))}"></video>
+      <span class="feat-body"><span class="kicker">${esc(t('heroVidKicker'))}</span><h2>${esc(t('heroVidT'))}</h2><p>${esc(t('heroVidD'))}</p><span class="link">${esc(c('apply'))} <span class="arr">→</span></span></span>
+    </a>` : ''}
+    <a class="feat rev rv" href="${LINKS.news}" target="_blank" rel="noopener">
+      ${pic(R, M.hero.file, 'feat-img', t('feat1T'))}
+      <span class="feat-body"><span class="kicker">${esc(t('featuredKicker'))}</span><h2>${esc(t('feat1T'))}</h2><p>${esc(t('feat1D'))}</p><span class="link">${esc(c('learnMore'))} <span class="arr">→</span></span></span>
+    </a>
   </div>
 </section>
-<section class="section tint">
+<section class="section tint why" id="why">
   <div class="wrap">
-    ${head(ctx, t('whyKicker'), t('whyTitle'), '', true)}
-    <div class="hexes">${why}</div>
+    ${head(ctx, t('whyKicker'), t('whyTitle'), t('whyLead'))}
+    <div class="stones">${whyPhoto}${why}</div>
   </div>
 </section>
 <section class="stats"><div class="wrap five">${stats}</div></section>
@@ -426,16 +430,17 @@ function home(ctx) {
   </div>
 </section>
 ${mosaicRule()}
-<section class="section tint" id="announcements">
+<section class="section newsroom" id="news">
   <div class="wrap">
-    <div class="row-head rv"><div><span class="kicker">${esc(t('annKicker'))}</span><h2>${esc(t('annTitle'))}</h2></div><a class="btn btn-ghost" href="${LINKS.announcements}" target="_blank" rel="noopener">${esc(c('viewAll'))} <span class="arr">→</span></a></div>
-    <div class="cards">${ann}</div>
-  </div>
-</section>
-<section class="section" id="news">
-  <div class="wrap">
-    <div class="row-head rv"><div><span class="kicker">${esc(t('newsKicker'))}</span><h2>${esc(t('newsTitle'))}</h2></div><a class="btn btn-ghost" href="${LINKS.news}" target="_blank" rel="noopener">${esc(c('viewAll'))} <span class="arr">→</span></a></div>
-    <div class="cards">${news}</div>
+    <div class="masthead rv">
+      <div><span class="kicker">${esc(t('newsroomKicker'))}</span><h2>${esc(t('newsTitle'))}</h2></div>
+      <div class="mast-meta"><span>${esc(t('newsUpdated'))}</span><a class="btn btn-ghost" href="${LINKS.news}" target="_blank" rel="noopener">${esc(t('newsAll'))} <span class="arr">→</span></a></div>
+    </div>
+    <div class="paper">
+      ${leadStory}
+      <div class="stories rv d1"><h4 class="col-head">${esc(t('newsMore'))}</h4>${stories}</div>
+      <aside class="notices rv d2" id="announcements"><h4 class="col-head">${esc(t('noticesLabel'))}</h4>${notices}<a class="link" href="${LINKS.announcements}" target="_blank" rel="noopener">${esc(t('noticesAll'))} <span class="arr">→</span></a></aside>
+    </div>
   </div>
 </section>
 ${orient ? `<section class="section tint" id="campus-life">
@@ -752,12 +757,22 @@ ${applyCta(ctx)}`;
 }
 
 function admissions(ctx) {
-  const { t, c, lang } = ctx;
-  const steps = [1, 2, 3, 4].map((i) => `<div class="step rv d${i - 1}"><h3>${esc(t('s' + i + 'T'))}</h3><p>${esc(t('s' + i + 'D'))}</p></div>`).join('');
+  const { R, t, c, lang } = ctx;
+  const steps = [1, 2, 3, 4].map((i) => `<li class="rstep rv d${i - 1}"><span class="rstep-n"><span>${String(i).padStart(2, '0')}</span></span><div><h3>${esc(t('s' + i + 'T'))}</h3><p>${esc(t('s' + i + 'D'))}</p>${i === 1 ? `<a class="link" href="${R}index.html#finder">${esc(c('findProgramme'))} <span class="arr">→</span></a>` : ''}${i === 2 ? `<a class="link" href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))} <span class="arr">↗</span></a>` : ''}${i === 4 ? `<a class="link" href="${R + PAGES.life}#bus">${esc(S.home.lifeBusT[lang])} <span class="arr">→</span></a>` : ''}</div></li>`).join('');
+  const poster = (M.events || []).find((e) => /openday/.test(e.file || '') && has(e.file));
   return `
-${phero(ctx, t('kicker'), t('h1'), t('lead'))}
-<section class="section">
-  <div class="wrap"><div class="steps">${steps}</div></div>
+${pheroPhoto(ctx, t('kicker'), t('h1'), t('lead'), M.admissionsHero, t('heroAlt'))}
+<section class="section" id="route">
+  <div class="wrap route">
+    <div>
+      ${head(ctx, t('routeKicker'), t('routeTitle'))}
+      <ol class="route-steps">${steps}</ol>
+    </div>
+    <aside class="route-side">
+      <div class="apply-card rv d1"><div class="tesserae" data-count="18" aria-hidden="true"></div>${icon('send')}<h3>${esc(t('applyCardT'))}</h3><p>${esc(t('applyCardD'))}</p><a class="btn" href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))} <span class="arr">→</span></a><p class="small">${esc(t('applyCardHours'))}</p><a class="link" href="${LINKS.tel}">${esc(c('phone'))}</a></div>
+      <a class="openday rv d2" href="${LINKS.events}" target="_blank" rel="noopener">${poster ? `<img src="${mp(R, poster.file)}" alt="${esc(t('openAlt'))}" loading="lazy">` : ''}<span><span class="kicker">${esc(t('openKicker'))}</span><b>${esc(t('openTitle'))}</b><p>${esc(t('openLead'))}</p><span class="link">${esc(t('openCta'))} <span class="arr">↗</span></span></span></a>
+    </aside>
+  </div>
 </section>
 <section class="section tint" id="fees">
   <div class="wrap">
@@ -793,12 +808,21 @@ ${applyCta(ctx)}`;
 }
 
 function life(ctx) {
-  const { t, c, lang } = ctx;
+  const { R, t, c, lang } = ctx;
   const rows = [['rAmman', 250], ['rFuhais', 250], ['rZarqa', 250], ['rKarak', 250], ['rMadaba', 160]]
     .map(([k, fee]) => `<tr><td><b>${esc(t(k))}</b></td><td class="num">${fee}</td></tr>`).join('');
-  const clubs = [1, 2, 3, 4, 5, 6].map((i) => `<span class="pill">${esc(t('cl' + i))}</span>`).join('');
+  const clubs = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `<span class="pill">${esc(t('cl' + i))}</span>`).join('');
+  const stripFiles = (M.lifeStrip && (M.lifeStrip.files || []).filter(has)) || [];
+  const stripImgs = stripFiles.map((f) => `<a href="${M.lifeStrip.url}" target="_blank" rel="noopener" tabindex="-1"><img src="${mp(R, f)}" alt="" loading="lazy"></a>`).join('');
+  const strip = stripFiles.length ? `<section class="strip-band" aria-label="${esc(t('stripLabel'))}"><div class="strip"><div class="strip-track">${stripImgs}${stripImgs}</div></div><div class="wrap strip-cap"><span class="kicker">${esc(t('stripLabel'))}</span><a class="link" href="${M.lifeStrip.url}" target="_blank" rel="noopener">${esc(t('stripCta'))} <span class="arr">↗</span></a></div></section>` : '';
+  const facts = [1, 2, 3, 4].map((i) => `<div class="stat"><b>${esc(t('f' + i + 'N'))}</b><span>${esc(t('f' + i))}</span></div>`).join('');
+  const sportPics = (M.sport && (M.sport.files || []).filter(has)) || [];
+  const sport = sportPics.length ? `<div class="gallery collage rv d1">${sportPics.map((f) => `<a href="${M.sport.url}" target="_blank" rel="noopener"><img src="${mp(R, f)}" alt="${esc(t('stripLabel'))}" loading="lazy"></a>`).join('')}</div>` : `<div class="photo olive rv d1"><div class="tesserae" data-count="60"></div><p class="note">${esc(S.science.photoNote[lang])}</p></div>`;
+  const health = M.health && has(M.health.file) ? `<a class="photo-link rv d1" href="${LINKS.health}" target="_blank" rel="noopener"><img src="${mp(R, M.health.file)}" alt="${esc(t('healthAlt'))}" loading="lazy"><span>${esc(t('healthAlt'))}</span></a>` : '';
   return `
-${phero(ctx, t('kicker'), t('h1'), t('lead'))}
+${pheroPhoto(ctx, t('kicker'), t('h1'), t('lead'), M.lifeHero, t('heroAlt'))}
+${strip}
+<section class="stats life-stats"><div class="wrap"><div class="stats-kicker kicker">${esc(t('dayKicker'))}</div><div class="stats-grid">${facts}</div></div></section>
 <section class="section" id="bus">
   <div class="wrap two">
     <div>
@@ -813,26 +837,31 @@ ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
   <div class="wrap">
     ${head(ctx, t('housingKicker'), t('housingTitle'))}
     <div class="grid c2">
-      <div class="tile rv">${icon('home')}<h3>${esc(lang === 'ar' ? 'للطالبات' : 'For women')}</h3><p>${esc(t('housingW'))}</p><a class="link" href="${LINKS.housing}" target="_blank" rel="noopener">${esc(t('housingApply'))}</a></div>
-      <div class="tile rv d1">${icon('pin')}<h3>${esc(lang === 'ar' ? 'للطلاب والطلبة الدوليين' : 'For men and international students')}</h3><p>${esc(t('housingM'))}</p></div>
+      <div class="tile rv">${icon('home')}<h3>${esc(lang === 'ar' ? 'للطالبات' : 'For women')}</h3><p>${esc(t('housingW'))}</p><span class="chip gold">${esc(t('housingFacts'))}</span><a class="link" href="${LINKS.housing}" target="_blank" rel="noopener">${esc(t('housingApply'))}</a></div>
+      <div class="tile rv d1">${icon('pin')}<h3>${esc(lang === 'ar' ? 'للطلاب والطلبة الدوليين' : 'For men and international students')}</h3><p>${esc(t('housingM'))}</p><a class="link" href="${LINKS.intl}" target="_blank" rel="noopener">${esc(t('intlCta'))}</a></div>
     </div>
   </div>
 </section>
-<section class="section" id="health">
+<section class="section" id="clubs">
+  <div class="wrap two">
+    <div class="rv"><span class="kicker">${esc(t('sportKicker'))}</span><h2>${esc(t('sportTitle'))}</h2><p class="lead">${esc(t('sportLead'))}</p><p class="finder-note">${esc(t('clubsLead'))}</p><div class="pills">${clubs}</div><p style="margin-top:18px"><a class="link" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${esc(S.tools.t_studentAffairs[lang])} <span class="arr">↗</span></a></p></div>
+    ${sport}
+  </div>
+</section>
+<section class="section tint" id="health">
   <div class="wrap two">
     <div class="rv"><span class="kicker">${esc(t('healthKicker'))}</span><h2>${esc(t('healthTitle'))}</h2><p class="lead">${esc(t('healthLead'))}</p><p class="finder-note">${esc(t('healthHours'))}</p><a class="link" href="${LINKS.health}" target="_blank" rel="noopener">${esc(c('opensAum'))}</a></div>
-    <div class="grid c2 rv d1">
-      <a class="tile" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${icon('languages')}<h3>${esc(t('langT'))}</h3><p>${esc(t('langD'))}</p></a>
-      <a class="tile" href="${LINKS.alumni}" target="_blank" rel="noopener">${icon('user')}<h3>${esc(t('careerT'))}</h3><p>${esc(t('careerD'))}</p></a>
-      <a class="tile" href="${LINKS.abroad}" target="_blank" rel="noopener">${icon('intl')}<h3>${esc(t('abroadT'))}</h3><p>${esc(t('abroadD'))}</p></a>
-      <a class="tile" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${icon('clubs')}<h3>${esc(S.tools.t_studentAffairs[lang])}</h3><p>${esc(S.tools.d_studentAffairs[lang])}</p></a>
-    </div>
+    ${health}
   </div>
 </section>
-<section class="section tint" id="clubs">
-  <div class="wrap two">
-    <div class="rv"><span class="kicker">${esc(t('clubsKicker'))}</span><h2>${esc(t('clubsTitle'))}</h2><p class="lead">${esc(t('clubsLead'))}</p><div class="pills">${clubs}</div></div>
-    <div class="photo olive rv d1"><div class="tesserae" data-count="60"></div><p class="note">${esc(S.science.photoNote[lang])}</p></div>
+<section class="section" id="support">
+  <div class="wrap">
+    <div class="grid c4">
+      <a class="tile rv" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${icon('languages')}<h3>${esc(t('langT'))}</h3><p>${esc(t('langD'))}</p></a>
+      <a class="tile rv d1" href="${LINKS.alumni}" target="_blank" rel="noopener">${icon('user')}<h3>${esc(t('careerT'))}</h3><p>${esc(t('careerD'))}</p></a>
+      <a class="tile rv d2" href="${LINKS.abroad}" target="_blank" rel="noopener">${icon('intl')}<h3>${esc(t('abroadT'))}</h3><p>${esc(t('abroadD'))}</p></a>
+      <a class="tile rv d3" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${icon('clubs')}<h3>${esc(S.tools.t_studentAffairs[lang])}</h3><p>${esc(S.tools.d_studentAffairs[lang])}</p></a>
+    </div>
   </div>
 </section>
 <section class="section dark" id="intl">

@@ -92,10 +92,13 @@
       list.classList.toggle('grouped', !fac && !needle);
       if (fac || needle) { list.innerHTML = out.map(card).join(''); return; }
       // No filter: group the cards by faculty so the list reads as a map of the university
+      // v4c: one drop-down per faculty, so the whole university fits on one screen
+      var FI = window.AUM_FICONS || {};
       list.innerHTML = D.faculties.map(function (f) {
         var ps = out.filter(function (p) { return p.faculty === f.id; });
         if (!ps.length) return '';
-        return '<h4 class="fgroup"><span>' + esc(f[lang] || f.en) + '</span><small>' + fmt(ps.length) + '</small></h4>' + ps.map(card).join('');
+        var names = ps.slice(0, 3).map(function (p) { return p[lang] || p.en; }).join(' · ') + (ps.length > 3 ? ' · …' : '');
+        return '<details class="fgroup-d" id="fg-' + f.id + '"><summary>' + (FI[f.id] || '') + '<span class="fg-text"><span class="fg-name">' + esc(f[lang] || f.en) + '</span><span class="fg-peek">' + esc(names) + '</span></span><small>' + fmt(ps.length) + ' ' + esc(t('programmesN')) + '</small></summary><div class="fg-body">' + ps.map(card).join('') + '</div></details>';
       }).join('');
     }
     var fchips = [].slice.call(finder.querySelectorAll('.fchip'));
@@ -227,6 +230,18 @@
     }
     form.addEventListener('submit', function (e) { e.preventDefault(); var q = input.value.trim(); if (!q) return; input.value = ''; answer(q); });
     panel.querySelectorAll('.guide-chips button').forEach(function (b) { b.addEventListener('click', function () { answer(b.dataset.q); }); });
+  }
+
+  // v4c: the tools card tilts a little towards the pointer on desktop (mouse only; nothing on touch)
+  var qc = doc.querySelector('.quick-card');
+  if (qc && window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    var tiltRaf;
+    qc.addEventListener('pointermove', function (e) {
+      var r = qc.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      cancelAnimationFrame(tiltRaf);
+      tiltRaf = requestAnimationFrame(function () { qc.style.setProperty('--tx', (x * 100 + 50).toFixed(1) + '%'); qc.style.setProperty('--ty', (y * 100 + 50).toFixed(1) + '%'); qc.style.transform = 'perspective(1400px) rotateX(' + (-y * 3).toFixed(2) + 'deg) rotateY(' + (x * 4).toFixed(2) + 'deg)'; });
+    });
+    qc.addEventListener('pointerleave', function () { cancelAnimationFrame(tiltRaf); qc.style.transform = ''; });
   }
 
   // v4b: faculty blocks fold; a jump chip or a #hash opens the one it points at

@@ -335,6 +335,10 @@
     "allPlans": {
       "en": "All study plans",
       "ar": "كل الخطط الدراسية"
+    },
+    "programmesN": {
+      "en": "programmes",
+      "ar": "برامج"
     }
   },
   "home": {
@@ -989,6 +993,70 @@
     "soundOff": {
       "en": "Mute",
       "ar": "كتم الصوت"
+    },
+    "whyLead": {
+      "en": "The seven things AUM lists first about itself. Each one opens the official page.",
+      "ar": "الأمور السبعة التي تذكرها الجامعة أولًا عن نفسها. كل منها يفتح الصفحة الرسمية."
+    },
+    "why1D": {
+      "en": "Your courses online at elearning.aum.edu.jo.",
+      "ar": "مساقاتك على الإنترنت عبر elearning.aum.edu.jo."
+    },
+    "why2D": {
+      "en": "Partial tuition scholarships by Tawjihi average.",
+      "ar": "منح جزئية من الرسوم بحسب معدل التوجيهي."
+    },
+    "why3D": {
+      "en": "House of Grace: 88 rooms near campus, opened 2018.",
+      "ar": "بيت النعمة: 88 غرفة قرب الحرم الجامعي، افتُتح عام 2018."
+    },
+    "why4D": {
+      "en": "A semester with partner universities in the US, Italy and Lebanon.",
+      "ar": "فصل دراسي في جامعة شريكة في الولايات المتحدة أو إيطاليا أو لبنان."
+    },
+    "why5D": {
+      "en": "Daily buses from Amman, Zarqa, Fuhais, Karak and Madaba.",
+      "ar": "باصات يومية من عمّان والزرقاء والفحيص والكرك ومادبا."
+    },
+    "why6D": {
+      "en": "Classes are scheduled across four days of the week.",
+      "ar": "تُجدول المحاضرات على أربعة أيام في الأسبوع."
+    },
+    "why7D": {
+      "en": "Registered in the USA; candidate for NECHE accreditation since 2024.",
+      "ar": "مسجّلة في الولايات المتحدة، ومرشّحة لاعتماد NECHE منذ 2024."
+    },
+    "whyPhotoAlt": {
+      "en": "New students on campus, October 2026",
+      "ar": "طلبة جدد في الحرم الجامعي، تشرين الأول 2026"
+    },
+    "newsroomKicker": {
+      "en": "Newsroom",
+      "ar": "غرفة الأخبار"
+    },
+    "newsUpdated": {
+      "en": "Updated 23 October 2026 · from aum.edu.jo",
+      "ar": "آخر تحديث 23 تشرين الأول 2026 · من موقع الجامعة"
+    },
+    "newsLeadLabel": {
+      "en": "Lead story",
+      "ar": "الخبر الرئيسي"
+    },
+    "newsMore": {
+      "en": "More stories",
+      "ar": "أخبار أخرى"
+    },
+    "noticesLabel": {
+      "en": "Notice board",
+      "ar": "لوحة الإعلانات"
+    },
+    "noticesAll": {
+      "en": "All announcements",
+      "ar": "كل الإعلانات"
+    },
+    "newsAll": {
+      "en": "All news",
+      "ar": "كل الأخبار"
     }
   },
   "academics": {
@@ -1765,6 +1833,54 @@
     "gradeD": {
       "en": "Bachelor: 50% to pass a course and 60% cumulative. Master: 70% and 75%.",
       "ar": "البكالوريوس: 50% لاجتياز المساق و60% معدلًا تراكميًا. الماجستير: 70% و75%."
+    },
+    "heroAlt": {
+      "en": "New students at the welcome day, October 2026",
+      "ar": "طلبة جدد في يوم الترحيب، تشرين الأول 2026"
+    },
+    "routeKicker": {
+      "en": "The route in",
+      "ar": "الطريق إلى القبول"
+    },
+    "routeTitle": {
+      "en": "Four steps, one afternoon online.",
+      "ar": "أربع خطوات، وتقديم إلكتروني في جلسة واحدة."
+    },
+    "applyCardT": {
+      "en": "Apply online",
+      "ar": "قدّم إلكترونيًا"
+    },
+    "applyCardD": {
+      "en": "Provisional admission for Tawjihi holders and this year’s graduates, through AUM’s online form.",
+      "ar": "قبول مبدئي لحملة التوجيهي وخريجي هذا العام عبر نموذج الجامعة الإلكتروني."
+    },
+    "applyCardHours": {
+      "en": "Admissions answer Sunday to Thursday, ext. 1900 and 1901.",
+      "ar": "يردّ القبول من الأحد إلى الخميس، فرعي 1900 و1901."
+    },
+    "openKicker": {
+      "en": "Open days",
+      "ar": "الأيام المفتوحة"
+    },
+    "openTitle": {
+      "en": "Come and see it first.",
+      "ar": "تعال وشاهد الجامعة أولًا."
+    },
+    "openLead": {
+      "en": "AUM held open days on 1 August, 29 August and 10 October 2026, from 4:00 pm to 8:30 pm. The next dates appear on the events page.",
+      "ar": "نظّمت الجامعة أيامًا مفتوحة في 1 آب و29 آب و10 تشرين الأول 2026، من 4:00 إلى 8:30 مساءً. المواعيد القادمة تُنشر في صفحة الفعاليات."
+    },
+    "openCta": {
+      "en": "Events page",
+      "ar": "صفحة الفعاليات"
+    },
+    "openAlt": {
+      "en": "Open day poster",
+      "ar": "ملصق اليوم المفتوح"
+    },
+    "stepLabel": {
+      "en": "Step",
+      "ar": "الخطوة"
     }
   },
   "life": {
@@ -1951,6 +2067,86 @@
     "housingApply": {
       "en": "Apply for housing",
       "ar": "قدّم طلب سكن"
+    },
+    "stripLabel": {
+      "en": "Welcome day, 21 October 2026",
+      "ar": "يوم الترحيب، 21 تشرين الأول 2026"
+    },
+    "heroAlt": {
+      "en": "Students on campus on welcome day",
+      "ar": "طلبة في الحرم الجامعي في يوم الترحيب"
+    },
+    "dayKicker": {
+      "en": "In numbers",
+      "ar": "بالأرقام"
+    },
+    "f1N": {
+      "en": "88",
+      "ar": "88"
+    },
+    "f1": {
+      "en": "rooms in House of Grace, the women’s residence",
+      "ar": "غرفة في بيت النعمة، سكن الطالبات"
+    },
+    "f2N": {
+      "en": "5",
+      "ar": "5"
+    },
+    "f2": {
+      "en": "bus routes to campus every semester",
+      "ar": "خطوط باصات إلى الحرم الجامعي كل فصل"
+    },
+    "f3N": {
+      "en": "40",
+      "ar": "40"
+    },
+    "f3": {
+      "en": "nationalities on campus",
+      "ar": "جنسية في الحرم الجامعي"
+    },
+    "f4N": {
+      "en": "4",
+      "ar": "4"
+    },
+    "f4": {
+      "en": "day academic week",
+      "ar": "أيام دراسية في الأسبوع"
+    },
+    "housingFacts": {
+      "en": "Opened July 2018 · 88 rooms · 3,490 m²",
+      "ar": "افتُتح في تموز 2018 · 88 غرفة · 3,490 م²"
+    },
+    "sportKicker": {
+      "en": "Sport and communities",
+      "ar": "الرياضة والمجتمعات الطلابية"
+    },
+    "sportTitle": {
+      "en": "A sports complex, a pool and student communities.",
+      "ar": "مجمّع رياضي ومسبح ومجتمعات طلابية."
+    },
+    "sportLead": {
+      "en": "The sports complex has a semi-Olympic indoor pool and courts. Student communities include Ra7ala, a hiking group on the Jordan Trail, and the Mosaic Thought Leaders Forum.",
+      "ar": "يضم المجمّع الرياضي مسبحًا داخليًا نصف أولمبي وملاعب. ومن المجتمعات الطلابية «رحّالة» لمسيرات درب الأردن، و«منتدى فسيفساء لقادة الفكر»."
+    },
+    "cl7": {
+      "en": "Ra7ala hiking community",
+      "ar": "مجتمع «رحّالة» للمسير"
+    },
+    "cl8": {
+      "en": "Mosaic Thought Leaders Forum",
+      "ar": "منتدى فسيفساء لقادة الفكر"
+    },
+    "cl9": {
+      "en": "Semi-Olympic indoor pool",
+      "ar": "مسبح داخلي نصف أولمبي"
+    },
+    "healthAlt": {
+      "en": "The health centre and its ambulance on campus",
+      "ar": "المركز الصحي وسيارة الإسعاف في الحرم الجامعي"
+    },
+    "stripCta": {
+      "en": "See the welcome day story",
+      "ar": "اقرأ خبر يوم الترحيب"
     }
   },
   "about": {
