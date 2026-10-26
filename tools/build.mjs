@@ -5,12 +5,16 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const S = JSON.parse(readFileSync(join(ROOT, 'data/strings.json'), 'utf8'));
 const D = JSON.parse(readFileSync(join(ROOT, 'data/programmes.json'), 'utf8'));
 const M = JSON.parse(readFileSync(join(ROOT, 'data/media.json'), 'utf8'));
 // Study plans copied from AUM's department pages (data/plans/<slug>.json, see /mnt/project-files/aum/study-plans/README.md)
+// Short content hash per asset, so browsers fetch new CSS/JS on the first load after a push
+const VER = (p) => createHash('sha1').update(readFileSync(join(ROOT, p))).digest('hex').slice(0, 8);
+const V = { css: VER('assets/css/site.css'), js: VER('assets/js/site.js'), intro: VER('assets/js/intro.js') };
 const PLANS = {};
 for (const f of readdirSync(join(ROOT, 'data/plans')).filter((x) => x.endsWith('.json')).sort()) PLANS[f.slice(0, -5)] = JSON.parse(readFileSync(join(ROOT, 'data/plans', f), 'utf8'));
 import { existsSync } from 'node:fs';
@@ -241,7 +245,7 @@ function shell(ctx, page, body) {
 <link rel="alternate" hreflang="ar" href="${SITE}ar/${file}">
 <link rel="alternate" hreflang="x-default" href="${SITE}${file}">
 <link rel="preload" href="${R}assets/fonts/${lang === 'ar' ? 'amiri-arabic-bold' : 'cormorant-latin'}.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="${R}assets/css/site.css">
+<link rel="stylesheet" href="${R}assets/css/site.css?v=${V.css}">
 <script>window.AUM_STRINGS=${JSON.stringify(strings)};window.AUM_DATA=${JSON.stringify(D)};window.AUM_FICONS=${JSON.stringify(Object.fromEntries(D.faculties.map((f) => [f.id, icon(facultyIcon[f.id])])))};</script>
 </head>
 <body>
@@ -251,7 +255,7 @@ function shell(ctx, page, body) {
   <p class="intro-name"><small>${esc(lang === 'ar' ? 'مادبا · الأردن' : 'Madaba · Jordan')}</small>${esc(c('siteName'))}</p>
   <button class="intro-skip" type="button">${esc(c('skip'))}</button>
 </div>
-<script src="${R}assets/js/intro.js"></script>
+<script src="${R}assets/js/intro.js?v=${V.intro}"></script>
 <div class="tools">
   <div class="wrap">
     <span class="tools-label">${esc(c('tools'))}</span>
@@ -296,7 +300,7 @@ ${body}
   </div>
 </footer>
 ${guideHtml(ctx)}
-<script src="${R}assets/js/site.js" defer></script>
+<script src="${R}assets/js/site.js?v=${V.js}" defer></script>
 </body>
 </html>
 `;
