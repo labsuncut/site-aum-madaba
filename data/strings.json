@@ -1247,6 +1247,22 @@
     "programmesIn": {
       "en": "Programmes",
       "ar": "البرامج"
+    },
+    "onPage": {
+      "en": "On this page",
+      "ar": "في هذه الصفحة"
+    },
+    "glance": {
+      "en": "At a glance",
+      "ar": "لمحة سريعة"
+    },
+    "plansN": {
+      "en": "study plans online",
+      "ar": "خطط دراسية منشورة"
+    },
+    "inFaculty": {
+      "en": "In this faculty",
+      "ar": "في هذه الكلية"
     }
   },
   "science": {

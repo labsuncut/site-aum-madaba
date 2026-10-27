@@ -665,20 +665,28 @@ function academics(ctx) {
   }).join('');
   const stages = D.faculties.map((f, i) => {
     const n = count(f.id, 'bachelor'), nm = count(f.id, 'master');
+    const mine = D.programmes.filter((p) => p.faculty === f.id), plans = mine.filter((p) => p.plan).length;
     const list = n ? `<div class="plist" data-programmes="${f.id}" data-level="bachelor"></div>`
       : `<p class="empty" style="text-align:start;padding:18px 0">${esc(lang === 'ar' ? 'لم تُنشر تفاصيل البرامج بعد في هذه المعاينة؛ تُضاف من الكلية.' : 'Programme details are not yet in this preview; they will be added from the faculty.')}</p>`;
-    const masters = nm ? `<h4 class="sub">${esc(t('masterIn'))}</h4><div class="plist" data-programmes="${f.id}" data-level="master"></div>` : '';
+    const tray = (title, cnt, body) => `<section class="tray"><h4 class="tray-h">${esc(title)}<small>${cnt}</small></h4>${body}</section>`;
+    const masters = nm ? tray(t('masterIn'), nm, `<div class="plist" data-programmes="${f.id}" data-level="master"></div>`) : '';
     const meta = [n ? `${n} ${esc(c('bachelor'))}` : '', nm ? `${nm} ${esc(c('master'))}` : ''].filter(Boolean).join(' · ');
     const extra = f.id === 'science' ? `<a class="btn btn-ghost" href="${R + PAGES.science}">${esc(c('facultyPage'))} <span class="arr">→</span></a>` : '';
+    const glance = `<dl class="glance"><div><dt>${esc(c('bachelor'))}</dt><dd>${n}</dd></div><div><dt>${esc(c('master'))}</dt><dd>${nm}</dd></div><div><dt>${esc(t('plansN'))}</dt><dd>${plans}</dd></div></dl>`;
+    const names = `<p class="fs-names"><b>${esc(t('inFaculty'))}:</b> ${mine.map((p) => esc(p[lang] || p.en)).join(' · ')}</p>`;
     return `<article class="facstage${i === 0 ? ' on' : ''}" id="${f.id}" role="tabpanel" aria-labelledby="tab-${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}">
-      <div class="fs-side"><div class="fs-pic">${facImg(f)}</div><div class="fs-text">${icon(facultyIcon[f.id])}<span class="kicker">${esc(t('stageKicker'))} 0${i + 1}</span><h3>${esc(f[lang])}</h3>${meta ? `<p class="fac-meta">${meta}</p>` : ''}${extra}</div></div>
-      <div class="fs-main">${n ? `<h4 class="sub">${esc(t('bachelorIn'))}</h4>` : ''}${list}${masters}</div>
+      <header class="fs-head">${icon(facultyIcon[f.id])}<div class="fs-head-text"><span class="kicker">${esc(t('stageKicker'))} 0${i + 1}</span><h3>${esc(f[lang])}</h3></div>${meta ? `<span class="fs-meta">${meta}</span>` : ''}${extra}</header>
+      <div class="fs-body">
+        <aside class="fs-side"><div class="fs-pic">${facImg(f)}</div><div class="fs-text"><span class="tray-h">${esc(t('glance'))}</span>${glance}${names}</div></aside>
+        <div class="fs-main">${n ? tray(t('bachelorIn'), n, list) : list}${masters}</div>
+      </div>
     </article>`;
   }).join('');
   const dots = D.faculties.map((f, i) => `<button type="button"${i === 0 ? ' class="on"' : ''} data-fac-dot="${f.id}" aria-label="${esc(f[lang])}"></button>`).join('');
   return `
 ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
-<section class="section faculties facgal"><div class="tesserae" data-count="60" aria-hidden="true"></div>
+<nav class="onpage" aria-label="${esc(t('onPage'))}"><div class="wrap"><span class="kicker">${esc(t('onPage'))}</span><a href="#faculties-board"><i>1</i>${esc(t('byFaculty'))}</a><a href="#graduate"><i>2</i>${esc(t('graduate'))}</a><a href="#general"><i>3</i>${esc(t('general'))}</a><a href="#calendar"><i>4</i>${esc(t('calendar'))}</a></div></nav>
+<section class="section faculties facgal" id="faculties-board"><div class="tesserae" data-count="60" aria-hidden="true"></div>
   <div class="wrap">
     ${head(ctx, '', t('byFaculty'), t('rowHint'))}
     <div class="facrow rv" role="tablist" aria-label="${esc(t('byFaculty'))}">${tiles}</div>
@@ -693,10 +701,10 @@ ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
     <div class="plist rv" data-programmes="all" data-level="master"></div>
   </div>
 </section>
-<section class="section">
+<section class="section" id="general">
   <div class="wrap two">
     <div class="rv"><span class="kicker">${esc(t('kicker'))}</span><h2>${esc(t('general'))}</h2><p class="lead">${esc(t('generalLead'))}</p></div>
-    <div class="tile rv d1">${icon('calendar')}<h3>${esc(t('calendar'))}</h3><p>${esc(t('calendarLead'))}</p><a class="link" href="${LINKS.calendar}" target="_blank" rel="noopener">${esc(t('openCalendar'))}</a></div>
+    <div class="tile rv d1" id="calendar">${icon('calendar')}<h3>${esc(t('calendar'))}</h3><p>${esc(t('calendarLead'))}</p><a class="link" href="${LINKS.calendar}" target="_blank" rel="noopener">${esc(t('openCalendar'))}</a></div>
   </div>
 </section>
 ${applyCta(ctx)}`;
