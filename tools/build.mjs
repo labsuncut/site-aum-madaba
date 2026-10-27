@@ -32,7 +32,7 @@ const SITE = 'https://labsuncut.github.io/site-aum-madaba/';
 const LINKS = {
   apply: 'https://registration.aum.edu.jo/faces/ui/pages/guest/admissionOnline/index.xhtml',
   elearning: 'https://elearning.aum.edu.jo/',
-  registration: 'https://reg.aum.edu.jo/',
+  registration: 'https://registration.aum.edu.jo/',
   bus: 'https://aum.edu.jo/announcements/bus-schedule-second-semester-2025-2026',
   calendar: 'https://aum.edu.jo/admissions/academic-calendar/view',
   email: 'mailto:info@aum.edu.jo',
@@ -171,26 +171,65 @@ const icon = (k) => `<span class="icon" aria-hidden="true"><svg viewBox="0 0 24 
 function guideHtml(ctx) {
   const { lang, R, c } = ctx; const G = S.guide; const g = (k) => G[k][lang];
   const tl = (id) => (S.tools['t_' + id] ? S.tools['t_' + id][lang] : id);
-  const E = (k, a, l) => ({ k, a, l });
+  const T2 = (sec, k) => (S[sec] && S[sec][k] ? S[sec][k][lang] : '');
+  const H = S.home, L = S.life, A = S.admissions, AB = S.about, SC = S.science, TL = S.tools;
+  const bach = D.programmes.filter((p) => p.level === 'bachelor').length, mast = D.programmes.length - bach;
+  const facNames = D.faculties.map((f) => f[lang] || f.en).join(lang === 'ar' ? '، ' : ', ');
+  const feeRows = D.programmes.filter((p) => p.feePerCredit).map((p) => `${p[lang] || p.en}: ${p.feePerCredit}`).join(lang === 'ar' ? '، ' : ', ');
+  // Knowledge base: every entry is built from strings already on the site, so Arabic and English stay in step and nothing is invented.
+  const E = (id, k, a, l, tags) => ({ id, t: g('kb_' + id), k, a, l, tags: tags || [] });
   const entries = [
-    E('apply admission admissions register enrol enroll tawjihi requirements قدم قدّم تقديم قبول تسجيل توجيهي شروط', g('a_apply'), [[c('apply'), LINKS.apply, 1], [c('howToApply'), R + PAGES.admissions]]),
-    E('study plan plans courses semester prerequisite prerequisites خطة خطتي دراسية الخطة مساقات فصل متطلب', g('a_plan'), [[c('allPlans'), R + PAGES.plans], [c('findProgramme'), R + 'index.html#finder']]),
-    E('bus buses transport transportation schedule amman zarqa karak fuhais باص باصات مواصلات جدول عمان الزرقاء الكرك', g('a_bus'), [[tl('bus'), LINKS.bus, 1]]),
-    E('fee fees tuition cost price pay payment scholarship scholarships discount رسوم رسم تكلفة سعر دفع منحة منح خصم', g('a_fees'), [[tl('fees'), LINKS.fees, 1], [c('navAdmissions'), R + PAGES.admissions], [tl('scholarships'), LINKS.scholarships, 1]]),
-    E('calendar dates date semester start begin exam exams holiday holidays تقويم مواعيد موعد بداية امتحان امتحانات عطلة عطل', g('a_calendar'), [[c('toolCalendar'), LINKS.calendar, 1]]),
-    E('contact phone call email mail number talk someone تواصل هاتف اتصال اتصل بريد رقم', g('a_contact'), [[c('phone'), LINKS.tel], ['info@aum.edu.jo', LINKS.email]]),
-    E('programme programmes program programs major majors faculty faculties degree degrees study تخصص تخصصات كلية كليات برنامج برامج درجة ادرس', g('a_programmes'), [[c('findProgramme'), R + 'index.html#finder'], [c('navAcademics'), R + PAGES.academics]]),
-    E('elearning e-learning moodle lms grades marks registration system portal login password تعلم الكتروني إلكتروني علامات نظام التسجيل بوابة دخول كلمة', g('a_elearning'), [[c('toolElearning'), LINKS.elearning, 1], [c('toolRegistration'), LINKS.registration, 1]]),
-    E('housing dorm dorms accommodation room live stay سكن سكن الطالبات غرفة إقامة', g('a_housing'), [[S.home.lifeHousingT[lang], R + PAGES.life + '#housing']]),
-    E('library books book database databases borrow مكتبة كتب كتاب قواعد بيانات استعارة', g('a_library'), [[c('toolLibrary'), LINKS.library, 1]]),
-    E('grading grade gpa average transfer rules regulations exam policy نظام العلامات علامة معدل تحويل تعليمات أنظمة', g('a_grading'), [[S.admissions.gradeT[lang], LINKS.grading, 1]]),
-    E('where location located map directions madaba address campus reach get there أين موقع خريطة اتجاهات مادبا عنوان حرم أصل', g('a_location'), [[c('directions'), LINKS.maps, 1], [c('linkCampusMap'), (M.campusMap && M.campusMap.url) || LINKS.glance, 1]]),
-    E('science biology biotechnology biotech lab labs dean علوم أحياء تكنولوجيا حيوية مختبر مختبرات عميد', g('a_science'), [[S.science.kicker[lang], R + PAGES.science], [S.biotech.h1[lang], R + PAGES.biotech]]),
-    E('news events announcements event announcement happening أخبار فعاليات إعلانات فعالية إعلان', g('a_news'), [[c('linkNews'), LINKS.news, 1], [c('linkEvents'), LINKS.events, 1]]),
-    E('tools links link student email outlook wifi أدوات روابط رابط بريد الطالب', g('a_tools'), [[c('allTools'), R + PAGES.tools]]),
+    E('apply', 'apply admission admissions register enrol enroll enrolment tawjihi requirements requirement join start studying provisional قدم قدّم تقديم أقدم اقدم قبول تسجيل توجيهي شروط التحق التحاق انتساب', g('a_apply'), [[c('apply'), LINKS.apply, 1], [c('howToApply'), R + PAGES.admissions]], ['apply']),
+    E('steps', 'steps step process placement test tests english arabic computer interview entrance exam adviser خطوات خطوة امتحان تحديد مستوى مقابلة قبول مرشد', `${T2('admissions', 'lead')} 1) ${T2('admissions', 's1T')}. 2) ${T2('admissions', 's2T')}. 3) ${T2('admissions', 's3T')}: ${T2('admissions', 's3D')} 4) ${T2('admissions', 's4T')}.`, [[c('howToApply'), R + PAGES.admissions], [c('apply'), LINKS.apply, 1]], ['apply']),
+    E('average', 'average minimum tawjihi score percent percentage accept accepted stream scientific literary معدل معدلي الحد الأدنى توجيهي نسبة مقبول قبول فرع علمي أدبي', `${T2('admissions', 's1D')} ${T2('admissions', 'gradeD')}`, [[c('findProgramme'), R + 'index.html#finder'], [TL.t_qa[lang], LINKS.qa, 1]], ['average']),
+    E('plan', 'study plan plans courses course semester prerequisite prerequisites guidance خطة خطتي دراسية الخطة مساقات مساق فصل متطلب متطلبات', g('a_plan'), [[c('allPlans'), R + PAGES.plans], [c('findProgramme'), R + 'index.html#finder']], ['plan']),
+    E('programmes', 'programme programmes program programs major majors specialisation specialization degree degrees study offer offered available list تخصص تخصصات برنامج برامج درجة ادرس أدرس متوفر متاح قائمة', `${g('countLine').replace('{b}', bach).replace('{m}', mast)} ${g('a_programmes')}`, [[c('findProgramme'), R + 'index.html#finder'], [c('navAcademics'), R + PAGES.academics]], ['programmes', 'numbers']),
+    E('faculties', 'faculty faculties college colleges school schools seven which كلية كليات سبع الكليات', `${facNames}.`, [[c('navAcademics'), R + PAGES.academics]], ['programmes', 'numbers']),
+    E('master', 'master masters msc mba graduate postgraduate graduates thesis comprehensive ماجستير ماستر دراسات عليا رسالة شامل', `${T2('academics', 'graduateLead')} ${T2('admissions', 'gradLead')}`, [[S.academics.graduate[lang], R + PAGES.academics + '#graduate'], [TL.t_masterRules[lang], LINKS.masterRules, 1]], ['programmes', 'fees']),
+    E('fees', 'fee fees tuition cost costs price prices pay payment expensive how much per credit hour jd dinar رسوم رسم تكلفة سعر أسعار دفع بكم كم غالي دينار الساعة', `${g('a_fees')} ${g('feesKnown')} ${feeRows} (${c('perCredit')}). ${T2('academics', 'graduateLead')}`, [[tl('fees'), LINKS.fees, 1], [c('navAdmissions'), R + PAGES.admissions + '#fees'], [tl('scholarships'), LINKS.scholarships, 1]], ['fees']),
+    E('schol', 'scholarship scholarships discount discounts sibling siblings sponsored sponsorship merit financial aid free منحة منح خصم خصومات أخوة إخوة مكفول كفالة دعم مجاني', `${T2('admissions', 'scholLead')} ${T2('admissions', 'scholNote')} ${T2('admissions', 'gradLead')}`, [[tl('scholarships'), LINKS.scholarships, 1], [c('navAdmissions'), R + PAGES.admissions + '#scholarships']], ['fees']),
+    E('bus', 'bus buses transport transportation commute commuting schedule timetable route routes amman zarqa karak fuhais madaba ride باص باصات حافلة مواصلات نقل جدول خط خطوط عمان الزرقاء الكرك الفحيص مادبا', `${L.busTitle[lang]} ${L.busLead[lang]} ${g('busFees')}`, [[tl('bus'), LINKS.bus, 1], [L.busTitle[lang], R + PAGES.life + '#bus']], ['fees', 'hours']),
+    E('calendar', 'calendar dates date semester start starts begin begins end exam exams midterm final holiday holidays vacation registration window when تقويم مواعيد موعد بداية نهاية امتحان امتحانات نصفي نهائي عطلة عطل إجازة متى يبدأ', g('a_calendar'), [[c('toolCalendar'), LINKS.calendar, 1]], ['dates']),
+    E('contact', 'contact phone call telephone email mail number talk someone office extension fax whatsapp تواصل اتصال اتصل هاتف تلفون بريد رقم مكتب فرعي فاكس', `${g('a_contact')} ${c('fax')}: ${c('faxN')}. ${TL.extAdm[lang]}: 1900, 1901.`, [[c('phone'), LINKS.tel], ['info@aum.edu.jo', LINKS.email], [TL.t_contact[lang], LINKS.contact, 1]], ['contact', 'hours']),
+    E('hours', 'hours hour open opening opens close closes time times working day days weekend friday saturday sunday دوام ساعات وقت أوقات مفتوح يفتح يغلق جمعة سبت أحد', `${c('hours')}: ${c('hoursV')}. ${L.hoursHealth[lang]}: ${L.healthHours[lang]}. ${A.applyCardHours[lang]}`, [[c('contact'), R + PAGES.about + '#contact']], ['hours']),
+    E('elearning', 'elearning e-learning moodle lms online course material grades marks results registration system portal login password account تعلم الكتروني إلكتروني مودل علامات نتائج نظام التسجيل بوابة دخول كلمة سر حساب', g('a_elearning'), [[c('toolElearning'), LINKS.elearning, 1], [c('toolRegistration'), LINKS.registration, 1]], []),
+    E('housing', 'housing dorm dorms dormitory accommodation room rooms live stay residence rent house of grace سكن سكنات مسكن غرفة غرف إقامة أقيم أسكن إيجار', `${L.housingW[lang]} ${L.housingM[lang]} ${L.housingFacts[lang]}.`, [[L.housingApply[lang], LINKS.housing, 1], [H.lifeHousingT[lang], R + PAGES.life + '#housing']], []),
+    E('library', 'library books book database databases borrow borrowing printing study space quiet مكتبة كتب كتاب قواعد بيانات استعارة طباعة', `${g('a_library')} ${TL.extLib[lang]}.`, [[c('toolLibrary'), LINKS.library, 1]], []),
+    E('exams', 'grading grade grades gpa pass fail mark marks exam exams final finals regulation regulations rules appeal review نظام العلامات علامة علامات معدل تراكمي نجاح رسوب امتحان امتحانات نهائي تعليمات مراجعة', `${A.gradeD[lang]} ${TL.d_exams[lang]}`, [[A.gradeT[lang], LINKS.grading, 1], [TL.t_exams[lang], LINKS.exams, 1]], []),
+    E('transfer', 'transfer transferring switch change changing major specialisation credit recognition equivalence bridging تحويل أحول تجسير تغيير تخصص معادلة احتساب', TL.d_transfer[lang], [[TL.t_transfer[lang], LINKS.transferPolicy, 1], [TL.t_qa[lang], LINKS.qa, 1]], []),
+    E('rules', 'graduation graduate requirements duration years long bachelor degree awarding rules thesis تخرج متطلبات مدة سنوات كم سنة منح درجة بكالوريوس', `${TL.d_bachelorRules[lang]} ${TL.d_masterRules[lang]} ${S.biotech.duration[lang]}: ${S.biotech.durationV[lang]} (${S.biotech.h1[lang]}).`, [[TL.t_bachelorRules[lang], LINKS.bachelorRules, 1], [TL.t_masterRules[lang], LINKS.masterRules, 1]], ['duration']),
+    E('gened', 'general education programme requirement requirements university electives elective متطلبات عامة جامعة اختياري اختيارية', T2('academics', 'generalLead'), [[TL.t_genEd[lang], LINKS.genEd, 1]], []),
+    E('location', 'where location located map directions madaba address campus reach get there far distance drive minutes amman أين وين موقع مكان خريطة اتجاهات مادبا عنوان حرم أصل أوصل بعيد مسافة دقيقة عمان', `${g('a_location')} ${H.visitLead[lang]}`, [[c('directions'), LINKS.maps, 1], [c('linkCampusMap'), (M.campusMap && M.campusMap.url) || LINKS.glance, 1]], ['where']),
+    E('map', 'campus map building buildings tour virtual 360 walk around find way خريطة الحرم مبنى مباني جولة افتراضية', `${H.campusD[lang]} ${H.tourD[lang]}`, [[H.campusCta[lang], (M.campusMap && M.campusMap.url) || LINKS.glance, 1]].concat(M.tour ? [[H.tourT[lang], M.tour, 1]] : []), ['where']),
+    E('madaba', 'madaba city town mosaic mosaics history about area مادبا مدينة فسيفساء', H.madabaD[lang], (M.madaba && M.madaba.url ? [[H.madabaCta[lang], M.madaba.url, 1]] : []).concat([[c('directions'), LINKS.maps, 1]]), ['where']),
+    E('science', 'science biology biotechnology biotech lab labs laboratory laboratories dean head department departments chemistry physics علوم أحياء بيولوجيا تكنولوجيا حيوية مختبر مختبرات عميد رئيس قسم كيمياء فيزياء', `${g('a_science')} ${SC.deanName[lang]}: ${SC.deanRole[lang]}. ${SC.headName[lang]}: ${SC.headRole[lang]}. ${SC.labsLead[lang]}`, [[SC.kicker[lang], R + PAGES.science], [S.biotech.h1[lang], R + PAGES.biotech]], ['people']),
+    E('news', 'news events announcements event announcement happening latest new today week أخبار فعاليات إعلانات فعالية إعلان جديد اليوم هذا الأسبوع', `${g('a_news')} ${H.newsLeadLabel[lang]}: ${H.news1T[lang]} (${H.news1D[lang]}).`, [[c('linkNews'), LINKS.news, 1], [c('linkEvents'), LINKS.events, 1], [H.newsroomKicker[lang], R + 'index.html#news']], ['dates']),
+    E('ann', 'announcement announcements notice notices board vacancy vacancies job jobs إعلان إعلانات لوحة وظيفة وظائف شاغر', `${H.annD[lang]} ${H.ann1T[lang]} (${H.ann1D[lang]}). ${H.ann2T[lang]}.`, [[c('linkAnnouncements'), LINKS.announcements, 1], [c('linkVacancies'), 'https://jobs.aum.edu.jo/', 1]], ['dates']),
+    E('openday', 'open day days visit visiting tour come see campus book appointment يوم مفتوح أيام مفتوحة زيارة أزور جولة حجز موعد', `${A.openLead[lang]} ${H.visitBookD[lang]}`, [[H.visitBook[lang], (M.visit && M.visit.url) || LINKS.contact, 1], [c('linkEvents'), LINKS.events, 1]], ['dates']),
+    E('tools', 'tools links link useful systems wifi password student portal أدوات روابط رابط أنظمة واي فاي بوابة', g('a_tools'), [[c('allTools'), R + PAGES.tools]], []),
+    E('email', 'student email mail gmail google account outlook inbox بريد الطالب جيميل حساب جوجل', TL.d_email[lang], [[c('toolEmail'), LINKS.studentEmail, 1], [c('allTools'), R + PAGES.tools]], []),
+    E('history', 'history founded foundation established establishment when old year years patriarchate latin catholic church pope king inaugurated opened تاريخ تأسست تأسيس أنشئت متى قديمة سنة بطريركية لاتينية كاثوليكية كنيسة بابا ملك افتتاح', `${AB.lead[lang]} ${AB.t1Y[lang]}: ${AB.t1[lang]} ${AB.t2Y[lang]}: ${AB.t2[lang]} ${AB.t3Y[lang]}: ${AB.t3[lang]} ${AB.t4Y[lang]}: ${AB.t4[lang]}`, [[c('navAbout'), R + PAGES.about]], ['dates', 'numbers']),
+    E('accred', 'accredited accreditation recognised recognized licensed license licence neche american usa us quality معتمدة معترف اعتماد ترخيص مرخصة أمريكية أمريكا جودة', `${AB.acc1[lang]}. ${AB.acc2[lang]}. ${AB.acc3[lang]}. ${AB.acc4[lang]}. ${AB.t6[lang]}`, [[AB.l4[lang], LINKS.licensing, 1], [c('navAbout'), R + PAGES.about]], []),
+    E('president', 'president rector chancellor head of university leadership board trustees council who runs رئيس الجامعة رئيس مجلس أمناء إدارة قيادة من يدير', `${AB.presName[lang]}: ${AB.presRole[lang]}. ${AB.linksTitle[lang]}`, [[AB.l1[lang], LINKS.president, 1], [AB.l2[lang], LINKS.board, 1]], ['people']),
+    E('motto', 'motto seal logo emblem meaning sapientia scientia wisdom hands light mosaic شعار ختم لوجو معنى حكمة علم أيدي نور فسيفساء', `${c('motto')} (${c('mottoMeaning')}). ${AB.sealLead[lang]}`, [[c('navAbout'), R + PAGES.about + '#seal']], []),
+    E('numbers', 'how many students number numbers size big small graduates nationalities majors faculties statistics كم عدد طلاب حجم كبيرة صغيرة خريجين جنسيات تخصصات كليات إحصائيات', `${H.statFacultiesN[lang]} ${H.statFaculties[lang]} · ${H.statMajorsN[lang]} ${H.statMajors[lang]} · ${H.statNatN[lang]} ${H.statNat[lang]} · ${H.statGradN[lang]} ${H.statGrad[lang]} · ${H.statSinceN[lang]} ${H.statSince[lang]}.`, [[AB.l6[lang], LINKS.glance, 1]], ['numbers']),
+    E('language', 'language instruction taught teach teaching english arabic medium لغة التدريس تدرس تدريس انجليزي إنجليزي إنجليزية عربي', `${H.statLang[lang]}: ${H.statLangN[lang]}. ${L.langD[lang]}`, [[c('navAcademics'), R + PAGES.academics]], []),
+    E('week', 'four day week schedule classes days weekly timetable friday off أربعة أيام أسبوع دوام أيام الدوام جدول جمعة عطلة', `${H.why6[lang]}: ${H.why6D[lang]}`, [[H.whyTitle[lang], R + 'index.html#why']], ['hours']),
+    E('intl', 'international foreign foreigner visa residency residence permit nationality nationalities abroad office دولي دوليين أجنبي أجانب فيزا تأشيرة إقامة جنسية جنسيات مكتب', `${L.intlLead[lang]} ${A.intlD[lang]}`, [[L.intlCta[lang], LINKS.intl, 1], [H.lifeIntlT[lang], R + PAGES.life + '#intl']], []),
+    E('abroad', 'study abroad exchange semester partner partners university universities italy usa lebanon erasmus الدراسة في الخارج تبادل فصل شريكة شركاء جامعات إيطاليا أمريكا لبنان', `${L.abroadD[lang]} ${H.why4D[lang]}`, [[L.abroadT[lang], LINKS.abroad, 1]], []),
+    E('clubs', 'club clubs society sport sports football volleyball chess pool swimming gym team teams activities community communities hiking debate ieee نادي أندية رياضة رياضات كرة قدم طائرة شطرنج مسبح سباحة فريق فرق أنشطة مجتمعات مشي مناظرة', `${L.clubsLead[lang]} ${L.sportLead[lang]} ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => L['cl' + i][lang]).join(lang === 'ar' ? '، ' : ', ')}.`, [[H.lifeClubsT[lang], R + PAGES.life + '#clubs'], [TL.t_studentAffairs[lang], LINKS.studentAffairs, 1]], []),
+    E('health', 'health doctor doctors clinic nurse sick ill emergency ambulance pharmacy medical wellbeing counselling counseling psychologist صحة طبيب أطباء عيادة ممرض مريض طوارئ إسعاف صيدلية طبي إرشاد نفسي', `${L.healthLead[lang]} ${L.hoursHealth[lang]}: ${L.healthHours[lang]}.`, [[TL.t_health[lang], LINKS.health, 1], [L.healthTitle[lang], R + PAGES.life + '#health']], ['hours']),
+    E('lang', 'language center centre arabic course courses beginners learn arabic مركز لغات اللغة العربية دورة دورات مبتدئين تعلم', L.langD[lang], [[c('navLife'), R + PAGES.life]], []),
+    E('careers', 'career careers job jobs work employment internship alumni graduates network career day وظيفة مهنة مهن عمل توظيف تدريب خريجين شبكة يوم مهني', `${L.careerD[lang]} ${S.biotech.careersTitle[lang]}`, [[c('linkAlumni'), LINKS.alumni, 1]], []),
+    E('discipline', 'discipline disciplinary rights duties rules behaviour behavior complaint cheating تأديب تأديبي حقوق واجبات سلوك شكوى غش', TL.d_discipline[lang], [[TL.t_discipline[lang], LINKS.discipline, 1]], []),
+    E('whats', 'whatsapp message chat text واتساب رسالة دردشة', H.visitWhats[lang], [[H.visitWhats[lang], (M.social && M.social.whatsapp) || LINKS.contact, 1], [c('phone'), LINKS.tel]], ['contact']),
   ];
+  // Faculty names answer "which faculty has X" and "faculty of business" style questions
+  D.faculties.forEach((f) => entries.push({ id: 'fac-' + f.id, t: f[lang] || f.en, k: (f.en + ' ' + (f.ar || '')).toLowerCase(), a: `${f[lang] || f.en}: ${D.programmes.filter((p) => p.faculty === f.id).map((p) => p[lang] || p.en).join(lang === 'ar' ? '، ' : ', ')}.`, l: [[c('navAcademics'), R + PAGES.academics + '#' + f.id]], tags: ['programmes'] }));
   const chips = ['q_apply', 'q_programmes', 'q_plan', 'q_bus', 'q_fees', 'q_calendar', 'q_contact'].map((k) => `<button type="button" data-q="${esc(g(k))}">${esc(g(k))}</button>`).join('');
-  const data = { hi: g('hi'), fallback: g('fallback'), progFound: g('progFound'), studyPlan: c('studyPlan'), details: c('programmeDetails'), entries };
+  const gs = {}; ['related', 'greet', 'thanks', 'canDo', 'fallback2', 'p_fee', 'p_feeOnly', 'p_feeNA', 'p_credits', 'p_creditsNA', 'p_avg', 'p_avgNA', 'p_plan', 'p_about', 'p_more'].forEach((k) => { gs[k] = g(k); });
+  const facMap = {}; D.faculties.forEach((f) => { facMap[f.id] = f[lang] || f.en; });
+  const data = { hi: g('hi'), fallback: g('fallback'), progFound: g('progFound'), studyPlan: c('studyPlan'), details: c('programmeDetails'), entries, s: gs, fac: facMap, lv: { bachelor: c('bachelor'), master: c('master') }, credits: c('credits'), minAverage: c('minAverage'), perCredit: c('perCredit'), notPublished: c('notPublished'), feeLink: [tl('fees'), LINKS.fees], contactLinks: [[c('phone'), LINKS.tel], [H.visitWhats[lang], (M.social && M.social.whatsapp) || LINKS.contact, 1], [c('allTools'), R + PAGES.tools]] };
   return `<button class="guide-fab" type="button" aria-expanded="false" aria-controls="guide">${icon('chat')}<span>${esc(g('open'))}</span></button>
 <section class="guide" id="guide" hidden aria-label="${esc(g('title'))}">
   <header><img src="${R}assets/img/seal.png" width="34" height="34" alt=""><b>${esc(g('title'))}</b><button class="guide-close" type="button" aria-label="${esc(g('close'))}">×</button></header>
@@ -439,7 +478,42 @@ function home(ctx) {
   const bannerBg = (o) => (o && has(o.file) ? ` style="background-image:url(${mp(R, o.file)})"` : '');
   const banners = `${M.tour ? `<a class="banner rv" href="${M.tour}" target="_blank" rel="noopener"><span><b>${esc(t('tourT'))}</b>${esc(t('tourD'))}</span><span class="btn btn-light">${esc(t('tourCta'))} <span class="arr">→</span></span></a>` : ''}${M.campusMap && M.campusMap.url ? `<a class="banner rv${has(M.campusMap.file) ? ' img' : ''}" href="${M.campusMap.url}" target="_blank" rel="noopener"${bannerBg(M.campusMap)}><span><b>${esc(t('campusT'))}</b>${esc(t('campusD'))}</span><span class="btn btn-light">${esc(t('campusCta'))} <span class="arr">→</span></span></a>` : ''}${M.madaba && M.madaba.url ? `<a class="banner alt rv d1${has(M.madaba.file) ? ' img' : ''}" href="${M.madaba.url}" target="_blank" rel="noopener"${bannerBg(M.madaba)}><span><b>${esc(t('madabaT'))}</b>${esc(t('madabaD'))}</span><span class="btn btn-light">${esc(t('madabaCta'))} <span class="arr">→</span></span></a>` : ''}`;
 
-  return `
+  const film = M.heroFilm && has(M.heroFilm.src) ? M.heroFilm : null;
+  const filmPoster = film && has(film.poster) ? mp(R, film.poster) : '';
+  const filmStats = [['statFacultiesN', 'statFaculties'], ['statMajorsN', 'statMajors'], ['statNatN', 'statNat']].map(([n, l]) => `<div class="fstat"><b>${esc(t(n))}</b><span>${esc(t(l))}</span></div>`).join('');
+  const heroCtas = `<a class="btn" href="#finder">${esc(c('findProgramme'))} <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))}</a>
+        <a class="btn btn-ghost" href="${LINKS.maps}" target="_blank" rel="noopener">${esc(c('visit'))}</a>`;
+  const filmHero = film ? `
+<section class="film" data-film aria-label="${esc(t('filmLabel'))}">
+  <div class="film-stage">
+    <video class="film-video" muted playsinline preload="auto"${filmPoster ? ` poster="${filmPoster}"` : ''} aria-hidden="true" tabindex="-1"><source src="${mp(R, film.src)}" type="video/mp4">${film.webm && has(film.webm) ? `<source src="${mp(R, film.webm)}" type="video/webm">` : ''}</video>
+    ${filmPoster ? `<img class="film-poster" src="${filmPoster}" alt="" aria-hidden="true">` : ''}
+    <div class="film-scrim" aria-hidden="true"></div>
+    <div class="film-wall tesserae" data-count="34" aria-hidden="true"></div>
+    <div class="wrap film-ui">
+      <div class="film-seal">${ring('hero-ring')}<img src="${seal}" width="239" height="239" alt="${esc(c('siteName'))}"></div>
+      <div class="beat b1 on" data-from="0" data-to="0.34">
+        <span class="kicker">${esc(t('kicker'))}</span>
+        <h1>${esc(t('h1a'))} <em>${esc(t('h1b'))}</em></h1>
+        <p class="lead">${esc(t('lead'))}</p>
+        <div class="hero-cta"><a class="btn" href="#finder">${esc(t('filmBeat1Cta'))} <span class="arr">→</span></a></div>
+      </div>
+      <div class="beat b2" data-from="0.34" data-to="0.67">
+        <span class="kicker">${esc(t('facultiesKicker'))}</span>
+        <h2>${esc(t('facultiesTitle'))}</h2>
+        <div class="film-stats">${filmStats}</div>
+      </div>
+      <div class="beat b3" data-from="0.67" data-to="1.01">
+        <span class="kicker">${esc(c('navAcademics'))}</span>
+        <h2>${esc(t('finderTitle'))}</h2>
+        <p class="lead">${esc(t('finderLead'))}</p>
+        <div class="hero-cta">${heroCtas}</div>
+      </div>
+    </div>
+    <div class="film-foot" aria-hidden="true"><span class="film-hint">${esc(t('filmScroll'))}<i></i></span><span class="film-bar"><i></i></span></div>
+  </div>
+</section>` : `
 <section class="hero${M.heroVideo && has(M.heroVideo.src) ? ' has-video' : ''}">
   ${M.heroVideo && has(M.heroVideo.src) ? `<video class="hero-video" src="${mp(R, M.heroVideo.src)}"${has(M.heroVideo.poster) ? ` poster="${mp(R, M.heroVideo.poster)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video><div class="hero-veil" aria-hidden="true"></div>` : ''}
   <div class="hero-wall tesserae" data-count="90"></div>
@@ -449,14 +523,14 @@ function home(ctx) {
       <h1 class="rv d1">${esc(t('h1a'))} <em>${esc(t('h1b'))}</em></h1>
       <p class="lead rv d2">${esc(t('lead'))}</p>
       <div class="hero-cta rv d3">
-        <a class="btn" href="#finder">${esc(c('findProgramme'))} <span class="arr">→</span></a>
-        <a class="btn btn-ghost" href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))}</a>
-        <a class="btn btn-ghost" href="${LINKS.maps}" target="_blank" rel="noopener">${esc(c('visit'))}</a>
+        ${heroCtas}
       </div>
     </div>
     <div class="hero-seal rv d2">${ring('hero-ring')}<img src="${seal}" width="239" height="239" alt="${esc(c('siteName'))}"></div>
   </div>
-</section>
+</section>`;
+
+  return `${filmHero}
 <section class="quickbar" aria-label="${esc(t('toolsKicker'))}">
   <div class="wrap"><div class="quick-card rv"><div class="tesserae" data-count="26" aria-hidden="true"></div>
     <div class="quick-head"><span class="kicker">${esc(t('toolsKicker'))}</span><a class="link" href="${R + PAGES.tools}">${esc(c('allTools'))}</a></div>
@@ -542,9 +616,9 @@ ${banners ? `<section class="section banners"><div class="wrap">${banners}</div>
   </div>
 </section>
 ${mosaicRule()}
-<section class="section dark">
+<section class="section tint research" id="research">
   <div class="wrap two">
-    <div>${head(ctx, t('researchKicker'), t('researchTitle'), t('researchLead'))}<p class="rv d1"><a class="btn btn-light" href="${R + PAGES.academics}#graduate">${esc(S.academics.graduate[lang])} <span class="arr">→</span></a></p></div>
+    <div class="research-text">${head(ctx, t('researchKicker'), t('researchTitle'), t('researchLead'))}<p class="rv d1"><a class="btn" href="${R + PAGES.academics}#graduate">${esc(S.academics.graduate[lang])} <span class="arr">→</span></a></p></div>
     <div class="labs rv d1"><a class="lab" href="${LINKS.alumni}" target="_blank" rel="noopener"><b>${esc(t('alumniT'))}</b><span>${esc(t('alumniD'))}</span></a><a class="lab" href="${LINKS.events}" target="_blank" rel="noopener"><b>${esc(t('eventsT'))}</b><span>${esc(t('eventsD'))}</span></a><a class="lab" href="${LINKS.announcements}" target="_blank" rel="noopener"><b>${esc(t('annT'))}</b><span>${esc(t('annD'))}</span></a><a class="lab" href="${LINKS.library}" target="_blank" rel="noopener"><b>${esc(c('linkLibrary'))}</b><span>${esc(T('tools', 'd_library'))}</span></a></div>
   </div>
 </section>

@@ -327,5 +327,11 @@
       }
     ],
     "url": "https://www.aum.edu.jo/visit"
+  },
+  "heroFilm": {
+    "src": "hero-scroll.mp4",
+    "poster": "hero-scroll-poster.jpg",
+    "_note": "8 s cut (2 s to 10 s) of AUM hero video, 15 fps all-keyframes, scrubbed by scroll",
+    "webm": "hero-scroll.webm"
   }
 }

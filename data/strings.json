@@ -1137,6 +1137,18 @@
     "visitOpenCta": {
       "en": "All events",
       "ar": "كل الفعاليات"
+    },
+    "filmLabel": {
+      "en": "Campus film",
+      "ar": "فيلم الحرم الجامعي"
+    },
+    "filmScroll": {
+      "en": "Scroll to explore",
+      "ar": "مرّر للاستكشاف"
+    },
+    "filmBeat1Cta": {
+      "en": "Find a programme",
+      "ar": "ابحث عن تخصص"
     }
   },
   "academics": {
@@ -3015,6 +3027,254 @@
     "a_tools": {
       "en": "All student links are on one page: e-learning, registration, course finder, bus schedule, calendar, library, email and more.",
       "ar": "كل روابط الطلبة في صفحة واحدة: التعلّم الإلكتروني، التسجيل، الباحث عن المساقات، جدول الباصات، التقويم، المكتبة، البريد وغيرها."
+    },
+    "related": {
+      "en": "You might also ask",
+      "ar": "قد تسأل أيضاً"
+    },
+    "greet": {
+      "en": "Hello! Ask me about programmes, fees, buses, housing, the calendar, how to apply, or anything on this site.",
+      "ar": "أهلاً! اسألني عن التخصصات أو الرسوم أو الباصات أو السكن أو التقويم أو طريقة التقديم أو أي شيء في هذا الموقع."
+    },
+    "thanks": {
+      "en": "You are welcome. Anything else?",
+      "ar": "على الرحب والسعة. هل من شيء آخر؟"
+    },
+    "canDo": {
+      "en": "I answer from this site’s own pages: programmes and study plans, fees and scholarships, how to apply, buses, housing, the health centre, clubs, the calendar, the Faculty of Science, contact details and the university’s history. Try one of these:",
+      "ar": "أجيب من صفحات هذا الموقع: التخصصات والخطط الدراسية، الرسوم والمنح، طريقة التقديم، الباصات، السكن، المركز الصحي، الأندية، التقويم، كلية العلوم، معلومات التواصل وتاريخ الجامعة. جرّب أحد هذه الأسئلة:"
+    },
+    "fallback2": {
+      "en": "I do not have that on this site yet. The admissions office answers on +962 5 329 4444 (ext. 1900 and 1901) or by WhatsApp, and the student tools page has every official link. Or try:",
+      "ar": "لا أملك هذه المعلومة في الموقع بعد. مكتب القبول يجيب على ‎+962 5 329 4444 (فرعي 1900 و1901) أو عبر واتساب، وصفحة أدوات الطالب فيها كل الروابط الرسمية. أو جرّب:"
+    },
+    "p_fee": {
+      "en": "{p}: {fee} JD per credit hour. With {credits} credit hours that is roughly {total} JD for the whole degree, before scholarships, registration and other fees.",
+      "ar": "{p}: {fee} دينار للساعة المعتمدة. مع {credits} ساعة معتمدة يكون المجموع التقريبي {total} دينار للدرجة كاملة، قبل المنح ورسوم التسجيل والرسوم الأخرى."
+    },
+    "p_feeOnly": {
+      "en": "{p}: {fee} JD per credit hour. The credit hours are in the study plan.",
+      "ar": "{p}: {fee} دينار للساعة المعتمدة. عدد الساعات في الخطة الدراسية."
+    },
+    "p_feeNA": {
+      "en": "AUM has not published the fee per credit hour for {p} on the pages I have. The official fee table is linked below.",
+      "ar": "لم تنشر الجامعة رسوم الساعة المعتمدة لتخصص {p} في الصفحات التي أملكها. جدول الرسوم الرسمي في الرابط أدناه."
+    },
+    "p_credits": {
+      "en": "{p} is {credits} credit hours.",
+      "ar": "{p}: {credits} ساعة معتمدة."
+    },
+    "p_creditsNA": {
+      "en": "The credit hours for {p} are not published on its department page; the study plan has the detail.",
+      "ar": "عدد الساعات المعتمدة لتخصص {p} غير منشور في صفحة القسم؛ التفاصيل في الخطة الدراسية."
+    },
+    "p_avg": {
+      "en": "{p} requires a minimum Tawjihi average of {avg}%.",
+      "ar": "يتطلب تخصص {p} معدل توجيهي لا يقل عن {avg}%."
+    },
+    "p_avgNA": {
+      "en": "The minimum average for {p} is not on the pages I have; the admissions office confirms it (ext. 1900).",
+      "ar": "الحد الأدنى للمعدل لتخصص {p} غير موجود في الصفحات التي أملكها؛ مكتب القبول يؤكده (فرعي 1900)."
+    },
+    "p_plan": {
+      "en": "Here is the study plan for {p}, semester by semester.",
+      "ar": "هذه الخطة الدراسية لتخصص {p}، فصلاً بفصل."
+    },
+    "p_about": {
+      "en": "{p} is a {level} programme in the {faculty}.",
+      "ar": "{p} برنامج {level} في {faculty}."
+    },
+    "p_more": {
+      "en": "Ask me about its fees, credit hours, minimum average or study plan.",
+      "ar": "اسألني عن رسومه أو ساعاته المعتمدة أو الحد الأدنى للمعدل أو خطته الدراسية."
+    },
+    "kb_steps": {
+      "en": "How admission works",
+      "ar": "كيف يتم القبول"
+    },
+    "kb_schol": {
+      "en": "Scholarships",
+      "ar": "المنح"
+    },
+    "kb_hours": {
+      "en": "Opening hours",
+      "ar": "ساعات الدوام"
+    },
+    "kb_faculties": {
+      "en": "The seven faculties",
+      "ar": "الكليات السبع"
+    },
+    "kb_master": {
+      "en": "Master degrees",
+      "ar": "درجات الماجستير"
+    },
+    "kb_intl": {
+      "en": "International students",
+      "ar": "الطلبة الدوليون"
+    },
+    "kb_abroad": {
+      "en": "Study abroad",
+      "ar": "الدراسة في الخارج"
+    },
+    "kb_clubs": {
+      "en": "Clubs and sport",
+      "ar": "الأندية والرياضة"
+    },
+    "kb_health": {
+      "en": "Health centre",
+      "ar": "المركز الصحي"
+    },
+    "kb_history": {
+      "en": "History of AUM",
+      "ar": "تاريخ الجامعة"
+    },
+    "kb_accred": {
+      "en": "Accreditation",
+      "ar": "الاعتماد"
+    },
+    "kb_president": {
+      "en": "The president",
+      "ar": "رئيس الجامعة"
+    },
+    "kb_motto": {
+      "en": "Motto and seal",
+      "ar": "الشعار والختم"
+    },
+    "kb_numbers": {
+      "en": "AUM in numbers",
+      "ar": "الجامعة بالأرقام"
+    },
+    "kb_language": {
+      "en": "Language of instruction",
+      "ar": "لغة التدريس"
+    },
+    "kb_week": {
+      "en": "Four-day week",
+      "ar": "أسبوع من أربعة أيام"
+    },
+    "kb_average": {
+      "en": "Minimum averages",
+      "ar": "الحد الأدنى للمعدلات"
+    },
+    "kb_transfer": {
+      "en": "Transfer and changing major",
+      "ar": "التحويل وتغيير التخصص"
+    },
+    "kb_exams": {
+      "en": "Exams and grading",
+      "ar": "الامتحانات والعلامات"
+    },
+    "kb_gened": {
+      "en": "General education",
+      "ar": "المتطلبات العامة"
+    },
+    "kb_email": {
+      "en": "Student email",
+      "ar": "بريد الطالب"
+    },
+    "kb_careers": {
+      "en": "Careers and alumni",
+      "ar": "المهن والخريجون"
+    },
+    "kb_lang": {
+      "en": "Language Center",
+      "ar": "مركز اللغات"
+    },
+    "kb_openday": {
+      "en": "Open days and visits",
+      "ar": "الأيام المفتوحة والزيارات"
+    },
+    "kb_madaba": {
+      "en": "Madaba",
+      "ar": "مادبا"
+    },
+    "kb_map": {
+      "en": "Campus map and tour",
+      "ar": "خريطة الحرم والجولة"
+    },
+    "kb_whats": {
+      "en": "WhatsApp",
+      "ar": "واتساب"
+    },
+    "kb_rules": {
+      "en": "Degree rules",
+      "ar": "أنظمة منح الدرجة"
+    },
+    "kb_discipline": {
+      "en": "Student discipline",
+      "ar": "نظام التأديب"
+    },
+    "kb_ann": {
+      "en": "Announcements",
+      "ar": "الإعلانات"
+    },
+    "kb_apply": {
+      "en": "How to apply",
+      "ar": "طريقة التقديم"
+    },
+    "kb_plan": {
+      "en": "Study plans",
+      "ar": "الخطط الدراسية"
+    },
+    "kb_bus": {
+      "en": "Buses",
+      "ar": "الباصات"
+    },
+    "kb_fees": {
+      "en": "Tuition fees",
+      "ar": "الرسوم الدراسية"
+    },
+    "kb_calendar": {
+      "en": "Academic calendar",
+      "ar": "التقويم الأكاديمي"
+    },
+    "kb_contact": {
+      "en": "Contact",
+      "ar": "التواصل"
+    },
+    "kb_programmes": {
+      "en": "Programmes",
+      "ar": "التخصصات"
+    },
+    "kb_elearning": {
+      "en": "E-learning and registration",
+      "ar": "التعلم الإلكتروني والتسجيل"
+    },
+    "kb_housing": {
+      "en": "Housing",
+      "ar": "السكن"
+    },
+    "kb_library": {
+      "en": "Library",
+      "ar": "المكتبة"
+    },
+    "kb_location": {
+      "en": "Where is AUM",
+      "ar": "أين تقع الجامعة"
+    },
+    "kb_science": {
+      "en": "Faculty of Science",
+      "ar": "كلية العلوم"
+    },
+    "kb_news": {
+      "en": "News and events",
+      "ar": "الأخبار والفعاليات"
+    },
+    "kb_tools": {
+      "en": "Student tools",
+      "ar": "أدوات الطالب"
+    },
+    "busFees": {
+      "en": "Fees per semester: Amman, Al-Fuhais, Zarqa and Karak 250 JD; Madaba 160 JD. Summer is about half.",
+      "ar": "الرسوم للفصل: عمان والفحيص والزرقاء والكرك 250 ديناراً؛ مادبا 160 ديناراً. الصيف نحو النصف."
+    },
+    "feesKnown": {
+      "en": "Published fees per credit hour:",
+      "ar": "الرسوم المنشورة للساعة المعتمدة:"
+    },
+    "countLine": {
+      "en": "{b} bachelor and {m} master programmes across seven faculties.",
+      "ar": "{b} برنامج بكالوريوس و{m} برامج ماجستير في سبع كليات."
     }
   },
   "plans": {

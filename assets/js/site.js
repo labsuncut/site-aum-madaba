@@ -273,6 +273,40 @@
     }); });
   });
 
+  // v4f: scroll film. The hero film is scrubbed by scroll position (user-driven, so it stays on with Reduce Motion).
+  var film = doc.querySelector('[data-film]');
+  if (film) {
+    var stage = film.querySelector('.film-stage'), fv = film.querySelector('.film-video'), beats = [].slice.call(film.querySelectorAll('.beat')), fbar = film.querySelector('.film-bar i'), hint = film.querySelector('.film-hint');
+    var fdur = 0, shown = 0, primed = false, fready = false, lastP = -1;
+    function fail() { stage.classList.add('no-video'); fready = false; }
+    var srcs = fv.querySelectorAll('source'); if (srcs.length) srcs[srcs.length - 1].addEventListener('error', fail); fv.addEventListener('error', fail);
+    fv.addEventListener('loadedmetadata', function () { fdur = fv.duration || 0; fready = fdur > 0; });
+    fv.addEventListener('loadeddata', function () { stage.classList.add('film-ready'); });
+    function prime() { if (primed) return; primed = true; var pr = fv.play(); if (pr && pr.then) pr.then(function () { fv.pause(); }).catch(function () {}); else fv.pause(); }
+    ['touchstart', 'pointerdown', 'wheel', 'keydown', 'scroll'].forEach(function (ev) { window.addEventListener(ev, prime, { once: true, passive: true }); });
+    function progress() { var r = film.getBoundingClientRect(), total = r.height - stage.offsetHeight; if (total <= 0) return 0; var p = (stage.getBoundingClientRect().top - r.top) / total; return p < 0 ? 0 : p > 1 ? 1 : p; }
+    function tick() {
+      var r = film.getBoundingClientRect();
+      if (r.bottom > -200 && r.top < window.innerHeight + 200) {
+        var p = progress();
+        if (p !== lastP) {
+          lastP = p;
+          beats.forEach(function (b) { b.classList.toggle('on', p >= +b.dataset.from && p < +b.dataset.to); });
+          if (fbar) fbar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+          if (hint) hint.classList.toggle('off', p > .04);
+        }
+        if (!fready && fv.readyState >= 1 && fv.duration > 0 && !stage.classList.contains('no-video')) { fdur = fv.duration; fready = true; }
+        if (fready) {
+          var target = p * fdur; shown += (target - shown) * .22;
+          if (Math.abs(target - shown) < .004) shown = target;
+          if (Math.abs(fv.currentTime - shown) > .01 && !fv.seeking) { try { fv.currentTime = shown; } catch (e) {} }
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
   // v4: built-in guide (keyword matching against this site's own pages; nothing leaves the browser)
   var G = window.AUM_GUIDE, fab = doc.querySelector('.guide-fab'), panel = doc.getElementById('guide');
   if (G && fab && panel) {
@@ -284,32 +318,91 @@
     fab.addEventListener('click', function () { open(panel.hidden); });
     panel.querySelector('.guide-close').addEventListener('click', function () { open(false); });
     doc.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) open(false); });
-    var STOP = ['what', 'can', 'how', 'where', 'the', 'you', 'are', 'for', 'and', 'with', 'your', 'any', 'who', 'when', 'does', 'there', 'some', 'get', 'need', 'want', 'know', 'about', 'find', 'هل', 'ماذا', 'كيف', 'اين', 'متى', 'ما', 'في', 'من', 'على', 'عن'];
+    // v4f: a small bilingual knowledge base (built from this site's own strings) with intent detection and programme facts
+    var STOP = ['what', 'can', 'how', 'where', 'the', 'you', 'are', 'for', 'and', 'with', 'your', 'any', 'who', 'when', 'does', 'there', 'some', 'get', 'need', 'want', 'know', 'about', 'find', 'tell', 'please', 'aum', 'university', 'much', 'many', 'this', 'that', 'have', 'has', 'which', 'like', 'into', 'from', 'هل', 'ماذا', 'كيف', 'اين', 'وين', 'متى', 'ما', 'في', 'من', 'على', 'عن', 'الى', 'او', 'لو', 'ممكن', 'بدي', 'اريد', 'شو', 'ايش', 'الجامعه', 'جامعه', 'هي', 'هو', 'انا', 'عندي', 'عندكم', 'فيه', 'يوجد', 'كم'];
+    var INTENTS = [
+      ['fee', ['fee', 'fees', 'tuition', 'cost', 'costs', 'price', 'prices', 'pay', 'much', 'expensive', 'cheap', 'jd', 'dinar', 'رسوم', 'رسم', 'تكلفه', 'سعر', 'اسعار', 'بكم', 'دينار', 'غالي', 'ادفع', 'دفع']],
+      ['credits', ['credit', 'credits', 'hour', 'hours', 'ساعه', 'ساعات']],
+      ['where', ['where', 'location', 'located', 'address', 'directions', 'وين', 'اين', 'موقع', 'عنوان', 'مكان']],
+      ['avg', ['average', 'minimum', 'tawjihi', 'score', 'percent', 'accept', 'accepted', 'معدل', 'معدلي', 'توجيهي', 'نسبه', 'الحد', 'يقبل', 'مقبول']],
+      ['plan', ['plan', 'plans', 'courses', 'course', 'semester', 'prerequisite', 'خطه', 'خطتي', 'مساقات', 'مساق', 'فصل']],
+      ['duration', ['years', 'year', 'long', 'duration', 'سنوات', 'سنه', 'مده']]
+    ];
+    var TAGMAP = { fee: 'fees', credits: 'plan', avg: 'average', plan: 'plan', duration: 'duration', where: 'where' };
+    var DEFAULTS = { fee: 'fees', credits: 'plan', avg: 'average', plan: 'plan', duration: 'rules', where: 'location' };
+    INTENTS.forEach(function (i) { i[1] = i[1].concat(i[1].map(stem)); });
+    var INTENT_WORDS = []; INTENTS.forEach(function (i) { INTENT_WORDS = INTENT_WORDS.concat(i[1]); });
+    var PROG_INTENTS = ['fee', 'credits', 'avg', 'plan', 'duration'];
+    var GENERIC = ['engineering', 'science', 'sciences', 'and', 'of', 'systems', 'management', 'هندسه', 'علوم', 'علم', 'اداره', 'انظمه', 'نظم'];
+    function stem(w) { if (/^[a-z]+$/.test(w)) { if (w.length > 5 && /ies$/.test(w)) return w.slice(0, -3) + 'y'; if (w.length > 4 && /(es|ed)$/.test(w) && !/ss$/.test(w)) return w.slice(0, -2) + (/sses$/.test(w) ? 'ss' : ''); if (w.length > 3 && /s$/.test(w) && !/ss$/.test(w)) return w.slice(0, -1); return w; } if (w.length > 4 && w.indexOf('ال') === 0) w = w.slice(2); else if (w.length > 4 && /^(لل|بال|وال|كال|فال)/.test(w)) w = w.replace(/^(لل|بال|وال|كال|فال)/, ''); else if (w.length > 3 && /^[وبلف]/.test(w) && !/^(باص|بحث|بريد|بوابه|لغه|فرع|فيزا|فصل|وقت|وظيفه|واتساب|بابا|بطريركيه)/.test(w)) w = w.slice(1); return w; }
+    function toks(s) { return gnorm(s).split(' ').filter(function (w) { return w.length >= 2 && STOP.indexOf(w) === -1; }).map(stem); }
+    function same(a, b) { if (a === b) return 1; if (a.length >= 4 && b.length >= 4 && (a.indexOf(b) === 0 || b.indexOf(a) === 0)) return .8; return 0; }
+    var KB = G.entries.map(function (e) { return { e: e, tt: toks(e.t), kt: toks(e.k), at: toks(e.a) }; });
+    var DF = {}; KB.forEach(function (x) { var seen = {}; x.tt.concat(x.kt, x.at).forEach(function (w) { if (!seen[w]) { seen[w] = 1; DF[w] = (DF[w] || 0) + 1; } }); });
+    function idf(w) { return 1 / (1 + Math.log(1 + (DF[w] || 0))); }
+    function hit(list, w) { var best = 0; for (var i = 0; i < list.length; i++) { var v = same(list[i], w); if (v > best) best = v; if (best === 1) break; } return best; }
+    var PROGS = (D ? D.programmes : []).map(function (p) { return { p: p, en: toks(p.en).filter(function (w) { return GENERIC.indexOf(w) === -1; }), ar: toks(p.ar || '').filter(function (w) { return GENERIC.indexOf(w) === -1; }), full: [gnorm(p.en), gnorm(p.ar || '')] }; });
+    var lastProg = null;
+    function findProg(n, q) {
+      var best = null, bs = 0;
+      PROGS.forEach(function (x) {
+        var s = 0;
+        if (x.full[0].length > 3 && n.indexOf(x.full[0]) !== -1) s = 3; else if (x.full[1].length > 3 && n.indexOf(x.full[1]) !== -1) s = 3;
+        else { var all = x.en.concat(x.ar), m = 0; all.forEach(function (w) { if (w.length >= 4 && hit(q, w) >= .8) m += (w.length >= 7 ? 1 : .5); }); if (m) s = m + (m >= 1.5 ? .5 : 0); }
+        if (s > bs) { bs = s; best = x.p; }
+      });
+      return bs >= 1 ? best : null;
+    }
+    function intentOf(q) { for (var i = 0; i < INTENTS.length; i++) { for (var j = 0; j < q.length; j++) if (INTENTS[i][1].indexOf(q[j]) !== -1) return INTENTS[i][0]; } return null; }
+    function fill(s, o) { return s.replace(/\{(\w+)\}/g, function (_, k) { return o[k] == null ? '' : o[k]; }); }
+    function progCard(p, intent) {
+      var name = p[lang] || p.en, l = [[G.details, p.page ? root + p.page : root + 'academics.html#' + p.faculty]];
+      var ph = planHref(p); if (ph) l.push([G.studyPlan, ph, !p.plan]);
+      var text;
+      if (intent === 'fee') { text = p.feePerCredit ? (p.credits ? fill(G.s.p_fee, { p: name, fee: fmt(p.feePerCredit), credits: fmt(p.credits), total: fmt(p.feePerCredit * p.credits) }) : fill(G.s.p_feeOnly, { p: name, fee: fmt(p.feePerCredit) })) : fill(G.s.p_feeNA, { p: name }); l.unshift([G.feeLink[0], G.feeLink[1], 1]); }
+      else if (intent === 'credits' || intent === 'duration') text = p.credits ? fill(G.s.p_credits, { p: name, credits: fmt(p.credits) }) : fill(G.s.p_creditsNA, { p: name });
+      else if (intent === 'avg') text = p.minAverage ? fill(G.s.p_avg, { p: name, avg: p.minAverage }) : fill(G.s.p_avgNA, { p: name });
+      else if (intent === 'plan') text = fill(G.s.p_plan, { p: name });
+      else text = fill(G.s.p_about, { p: name, level: G.lv[p.level] || p.level, faculty: G.fac[p.faculty] || p.faculty }) + ' ' + G.s.p_more;
+      var facts = '';
+      if (!intent) facts = '<small class="g-facts">' + (p.credits ? fmt(p.credits) + ' ' + esc(G.credits) : '') + (p.minAverage ? ' · ' + p.minAverage + '% ' + esc(G.minAverage) : '') + (p.feePerCredit ? ' · ' + fmt(p.feePerCredit) + ' ' + esc(G.perCredit) : '') + '</small>';
+      return esc(text) + '<div class="g-card"><b>' + esc(name) + '</b>' + facts + links(l) + '</div>';
+    }
+    function related(exclude, n) {
+      var picks = exclude.slice(0, n).filter(Boolean);
+      if (!picks.length) return '';
+      return '<div class="g-rel"><span>' + esc(G.s.related) + '</span>' + picks.map(function (e) { return '<button type="button" data-q="' + esc(e.t) + '">' + esc(e.t) + '</button>'; }).join('') + '</div>';
+    }
+    function rank(q, intent) {
+      var tag = intent && TAGMAP[intent];
+      return KB.map(function (x) {
+        var s = 0; q.forEach(function (w) { var v = Math.max(hit(x.tt, w) * 3, hit(x.kt, w) * 2, hit(x.at, w) * 1); if (v) s += v * idf(w); });
+        if (tag && x.e.tags.indexOf(tag) !== -1 && s) s *= 1.4;
+        return { x: x, s: s };
+      }).filter(function (r) { return r.s > 0; }).sort(function (a, b) { return b.s - a.s; });
+    }
     function answer(q) {
       var n = gnorm(q); if (!n) return;
       bubble('g-me', esc(q));
-      // 1. a programme named in the question
-      var progs = (D ? D.programmes : []).filter(function (p) {
-        var en = gnorm(p.en), ar = gnorm(p.ar || '');
-        return (en.length > 3 && (n.indexOf(en) !== -1 || en.indexOf(n) !== -1 && n.length > 4)) || (ar.length > 3 && (n.indexOf(ar) !== -1 || ar.indexOf(n) !== -1 && n.length > 3));
-      }).slice(0, 4);
-      if (progs.length) {
-        bubble('g-bot', esc(G.progFound) + progs.map(function (p) {
-          var l = [[G.details, p.page ? root + p.page : root + 'academics.html#' + p.faculty]];
-          var ph = planHref(p); if (ph) l.push([G.studyPlan, ph, !p.plan]);
-          return '<div class="g-card"><b>' + esc(p[lang] || p.en) + '</b>' + links(l) + '</div>';
-        }).join(''));
+      var raw = n.split(' ').map(stem), intent = intentOf(raw), qt = toks(q), content = qt.filter(function (w) { return INTENT_WORDS.indexOf(w) === -1; });
+      if (/^(hi|hello|hey|salam|marhaba|مرحبا|اهلا|أهلا|هلا|السلام عليكم|سلام)\b/.test(n) && qt.length <= 3) { bubble('g-bot', esc(G.s.greet) + related(KB.slice(0, 3).map(function (x) { return x.e; }), 3)); return; }
+      if (/^(thanks|thank you|thx|شكرا|شكراً|يسلمو|مشكور)/.test(n)) { bubble('g-bot', esc(G.s.thanks)); return; }
+      if (/(what can you|what do you|help me|who are you|شو بتعرف|ماذا تعرف|كيف تساعد|بتقدر تساعد)/.test(n)) { bubble('g-bot', esc(G.s.canDo) + related(KB.slice(0, 6).map(function (x) { return x.e; }), 6)); return; }
+      // 1. a programme named in the question (or a follow-up like "and its fees?" after one was named)
+      var prog = findProg(n, qt);
+      if (!prog && intent && PROG_INTENTS.indexOf(intent) !== -1 && lastProg && !content.length) prog = lastProg;
+      if (prog) { lastProg = prog; var ex = rank(qt, intent).slice(0, 4).map(function (r) { return r.x.e; }).filter(function (e) { return e.id.indexOf('fac-') !== 0; }); bubble('g-bot', progCard(prog, intent) + related(ex, 2)); return; }
+      // 2. the best knowledge-base entry
+      var rs = rank(qt, intent);
+      if (!content.length && intent && DEFAULTS[intent]) { var dflt = KB.filter(function (x) { return x.e.id === DEFAULTS[intent]; }); if (dflt.length) rs = dflt.map(function (x) { return { x: x, s: 9 }; }).concat(rs.filter(function (r) { return r.x !== dflt[0]; })); }
+      if (rs.length && rs[0].s >= .7) {
+        var top = rs[0].x.e, more = rs.slice(1, 4).map(function (r) { return r.x.e; }).filter(function (e) { return e.id !== top.id; }).slice(0, 2);
+        bubble('g-bot', '<b class="g-title">' + esc(top.t) + '</b>' + esc(top.a) + links(top.l) + related(more, 2));
         return;
       }
-      // 2. the best keyword entry
-      var best = null, bestScore = 0;
-      G.entries.forEach(function (e) {
-        var score = 0; gnorm(e.k).split(' ').forEach(function (k) { if (k.length >= 3 && STOP.indexOf(k) === -1 && n.indexOf(k) !== -1) score += k.length; });
-        if (score > bestScore) { bestScore = score; best = e; }
-      });
-      if (best) bubble('g-bot', esc(best.a) + links(best.l));
-      else bubble('g-bot', esc(G.fallback));
+      bubble('g-bot', esc(G.s.fallback2) + links(G.contactLinks) + related(rs.slice(0, 3).map(function (r) { return r.x.e; }).concat(KB.slice(0, 3).map(function (x) { return x.e; })).filter(function (e, i, a) { return a.indexOf(e) === i; }).slice(0, 3), 3));
     }
+    log.addEventListener('click', function (e) { var b = e.target.closest('button[data-q]'); if (b) answer(b.dataset.q); });
     form.addEventListener('submit', function (e) { e.preventDefault(); var q = input.value.trim(); if (!q) return; input.value = ''; answer(q); });
     panel.querySelectorAll('.guide-chips button').forEach(function (b) { b.addEventListener('click', function () { answer(b.dataset.q); }); });
   }
