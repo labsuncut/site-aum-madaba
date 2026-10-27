@@ -514,7 +514,7 @@ function home(ctx) {
     <div class="film-foot" aria-hidden="true"><span class="film-hint">${esc(t('filmScroll'))}<i></i></span><span class="film-bar"><i></i></span></div>
   </div>
 </section>` : `
-<section class="hero${M.heroVideo && has(M.heroVideo.src) ? ' has-video' : ''}">
+<section class="hero${M.heroVideo && has(M.heroVideo.src) ? ' has-video cine' : ''}">
   ${M.heroVideo && has(M.heroVideo.src) ? `<video class="hero-video" src="${mp(R, M.heroVideo.src)}"${has(M.heroVideo.poster) ? ` poster="${mp(R, M.heroVideo.poster)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video><div class="hero-veil" aria-hidden="true"></div>` : ''}
   <div class="hero-wall tesserae" data-count="90"></div>
   <div class="wrap hero-grid">
