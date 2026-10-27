@@ -1,0 +1,11 @@
+{
+  "_note": "Breaking-news bar in the home newsroom. active:false hides it. Each item: level (breaking|notice), en, ar, optional url. The sample item is a placeholder: replace it with the real notice when one happens.",
+  "active": true,
+  "items": [
+    {
+      "level": "breaking",
+      "key": "tickerSample",
+      "url": "https://www.aum.edu.jo/announcements"
+    }
+  ]
+}

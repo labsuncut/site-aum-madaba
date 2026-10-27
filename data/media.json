@@ -240,7 +240,17 @@
   },
   "why": {
     "file": "orient-24.jpg",
-    "url": "https://www.aum.edu.jo/news/aum-welcomes-new-students-at-an-interactive-orientation-event"
+    "url": "https://www.aum.edu.jo/news/aum-welcomes-new-students-at-an-interactive-orientation-event",
+    "files": [
+      "orient-24.jpg",
+      "orient-28.jpg",
+      "orient-06.jpg",
+      "orient-14.jpg",
+      "orient-30.jpg",
+      "orient-10.jpg",
+      "orient-08.jpg",
+      "orient-33.jpg"
+    ]
   },
   "lifeHero": {
     "file": "orient-29.jpg",
@@ -300,5 +310,22 @@
       "url": "https://www.aum.edu.jo/news/aum-spotlight-27",
       "key": "news6"
     }
-  ]
+  ],
+  "visit": {
+    "files": [
+      {
+        "file": "madaba.jpg",
+        "cap": "visitCap1"
+      },
+      {
+        "file": "orient-02.jpg",
+        "cap": "visitCap2"
+      },
+      {
+        "file": "hero-neche.jpg",
+        "cap": "visitCap3"
+      }
+    ],
+    "url": "https://www.aum.edu.jo/visit"
+  }
 }

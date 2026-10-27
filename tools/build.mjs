@@ -11,6 +11,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const S = JSON.parse(readFileSync(join(ROOT, 'data/strings.json'), 'utf8'));
 const D = JSON.parse(readFileSync(join(ROOT, 'data/programmes.json'), 'utf8'));
 const M = JSON.parse(readFileSync(join(ROOT, 'data/media.json'), 'utf8'));
+const AL = JSON.parse(readFileSync(join(ROOT, 'data/alerts.json'), 'utf8'));
 // Study plans copied from AUM's department pages (data/plans/<slug>.json, see /mnt/project-files/aum/study-plans/README.md)
 // Short content hash per asset, so browsers fetch new CSS/JS on the first load after a push
 const VER = (p) => createHash('sha1').update(readFileSync(join(ROOT, p))).digest('hex').slice(0, 8);
@@ -161,7 +162,8 @@ const ICONS = {
   star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z"/>',
   trophy: '<path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4a1 1 0 0 0-1 1 4 4 0 0 0 4 4M17 6h3a1 1 0 0 1 1 1 4 4 0 0 1-4 4"/>',
   waves: '<path d="M2 8c2 0 2-1.5 4-1.5S8 8 10 8s2-1.5 4-1.5S16 8 18 8s2-1.5 4-1.5"/><path d="M2 13c2 0 2-1.5 4-1.5S8 13 10 13s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 18c2 0 2-1.5 4-1.5S8 18 10 18s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/>',
-  camera: '<path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/>'
+  camera: '<path d="M4 8h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'
 };
 const icon = (k) => `<span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg></span>`;
 
@@ -246,7 +248,7 @@ function shell(ctx, page, body) {
 <link rel="alternate" hreflang="x-default" href="${SITE}${file}">
 <link rel="preload" href="${R}assets/fonts/${lang === 'ar' ? 'amiri-arabic-bold' : 'cormorant-latin'}.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${R}assets/css/site.css?v=${V.css}">
-<script>window.AUM_STRINGS=${JSON.stringify(strings)};window.AUM_DATA=${JSON.stringify(D)};window.AUM_FAC=${JSON.stringify(facData(R))};window.AUM_DEPT=${JSON.stringify(deptThumbs(R))};</script>
+<script>window.AUM_STRINGS=${JSON.stringify(strings)};window.AUM_DATA=${JSON.stringify(D)};window.AUM_FAC=${JSON.stringify(facData(R))};window.AUM_DEPT=${JSON.stringify(deptThumbs(R))};window.AUM_ALERTS=${JSON.stringify(alertsData(lang))};</script>
 </head>
 <body>
 <div class="intro" id="intro" aria-hidden="true">
@@ -336,6 +338,8 @@ const facultyIcon = { engineering: 'engineering', science: 'science', health: 'h
 // v4d: each faculty gets its own photo (AUM's department card images), a colour edge and the icon as fallback
 const facultyColor = { engineering: '#9a4a2a', science: '#5e6b3a', health: '#8b0a12', it: '#5a3d2b', business: '#b8862b', design: '#560309', languages: '#c08a2e' };
 const facData = (R) => Object.fromEntries(D.faculties.map((f) => [f.id, { icon: icon(facultyIcon[f.id]), img: has(`dept/fac-${f.id}.jpg`) ? mp(R, `dept/fac-${f.id}.jpg`) : '', color: facultyColor[f.id] || '#8b0a12' }]));
+// v4e: breaking-news bar data (text from strings.json when an item names a key, else inline en/ar)
+const alertsData = (lang) => ({ active: !!AL.active, items: (AL.items || []).map((i) => ({ level: i.level || 'notice', text: i.key ? ((S.home[i.key] || {})[lang] || (S.home[i.key] || {}).en || '') : (i[lang] || i.en || ''), url: i.url || '' })).filter((i) => i.text) });
 const deptThumbs = (R) => Object.fromEntries(D.programmes.filter((p) => p.plan && has(`dept/${p.plan}.jpg`)).map((p) => [p.plan, mp(R, `dept/${p.plan}.jpg`)]));
 const count = (fid, level) => D.programmes.filter((p) => p.faculty === fid && p.level === level).length;
 
@@ -344,6 +348,64 @@ function toolCard(ctx, id, group, ic, url, i) {
   const { T, c } = ctx;
   const internal = url === '@plans'; if (internal) url = ctx.R + PAGES.plans;
   return `<a class="tool rv d${i % 4}" href="${url}"${internal ? '' : ' target="_blank" rel="noopener"'} data-group="${group}" data-text="${esc((T('tools', 't_' + id) + ' ' + T('tools', 'd_' + id)).toLowerCase())}">${icon(ic)}<span class="tool-body"><b>${esc(T('tools', 't_' + id))}</b><span>${esc(T('tools', 'd_' + id))}</span></span><span class="tool-go" aria-hidden="true">↗</span></a>`;
+}
+
+// v4e: the visit band (dark, floating tesserae, three ways in, a stack of photos) replaces the plain contact tiles on the home page
+function visitSection(ctx) {
+  const { R, t, c, lang } = ctx;
+  const pics = ((M.visit && M.visit.files) || []).filter((x) => has(x.file));
+  const stack = pics.length ? `<div class="visit-stack rv d1">${pics.map((x, i) => `<figure class="vphoto p${i}"><img src="${mp(R, x.file)}" alt="${esc(t(x.cap))}" loading="lazy"><figcaption>${esc(t(x.cap))}</figcaption></figure>`).join('')}</div>` : '';
+  const ways = [
+    ['send', t('visitBook'), t('visitBookD'), (M.visit && M.visit.url) || LINKS.contact, c('visit')],
+    ['calendar', t('visitOpen'), S.admissions.openLead[lang], LINKS.events, t('visitOpenCta')],
+    ['pin', t('visitDir'), c('address'), LINKS.maps, c('directions')]
+  ].map(([ic, h, d, href, cta], i) => `<a class="way rv d${i}" href="${href}" target="_blank" rel="noopener">${icon(ic)}<span class="way-body"><b>${esc(h)}</b><span>${esc(d)}</span><span class="link">${esc(cta)} <span class="arr">→</span></span></span></a>`).join('');
+  const wa = M.social && M.social.whatsapp;
+  return `<section class="section dark visit" id="visit"><div class="tesserae" data-count="90" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="visit-grid">
+      <div class="rv"><span class="kicker">${esc(t('visitKicker'))}</span><h2 class="visit-title">${esc(t('visitTitle'))}</h2><p class="lead">${esc(t('visitLead'))}</p>
+        <div class="visit-actions"><a class="btn btn-light" href="${LINKS.tel}">${esc(t('visitCall'))} · ${esc(c('phone'))}</a>${wa ? `<a class="btn btn-ghost light" href="${wa}" target="_blank" rel="noopener">${esc(t('visitWhats'))}</a>` : ''}<a class="btn btn-ghost light" href="${LINKS.email}">${esc(t('visitEmail'))}</a></div>
+        <p class="visit-hours"><b>${esc(t('visitHoursT'))}</b> ${esc(c('hoursV'))}</p>
+      </div>
+      ${stack}
+    </div>
+    <div class="ways">${ways}</div>
+  </div>
+</section>`;
+}
+
+// v4e: Life at AUM blocks for current and new students
+function audBar(ctx) {
+  const { t } = ctx;
+  return `<div class="wrap"><div class="audbar rv" role="tablist" aria-label="${esc(t('audLabel'))}"><span class="aud-label">${esc(t('audLabel'))}</span><div class="aud-seg"><button type="button" role="tab" class="on" data-aud="all" aria-selected="true">${esc(t('audAll'))}</button><button type="button" role="tab" data-aud="new" aria-selected="false">${esc(t('audNew'))}</button><button type="button" role="tab" data-aud="current" aria-selected="false">${esc(t('audCurrent'))}</button></div></div></div>`;
+}
+function lifeWeek(ctx) {
+  const { R, t, c, lang, T } = ctx;
+  const quick = ['elearning', 'registration', 'courseFinder', 'calendar', 'library', 'email'].map((id, i) => { const tl = TOOLS.find((x) => x[0] === id); return `<a class="quick rv d${i % 4}" href="${tl[3]}" target="_blank" rel="noopener">${icon(tl[2])}<b>${esc(T('tools', 't_' + id))}</b></a>`; }).join('');
+  const routes = [['rAmman', 250], ['rFuhais', 250], ['rZarqa', 250], ['rKarak', 250], ['rMadaba', 160]];
+  const opts = routes.map(([k, fee], i) => `<option value="${fee}"${i ? '' : ' selected'}>${esc(t(k))}</option>`).join('');
+  return `<section class="section week" id="week" data-aud="current">
+  <div class="wrap">
+    ${head(ctx, t('weekKicker'), t('weekTitle'), t('weekLead'))}
+    <div class="week-grid">
+      <div class="week-card quick-links rv"><h3>${esc(t('quickT'))}</h3><div class="quick-grid">${quick}</div><a class="link" href="${R + PAGES.tools}">${esc(c('allTools'))} <span class="arr">→</span></a></div>
+      <div class="week-card hours rv d1"><h3>${esc(t('hoursT'))}</h3><dl><div>${icon('health')}<dt>${esc(t('hoursHealth'))}</dt><dd>${esc(t('healthHours'))}</dd></div><div>${icon('clock')}<dt>${esc(t('hoursOffice'))}</dt><dd>${esc(c('hoursV'))}</dd></div></dl></div>
+      <div class="week-card busfind rv d2"><h3>${esc(t('busFindT'))}</h3><label class="field">${esc(t('busFindLabel'))}<select id="bus-from">${opts}</select></label><p class="bus-out"><b id="bus-fee">250</b> ${esc(t('busFindFee'))}</p><p class="finder-note">${esc(t('busFindSummer'))} ${esc(t('busNote'))}</p><a class="btn" href="${LINKS.bus}" target="_blank" rel="noopener">${esc(t('busFindCta'))} <span class="arr">→</span></a></div>
+    </div>
+  </div>
+</section>`;
+}
+function lifeStart(ctx) {
+  const { t } = ctx;
+  const links = [LINKS.elearning, LINKS.bus, LINKS.housing, LINKS.calendar, LINKS.studentAffairs];
+  const steps = [1, 2, 3, 4, 5].map((i) => `<li class="rstep rv d${(i - 1) % 4}"><span class="rstep-n">${i}</span><div><h3>${esc(t('n' + i))}</h3><p>${esc(t('n' + i + 'D'))}</p><a class="link" href="${links[i - 1]}" target="_blank" rel="noopener">${esc(ctx.c('opensAum'))} <span class="arr">↗</span></a></div></li>`).join('');
+  return `<section class="section tint start" id="start" data-aud="new">
+  <div class="wrap">
+    ${head(ctx, t('newKicker'), t('newTitle'), t('newLead'))}
+    <ol class="route-steps start-steps">${steps}</ol>
+  </div>
+</section>`;
 }
 
 function home(ctx) {
@@ -355,8 +417,9 @@ function home(ctx) {
   const chips = D.faculties.map((f) => `<button type="button" class="fchip" data-fac="${f.id}">${esc(f[lang])}</button>`).join('');
   const why = [['laptop', 'why1', LINKS.elearning], ['award', 'why2', LINKS.scholarships], ['home', 'why3', LINKS.dorms], ['intl', 'why4', LINKS.abroad], ['bus', 'why5', LINKS.transport], ['calendar', 'why6', LINKS.calendar], ['shield', 'why7', LINKS.licensing]]
     .map(([ic, k, h], i) => `<a class="stone rv d${i % 4}" href="${h}" target="_blank" rel="noopener"><span class="stone-n">${String(i + 1).padStart(2, '0')}</span>${icon(ic)}<b>${esc(t(k))}</b><p>${esc(t(k + 'D'))}</p><span class="stone-go">${esc(c('opensAum'))} <span class="arr">↗</span></span></a>`).join('');
-  const whyBand = M.why && has(M.why.file)
-    ? `<a class="why-band rv" href="${M.why.url}" target="_blank" rel="noopener"><img src="${mp(R, M.why.file)}" alt="${esc(t('whyPhotoAlt'))}" loading="lazy"><span class="why-cap">${esc(t('whyBandCap'))} <span class="arr">↗</span></span></a>`
+  const bandFiles = ((M.why && M.why.files) || [M.why && M.why.file]).filter(has);
+  const whyBand = bandFiles.length
+    ? `<div class="why-band rv" data-band><div class="band-track">${bandFiles.map((f, i) => `<a class="band-slide${i ? '' : ' on'}" href="${M.why.url}" target="_blank" rel="noopener" tabindex="${i ? -1 : 0}"><img src="${mp(R, f)}" alt="${esc(t('whyPhotoAlt'))}" loading="${i < 2 ? 'eager' : 'lazy'}"></a>`).join('')}</div><span class="why-cap">${esc(t('whyBandCap'))}</span><div class="band-ui"><button type="button" class="band-btn prev" aria-label="${esc(t('bandPrev'))}">←</button><span class="band-dots" role="tablist">${bandFiles.map((_, i) => `<button type="button" role="tab" class="${i ? '' : 'on'}" aria-label="${i + 1} ${esc(t('bandOf'))} ${bandFiles.length}"></button>`).join('')}</span><button type="button" class="band-btn next" aria-label="${esc(t('bandNext'))}">→</button></div></div>`
     : `<div class="why-band ph"><div class="tesserae" data-count="40"></div><span>${esc(PH)}</span></div>`;
   const notices = [1, 2, 3].map((i) => `<a class="notice" href="${M.announcements[i - 1].url}" target="_blank" rel="noopener">${icon(M.announcements[i - 1].icon || 'megaphone')}<span><small>${esc(t('annCat' + i))} · ${esc(t('ann' + i + 'D'))}</small><b>${esc(t('ann' + i + 'T'))}</b></span></a>`).join('');
   const leadStory = (() => { const n = M.news[0]; return `<a class="lead-story rv" href="${n.url}" target="_blank" rel="noopener">${pic(R, n.file, 'lead-img', t('news1T'))}<span class="lead-body"><span class="tag">${esc(t('newsLeadLabel'))}</span><h3>${esc(t('news1T'))}</h3><span class="date">${esc(t('news1D'))}</span><span class="link">${esc(c('learnMore'))} <span class="arr">→</span></span></span></a>`; })();
@@ -444,6 +507,7 @@ ${mosaicRule()}
       <div><span class="kicker">${esc(t('newsroomKicker'))}</span><h2>${esc(t('newsTitle'))}</h2></div>
       <div class="mast-meta"><span>${esc(t('newsUpdated'))}</span><a class="btn btn-ghost" href="${LINKS.news}" target="_blank" rel="noopener">${esc(t('newsAll'))} <span class="arr">→</span></a></div>
     </div>
+    <div class="ticker" id="ticker" hidden><span class="ticker-label"><i></i>${esc(t('tickerLabel'))}</span><div class="ticker-view"><div class="ticker-track"></div></div></div>
     <div class="paper">
       ${leadStory}
       <div class="stories"><h4 class="col-head rv">${esc(t('newsMore'))}</h4>${stories}</div>
@@ -484,7 +548,7 @@ ${mosaicRule()}
     <div class="labs rv d1"><a class="lab" href="${LINKS.alumni}" target="_blank" rel="noopener"><b>${esc(t('alumniT'))}</b><span>${esc(t('alumniD'))}</span></a><a class="lab" href="${LINKS.events}" target="_blank" rel="noopener"><b>${esc(t('eventsT'))}</b><span>${esc(t('eventsD'))}</span></a><a class="lab" href="${LINKS.announcements}" target="_blank" rel="noopener"><b>${esc(t('annT'))}</b><span>${esc(t('annD'))}</span></a><a class="lab" href="${LINKS.library}" target="_blank" rel="noopener"><b>${esc(c('linkLibrary'))}</b><span>${esc(T('tools', 'd_library'))}</span></a></div>
   </div>
 </section>
-${contactTiles(ctx, t('visitKicker'), t('visitTitle'), t('visitLead'))}
+${visitSection(ctx)}
 ${applyCta(ctx)}`;
 }
 
@@ -526,16 +590,18 @@ function academics(ctx) {
     const nm = count(f.id, 'master');
     const masters = nm ? `<h4 class="sub">${esc(t('masterIn'))}</h4><div class="plist" data-programmes="${f.id}" data-level="master"></div>` : '';
     const meta = [n ? `${n} ${esc(c('bachelor'))}` : '', nm ? `${nm} ${esc(c('master'))}` : ''].filter(Boolean).join(' · ');
-    return `<details class="facblock rv" id="${f.id}"><summary class="facblock-head">${icon(facultyIcon[f.id])}<div><h3>${esc(f[lang])}</h3>${meta ? `<span class="fac-meta">${meta}</span>` : ''}</div></summary><div class="facblock-body">${extra ? `<p class="fac-extra">${extra}</p>` : ''}${n ? `<h4 class="sub">${esc(t('bachelorIn'))}</h4>` : ''}${list}${masters}</div></details>`;
+    const peekNames = D.programmes.filter((p) => p.faculty === f.id).slice(0, 3).map((p) => p[lang] || p.en).join(' · ');
+    const total = D.programmes.filter((p) => p.faculty === f.id).length;
+    return `<details class="facblock rv" id="${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}"><summary class="facblock-head">${icon(facultyIcon[f.id])}<div class="fb-text"><h3>${esc(f[lang])}</h3>${meta ? `<span class="fac-meta">${meta}</span>` : ''}<span class="fac-peek">${esc(peekNames)}</span></div><small class="fb-count">${total === 1 ? esc(c('programmeOne')) : `${total} ${esc(c('programmesN'))}`}</small></summary><div class="facblock-body">${extra ? `<p class="fac-extra">${extra}</p>` : ''}${n ? `<h4 class="sub">${esc(t('bachelorIn'))}</h4>` : ''}${list}${masters}</div></details>`;
   }).join('');
-  const findex = `<div class="facindex rv"><span class="kicker">${esc(t('indexKicker'))}</span><div class="fchips">${D.faculties.map((f) => `<a class="fchip" href="#${f.id}">${esc(f[lang])}</a>`).join('')}</div></div>`;
+  const findex = `<div class="facindex rv" id="facindex"><span class="kicker">${esc(t('indexKicker'))}</span><div class="fchips">${D.faculties.map((f) => `<a class="fchip" href="#${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}">${esc(f[lang])}</a>`).join('')}</div><div class="fac-ctl"><button type="button" class="link" data-fac-all="open">${esc(t('openAll'))}</button><button type="button" class="link" data-fac-all="close">${esc(t('closeAll'))}</button></div></div>`;
   return `
 ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
-<section class="section">
+<section class="section faculties"><div class="tesserae" data-count="60" aria-hidden="true"></div>
   <div class="wrap">
     ${head(ctx, '', t('byFaculty'), c('verify'))}
     ${findex}
-    ${blocks}
+    <div class="facblocks">${blocks}</div>
   </div>
 </section>
 <section class="section tint" id="graduate">
@@ -819,16 +885,21 @@ function life(ctx) {
   const { R, t, c, lang } = ctx;
   const rows = [['rAmman', 250], ['rFuhais', 250], ['rZarqa', 250], ['rKarak', 250], ['rMadaba', 160]]
     .map(([k, fee]) => `<tr><td><b>${esc(t(k))}</b></td><td class="num">${fee}</td></tr>`).join('');
-  const clubs = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `<span class="pill">${esc(t('cl' + i))}</span>`).join('');
+  const kinds = { 1: 'clubs', 2: 'clubs', 3: 'clubs', 4: 'sport', 5: 'sport', 6: 'sport', 7: 'comm', 8: 'comm', 9: 'sport' };
+  const clubs = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `<span class="pill" data-kind="${kinds[i]}">${esc(t('cl' + i))}</span>`).join('');
+  const kindChips = [['', 'filtAll'], ['clubs', 'filtClubs'], ['sport', 'filtSport'], ['comm', 'filtComm']].map(([k, key], i) => `<button type="button" class="fchip${i ? '' : ' on'}" data-kind="${k}">${esc(t(key))}</button>`).join('');
   const stripFiles = (M.lifeStrip && (M.lifeStrip.files || []).filter(has)) || [];
   const stripImgs = stripFiles.map((f) => `<a href="${M.lifeStrip.url}" target="_blank" rel="noopener" tabindex="-1"><img src="${mp(R, f)}" alt="" loading="lazy"></a>`).join('');
-  const strip = stripFiles.length ? `<section class="strip-band" aria-label="${esc(t('stripLabel'))}"><div class="strip"><div class="strip-track">${stripImgs}${stripImgs}</div></div><div class="wrap strip-cap"><span class="kicker">${esc(t('stripLabel'))}</span><a class="link" href="${M.lifeStrip.url}" target="_blank" rel="noopener">${esc(t('stripCta'))} <span class="arr">↗</span></a></div></section>` : '';
+  const strip = stripFiles.length ? `<section class="strip-band" data-aud="new" aria-label="${esc(t('stripLabel'))}"><div class="strip"><div class="strip-track">${stripImgs}${stripImgs}</div></div><div class="wrap strip-cap"><span class="kicker">${esc(t('stripLabel'))}</span><a class="link" href="${M.lifeStrip.url}" target="_blank" rel="noopener">${esc(t('stripCta'))} <span class="arr">↗</span></a></div></section>` : '';
   const facts = [1, 2, 3, 4].map((i) => `<div class="stat"><b>${esc(t('f' + i + 'N'))}</b><span>${esc(t('f' + i))}</span></div>`).join('');
   const sportPics = (M.sport && (M.sport.files || []).filter(has)) || [];
   const sport = sportPics.length ? `<div class="gallery collage rv d1">${sportPics.map((f) => `<a href="${M.sport.url}" target="_blank" rel="noopener"><img src="${mp(R, f)}" alt="${esc(t('stripLabel'))}" loading="lazy"></a>`).join('')}</div>` : `<div class="photo olive rv d1"><div class="tesserae" data-count="60"></div><p class="note">${esc(S.science.photoNote[lang])}</p></div>`;
   const health = M.health && has(M.health.file) ? `<a class="photo-link rv d1" href="${LINKS.health}" target="_blank" rel="noopener"><img src="${mp(R, M.health.file)}" alt="${esc(t('healthAlt'))}" loading="lazy"><span>${esc(t('healthAlt'))}</span></a>` : '';
   return `
 ${pheroPhoto(ctx, t('kicker'), t('h1'), t('lead'), M.lifeHero, t('heroAlt'))}
+${audBar(ctx)}
+${lifeWeek(ctx)}
+${lifeStart(ctx)}
 ${strip}
 <section class="stats life-stats"><div class="wrap"><div class="stats-kicker kicker">${esc(t('dayKicker'))}</div><div class="stats-grid">${facts}</div></div></section>
 <section class="section" id="bus">
@@ -841,7 +912,7 @@ ${strip}
     <div class="tablewrap rv d1"><table><thead><tr><th>${esc(t('thRoute'))}</th><th class="num">${esc(t('thFallSpring'))}</th></tr></thead><tbody>${rows}</tbody></table></div>
   </div>
 </section>
-<section class="section tint" id="housing">
+<section class="section tint" id="housing" data-aud="new">
   <div class="wrap">
     ${head(ctx, t('housingKicker'), t('housingTitle'))}
     <div class="grid c2">
@@ -852,7 +923,7 @@ ${strip}
 </section>
 <section class="section" id="clubs">
   <div class="wrap two">
-    <div class="rv"><span class="kicker">${esc(t('sportKicker'))}</span><h2>${esc(t('sportTitle'))}</h2><p class="lead">${esc(t('sportLead'))}</p><p class="finder-note">${esc(t('clubsLead'))}</p><div class="pills">${clubs}</div><p style="margin-top:18px"><a class="link" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${esc(S.tools.t_studentAffairs[lang])} <span class="arr">↗</span></a></p></div>
+    <div class="rv"><span class="kicker">${esc(t('sportKicker'))}</span><h2>${esc(t('sportTitle'))}</h2><p class="lead">${esc(t('sportLead'))}</p><p class="finder-note">${esc(t('clubsLead'))}</p><div class="fchips kind-chips" id="kind-chips">${kindChips}</div><div class="pills" id="club-pills">${clubs}</div><p style="margin-top:18px"><a class="link" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${esc(S.tools.t_studentAffairs[lang])} <span class="arr">↗</span></a></p></div>
     ${sport}
   </div>
 </section>
@@ -862,7 +933,7 @@ ${strip}
     ${health}
   </div>
 </section>
-<section class="section" id="support">
+<section class="section" id="support" data-aud="current">
   <div class="wrap">
     <div class="grid c4">
       <a class="tile rv" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${icon('languages')}<h3>${esc(t('langT'))}</h3><p>${esc(t('langD'))}</p></a>

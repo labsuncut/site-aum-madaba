@@ -1071,12 +1071,72 @@
       "ar": "22 تشرين الأول 2026"
     },
     "whyBandCap": {
-      "en": "New students on campus, welcome day, October 2026",
-      "ar": "طلبة جدد في الحرم الجامعي، يوم الاستقبال، تشرين الأول 2026"
+      "en": "Students on campus, welcome day, October 2026",
+      "ar": "طلبة في الحرم الجامعي، يوم الاستقبال، تشرين الأول 2026"
     },
     "finderHint": {
       "en": "Open a faculty to see its programmes. Tap any programme for its study plan.",
       "ar": "افتح الكلية لترى برامجها. اضغط على أي برنامج لترى خطته الدراسية."
+    },
+    "tickerLabel": {
+      "en": "Breaking",
+      "ar": "عاجل"
+    },
+    "tickerSample": {
+      "en": "Sample notice: this bar appears only when the university has urgent news, such as a weather closure or a national holiday. It is switched on and off in one data file.",
+      "ar": "إشعار تجريبي: يظهر هذا الشريط فقط عندما يكون لدى الجامعة خبر عاجل، مثل تعطيل الدوام بسبب الطقس أو عطلة وطنية. يُفعَّل ويُطفأ من ملف بيانات واحد."
+    },
+    "bandPrev": {
+      "en": "Previous photo",
+      "ar": "الصورة السابقة"
+    },
+    "bandNext": {
+      "en": "Next photo",
+      "ar": "الصورة التالية"
+    },
+    "bandOf": {
+      "en": "of",
+      "ar": "من"
+    },
+    "visitBook": {
+      "en": "Book a campus visit",
+      "ar": "احجز زيارة للحرم الجامعي"
+    },
+    "visitBookD": {
+      "en": "Request a date through AUM’s visit page and come and see the labs, the library and the sports complex for yourself.",
+      "ar": "اطلب موعدًا عبر صفحة الزيارة في موقع الجامعة وتعال لترى المختبرات والمكتبة والمجمع الرياضي بنفسك."
+    },
+    "visitOpen": {
+      "en": "Open days",
+      "ar": "الأيام المفتوحة"
+    },
+    "visitDir": {
+      "en": "Find us",
+      "ar": "موقعنا"
+    },
+    "visitWhats": {
+      "en": "WhatsApp the university",
+      "ar": "راسل الجامعة على واتساب"
+    },
+    "visitHoursT": {
+      "en": "Office hours",
+      "ar": "ساعات الدوام"
+    },
+    "visitCap1": {
+      "en": "Madaba, the city of mosaics",
+      "ar": "مادبا، مدينة الفسيفساء"
+    },
+    "visitCap2": {
+      "en": "The campus lawn on welcome day",
+      "ar": "ساحة الحرم الجامعي في يوم الاستقبال"
+    },
+    "visitCap3": {
+      "en": "The “I ♥ AUM” sign by the main building",
+      "ar": "لافتة “I ♥ AUM” قرب المبنى الرئيسي"
+    },
+    "visitOpenCta": {
+      "en": "All events",
+      "ar": "كل الفعاليات"
     }
   },
   "academics": {
@@ -1147,6 +1207,14 @@
     "programmesN": {
       "en": "programmes",
       "ar": "برامج"
+    },
+    "openAll": {
+      "en": "Open all",
+      "ar": "افتح الكل"
+    },
+    "closeAll": {
+      "en": "Close all",
+      "ar": "أغلق الكل"
     }
   },
   "science": {
@@ -2167,6 +2235,138 @@
     "stripCta": {
       "en": "See the welcome day story",
       "ar": "اقرأ خبر يوم الترحيب"
+    },
+    "audLabel": {
+      "en": "Show me what matters to",
+      "ar": "أرني ما يهم"
+    },
+    "audAll": {
+      "en": "Everyone",
+      "ar": "الجميع"
+    },
+    "audNew": {
+      "en": "New students",
+      "ar": "الطلبة الجدد"
+    },
+    "audCurrent": {
+      "en": "Current students",
+      "ar": "الطلبة الحاليين"
+    },
+    "weekKicker": {
+      "en": "For current students",
+      "ar": "للطلبة الحاليين"
+    },
+    "weekTitle": {
+      "en": "Your week at AUM, in one place.",
+      "ar": "أسبوعك في الجامعة، في مكان واحد."
+    },
+    "weekLead": {
+      "en": "The links you open every week, the hours you keep forgetting, and your bus.",
+      "ar": "الروابط التي تفتحها كل أسبوع، والساعات التي تنساها دائمًا، وباصك."
+    },
+    "quickT": {
+      "en": "Quick links",
+      "ar": "روابط سريعة"
+    },
+    "hoursT": {
+      "en": "Hours to remember",
+      "ar": "ساعات تذكّرها"
+    },
+    "hoursHealth": {
+      "en": "Health centre",
+      "ar": "المركز الصحي"
+    },
+    "hoursOffice": {
+      "en": "University offices",
+      "ar": "مكاتب الجامعة"
+    },
+    "busFindT": {
+      "en": "Find your bus",
+      "ar": "اعثر على باصك"
+    },
+    "busFindLabel": {
+      "en": "Where do you travel from?",
+      "ar": "من أين تأتي؟"
+    },
+    "busFindFee": {
+      "en": "JD per semester",
+      "ar": "دينار في الفصل"
+    },
+    "busFindSummer": {
+      "en": "Summer is about half of that.",
+      "ar": "الصيف نحو نصف هذا المبلغ."
+    },
+    "busFindCta": {
+      "en": "Open the current timetable",
+      "ar": "افتح الجدول الحالي"
+    },
+    "filtAll": {
+      "en": "All",
+      "ar": "الكل"
+    },
+    "filtClubs": {
+      "en": "Clubs",
+      "ar": "الأندية"
+    },
+    "filtSport": {
+      "en": "Sport",
+      "ar": "الرياضة"
+    },
+    "filtComm": {
+      "en": "Communities",
+      "ar": "المجتمعات الطلابية"
+    },
+    "newKicker": {
+      "en": "For new students",
+      "ar": "للطلبة الجدد"
+    },
+    "newTitle": {
+      "en": "Your first weeks, step by step.",
+      "ar": "أسابيعك الأولى، خطوة بخطوة."
+    },
+    "newLead": {
+      "en": "Five things most new AUMers sort out before the first exam week.",
+      "ar": "خمسة أمور يرتّبها معظم الطلبة الجدد قبل أسبوع الامتحانات الأول."
+    },
+    "n1": {
+      "en": "Log in to e-learning",
+      "ar": "سجّل الدخول إلى التعلّم الإلكتروني"
+    },
+    "n1D": {
+      "en": "Courses, materials and class announcements live on elearning.aum.edu.jo.",
+      "ar": "المساقات والمواد وإعلانات المحاضرات على elearning.aum.edu.jo."
+    },
+    "n2": {
+      "en": "Pick your bus route",
+      "ar": "اختر خط الباص"
+    },
+    "n2D": {
+      "en": "Five routes: Amman, Fuhais, Zarqa, Karak and Madaba. Fees are per semester.",
+      "ar": "خمسة خطوط: عمّان والفحيص والزرقاء والكرك ومادبا. الرسوم فصلية."
+    },
+    "n3": {
+      "en": "Apply for a room",
+      "ar": "قدّم طلب سكن"
+    },
+    "n3D": {
+      "en": "House of Grace for women; the International Students Office helps men and international students find housing.",
+      "ar": "بيت النعمة للطالبات؛ ويساعد مكتب الطلبة الدوليين الطلاب والطلبة الدوليين في إيجاد سكن."
+    },
+    "n4": {
+      "en": "Check the academic calendar",
+      "ar": "راجع التقويم الأكاديمي"
+    },
+    "n4D": {
+      "en": "Semester start, exam weeks and holidays for 2026/2027.",
+      "ar": "بداية الفصل وأسابيع الامتحانات والعطل للعام 2026/2027."
+    },
+    "n5": {
+      "en": "Join a club or a team",
+      "ar": "انضم إلى نادٍ أو فريق"
+    },
+    "n5D": {
+      "en": "The Deanship of Student Affairs runs the clubs, the sport teams and the student communities.",
+      "ar": "تدير عمادة شؤون الطلبة الأندية والفرق الرياضية والمجتمعات الطلابية."
     }
   },
   "about": {
