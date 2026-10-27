@@ -656,26 +656,35 @@ ${applyCta(ctx)}`;
 
 function academics(ctx) {
   const { R, t, c, lang } = ctx;
-  const blocks = D.faculties.map((f) => {
-    const n = count(f.id, 'bachelor');
+  // v4g (27 Oct, Abdullah): the faculties as a presented row (expanding photo tiles) with one stage below for the chosen faculty
+  const shortName = (f) => (f[lang] || f.en).replace(/^Faculty of /, '').replace(/^كلية /, '');
+  const facImg = (f) => has(`dept/fac-${f.id}.jpg`) ? `<img src="${mp(R, `dept/fac-${f.id}.jpg`)}" alt="" loading="lazy" width="480" height="480">` : '<span class="ft-ph" aria-hidden="true"></span>';
+  const tiles = D.faculties.map((f, i) => {
+    const total = D.programmes.filter((p) => p.faculty === f.id).length;
+    return `<button type="button" class="ftile${i === 0 ? ' on' : ''}" role="tab" id="tab-${f.id}" aria-selected="${i === 0}" aria-controls="${f.id}" data-fac="${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}">${facImg(f)}<span class="ft-num">0${i + 1}</span><span class="ft-body">${icon(facultyIcon[f.id])}<span class="ft-name">${esc(shortName(f))}</span><span class="ft-count">${total === 1 ? esc(c('programmeOne')) : `${total} ${esc(c('programmesN'))}`}</span></span></button>`;
+  }).join('');
+  const stages = D.faculties.map((f, i) => {
+    const n = count(f.id, 'bachelor'), nm = count(f.id, 'master');
     const list = n ? `<div class="plist" data-programmes="${f.id}" data-level="bachelor"></div>`
       : `<p class="empty" style="text-align:start;padding:18px 0">${esc(lang === 'ar' ? 'لم تُنشر تفاصيل البرامج بعد في هذه المعاينة؛ تُضاف من الكلية.' : 'Programme details are not yet in this preview; they will be added from the faculty.')}</p>`;
-    const extra = f.id === 'science' ? ` <a class="link" href="${R + PAGES.science}">${esc(c('facultyPage'))}</a>` : '';
-    const nm = count(f.id, 'master');
     const masters = nm ? `<h4 class="sub">${esc(t('masterIn'))}</h4><div class="plist" data-programmes="${f.id}" data-level="master"></div>` : '';
     const meta = [n ? `${n} ${esc(c('bachelor'))}` : '', nm ? `${nm} ${esc(c('master'))}` : ''].filter(Boolean).join(' · ');
-    const peekNames = D.programmes.filter((p) => p.faculty === f.id).slice(0, 3).map((p) => p[lang] || p.en).join(' · ');
-    const total = D.programmes.filter((p) => p.faculty === f.id).length;
-    return `<details class="facblock rv" id="${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}"><summary class="facblock-head">${icon(facultyIcon[f.id])}<div class="fb-text"><h3>${esc(f[lang])}</h3>${meta ? `<span class="fac-meta">${meta}</span>` : ''}<span class="fac-peek">${esc(peekNames)}</span></div><small class="fb-count">${total === 1 ? esc(c('programmeOne')) : `${total} ${esc(c('programmesN'))}`}</small></summary><div class="facblock-body">${extra ? `<p class="fac-extra">${extra}</p>` : ''}${n ? `<h4 class="sub">${esc(t('bachelorIn'))}</h4>` : ''}${list}${masters}</div></details>`;
+    const extra = f.id === 'science' ? `<a class="btn btn-ghost" href="${R + PAGES.science}">${esc(c('facultyPage'))} <span class="arr">→</span></a>` : '';
+    return `<article class="facstage${i === 0 ? ' on' : ''}" id="${f.id}" role="tabpanel" aria-labelledby="tab-${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}">
+      <div class="fs-side"><div class="fs-pic">${facImg(f)}</div><div class="fs-text">${icon(facultyIcon[f.id])}<span class="kicker">${esc(t('stageKicker'))} 0${i + 1}</span><h3>${esc(f[lang])}</h3>${meta ? `<p class="fac-meta">${meta}</p>` : ''}${extra}</div></div>
+      <div class="fs-main">${n ? `<h4 class="sub">${esc(t('bachelorIn'))}</h4>` : ''}${list}${masters}</div>
+    </article>`;
   }).join('');
-  const findex = `<div class="facindex rv" id="facindex"><span class="kicker">${esc(t('indexKicker'))}</span><div class="fchips">${D.faculties.map((f) => `<a class="fchip" href="#${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}">${esc(f[lang])}</a>`).join('')}</div><div class="fac-ctl"><button type="button" class="link" data-fac-all="open">${esc(t('openAll'))}</button><button type="button" class="link" data-fac-all="close">${esc(t('closeAll'))}</button></div></div>`;
+  const dots = D.faculties.map((f, i) => `<button type="button"${i === 0 ? ' class="on"' : ''} data-fac-dot="${f.id}" aria-label="${esc(f[lang])}"></button>`).join('');
   return `
 ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
-<section class="section faculties"><div class="tesserae" data-count="60" aria-hidden="true"></div>
+<section class="section faculties facgal"><div class="tesserae" data-count="60" aria-hidden="true"></div>
   <div class="wrap">
-    ${head(ctx, '', t('byFaculty'), c('verify'))}
-    ${findex}
-    <div class="facblocks">${blocks}</div>
+    ${head(ctx, '', t('byFaculty'), t('rowHint'))}
+    <div class="facrow rv" role="tablist" aria-label="${esc(t('byFaculty'))}">${tiles}</div>
+    <div class="facnav rv" aria-hidden="true"><button type="button" class="sbtn" data-fac-step="-1" aria-label="${esc(t('prevFac'))}"><span class="arr">←</span></button><span class="sdots">${dots}</span><button type="button" class="sbtn" data-fac-step="1" aria-label="${esc(t('nextFac'))}"><span class="arr">→</span></button></div>
+    <div class="facstages">${stages}</div>
+    <p class="finder-note rv">${esc(c('verify'))}</p>
   </div>
 </section>
 <section class="section tint" id="graduate">

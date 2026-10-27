@@ -111,6 +111,31 @@
     syncChips(); render();
   }
 
+  // v4g: faculty row on the academics page: one tile open at a time, its stage shown below
+  var facrow = doc.querySelector('.facrow');
+  if (facrow) {
+    var ftiles = [].slice.call(facrow.querySelectorAll('.ftile')), fstages = [].slice.call(doc.querySelectorAll('.facstage')), fdots = [].slice.call(doc.querySelectorAll('[data-fac-dot]'));
+    var fids = ftiles.map(function (b) { return b.dataset.fac; }), fcur = fids[0];
+    function fpick(id, how) {
+      if (fids.indexOf(id) === -1) return;
+      fcur = id;
+      ftiles.forEach(function (b) { var on = b.dataset.fac === id; b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); b.tabIndex = on ? 0 : -1; if (on && how === 'user' && facrow.scrollWidth > facrow.clientWidth + 4) b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' }); });
+      fstages.forEach(function (s) { s.classList.toggle('on', s.id === id); });
+      fdots.forEach(function (d) { d.classList.toggle('on', d.dataset.facDot === id); });
+      if (how === 'user' && innerWidth < 860) { var st = doc.getElementById(id); if (st) setTimeout(function () { st.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 80); }
+    }
+    ftiles.forEach(function (b) { b.addEventListener('click', function () { fpick(b.dataset.fac, 'user'); }); });
+    fdots.forEach(function (d) { d.addEventListener('click', function () { fpick(d.dataset.facDot, 'user'); }); });
+    [].slice.call(doc.querySelectorAll('[data-fac-step]')).forEach(function (b) { b.addEventListener('click', function () { var i = (fids.indexOf(fcur) + (+b.dataset.facStep) + fids.length) % fids.length; fpick(fids[i], 'user'); }); });
+    facrow.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+      if (html.dir === 'rtl') d = -d;
+      var i = (fids.indexOf(fcur) + d + fids.length) % fids.length; fpick(fids[i], 'key'); ftiles[i].focus(); e.preventDefault();
+    });
+    function fromHash() { var id = location.hash.slice(1); if (fids.indexOf(id) !== -1) { fpick(id, 'hash'); facrow.scrollIntoView({ block: 'start' }); scrollBy(0, -(parseInt(getComputedStyle(html).getPropertyValue('--header')) || 84) - 16); } }
+    fromHash(); window.addEventListener('hashchange', fromHash);
+  }
+
   // Programme lists by faculty (academics page)
   doc.querySelectorAll('[data-programmes]').forEach(function (box) {
     var fac = box.dataset.programmes, level = box.dataset.level || 'bachelor';

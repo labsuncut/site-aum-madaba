@@ -1227,6 +1227,26 @@
     "closeAll": {
       "en": "Close all",
       "ar": "أغلق الكل"
+    },
+    "rowHint": {
+      "en": "Seven faculties. Choose one to see its programmes.",
+      "ar": "سبع كليات. اختر واحدة لعرض برامجها."
+    },
+    "stageKicker": {
+      "en": "Faculty",
+      "ar": "الكلية"
+    },
+    "prevFac": {
+      "en": "Previous faculty",
+      "ar": "الكلية السابقة"
+    },
+    "nextFac": {
+      "en": "Next faculty",
+      "ar": "الكلية التالية"
+    },
+    "programmesIn": {
+      "en": "Programmes",
+      "ar": "البرامج"
     }
   },
   "science": {

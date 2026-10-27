@@ -1314,3 +1314,62 @@ html[dir="rtl"] .hero.cine .hero-veil { background: linear-gradient(180deg, rgba
   .hero.cine .hero-veil, html[dir="rtl"] .hero.cine .hero-veil { background: linear-gradient(180deg, rgba(58,6,8,.5), rgba(58,6,8,.22) 26%, rgba(58,6,8,.72) 56%, rgba(58,6,8,.94) 80%, var(--brand-ink)); }
   .hero.cine .hero-seal { width: min(46%, 180px); }
 }
+
+/* v4g: Faculties page. Seven photo tiles in one row (the chosen one opens wide), one presented stage below */
+.facgal .section-head { margin-bottom: 8px; }
+.facrow { display: flex; gap: 10px; height: clamp(300px, 34vw, 400px); margin-top: 18px; }
+.ftile { position: relative; flex: 1 1 0; min-width: 0; border: 0; padding: 0; margin: 0; border-radius: 18px; overflow: hidden; cursor: pointer; background: var(--fc); color: #fff; text-align: start; font: inherit; isolation: isolate; transition: flex .65s var(--ease), box-shadow .4s var(--ease), transform .4s var(--ease); box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 18px 30px -24px rgba(58,6,8,.5); }
+.ftile img, .ftile .ft-ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .9s var(--ease), filter .5s; filter: saturate(.72) brightness(.92); }
+.ftile .ft-ph { background: linear-gradient(160deg, color-mix(in srgb, var(--fc) 70%, var(--stone)), var(--fc)); }
+.ftile::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(58,6,8,.08), rgba(58,6,8,.12) 38%, rgba(58,6,8,.72) 74%, rgba(58,6,8,.92)); transition: opacity .4s; }
+.ftile::after { content: ""; position: absolute; inset-inline: 0; bottom: 0; height: 5px; z-index: 2; background: var(--fc); transition: height .4s var(--ease), background .3s; }
+.ftile:hover img, .ftile.on img { transform: scale(1.06); filter: saturate(1) brightness(1); }
+.ftile.on { flex: 2.3 1 0; box-shadow: 0 0 0 3px var(--gold-soft), 0 30px 50px -30px rgba(58,6,8,.65); }
+.ftile.on::after { height: 7px; background: var(--mosaic); }
+.ftile:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.ft-num { position: absolute; top: 12px; inset-inline-start: 12px; z-index: 2; font: 600 .7rem var(--sans); letter-spacing: .14em; color: var(--gold-soft); background: rgba(58,6,8,.55); border: 1px solid rgba(233,214,166,.35); border-radius: 999px; padding: 4px 9px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.ft-body { position: absolute; inset-inline: 12px; bottom: 14px; z-index: 2; display: grid; gap: 6px; min-width: 0; }
+.ft-body .icon { width: 40px; height: 40px; border-radius: 12px; background: var(--fc); color: #fff; margin: 0 0 4px; box-shadow: 0 8px 18px -10px rgba(0,0,0,.6); transition: transform .45s var(--ease); }
+.ftile.on .ft-body .icon { transform: rotate(-6deg); }
+.ft-name { font: 600 .92rem/1.2 var(--serif); letter-spacing: -.01em; color: #fff; text-shadow: 0 1px 12px rgba(0,0,0,.5); transition: font-size .45s var(--ease); hyphens: manual; }
+html[lang="ar"] .ft-name { font-weight: 700; }
+.ftile.on .ft-name { font-size: clamp(1.35rem, 2.1vw, 1.85rem); }
+.ft-count { font: 600 .78rem var(--sans); color: var(--gold-soft); letter-spacing: .04em; max-height: 0; opacity: 0; transform: translateY(6px); overflow: hidden; transition: opacity .4s .15s, transform .45s .15s var(--ease), max-height .45s; }
+.ftile.on .ft-count { max-height: 30px; opacity: 1; transform: none; }
+.facnav { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 16px 0 4px; }
+.facnav .sdots { display: flex; gap: 8px; }
+.facnav .sdots button { border-color: var(--gold); }
+.facstages { position: relative; margin-top: 16px; }
+.facstage { display: none; scroll-margin-top: calc(var(--header) + 16px); }
+.facstage.on { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 22px; align-items: start; animation: pop .55s var(--ease) both; }
+.fs-side { position: relative; overflow: hidden; border-radius: 18px; border: 1px solid var(--stone-2); background: linear-gradient(180deg, var(--white), var(--cream)); box-shadow: 0 24px 40px -32px rgba(58,6,8,.35); position: sticky; top: calc(var(--header) + 16px); }
+.fs-side::before { content: ""; position: absolute; top: 0; bottom: 0; inset-inline-start: 0; width: 6px; background: var(--fc); z-index: 1; }
+.fs-pic { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--stone-2); }
+.fs-pic img, .fs-pic .ft-ph { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fs-pic .ft-ph { background: linear-gradient(160deg, color-mix(in srgb, var(--fc) 60%, var(--stone)), var(--fc)); }
+.fs-pic::after { content: ""; position: absolute; inset-inline: 0; bottom: 0; height: 6px; background: var(--mosaic); opacity: .85; }
+.fs-text { padding: 18px 20px 22px 24px; display: grid; gap: 8px; justify-items: start; }
+html[dir="rtl"] .fs-text { padding: 18px 24px 22px 20px; }
+.fs-text .icon { width: 48px; height: 48px; border-radius: 14px; background: var(--fc); color: #fff; margin: -44px 0 2px; position: relative; z-index: 2; box-shadow: 0 10px 20px -12px rgba(58,6,8,.6); border: 3px solid var(--white); }
+.fs-text .kicker { margin-bottom: 0; }
+.fs-text h3 { margin: 0; font-size: clamp(1.4rem, 2.2vw, 1.8rem); }
+.fs-text .fac-meta { margin: 0; }
+.fs-text .btn { margin-top: 8px; min-height: 44px; padding: 8px 18px; font-size: .9rem; }
+.fs-main .sub:first-child { margin-top: 2px; }
+.facstage .plist { grid-template-columns: repeat(2, 1fr); gap: 12px; align-items: start; }
+.facstage .pcard { background: var(--white); border-color: var(--stone-2); box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 10px 18px -16px rgba(58,6,8,.4); }
+.facstage .pcard:hover { border-color: var(--gold); }
+.facstage .pcard .fac { display: none; }
+.facstage .pcard .pthumb { width: 100%; height: 110px; border-radius: 10px; margin: -4px 0 4px; }
+@media (max-width: 1100px) { .facstage.on { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
+@media (max-width: 860px) {
+  .facrow { height: 250px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: calc(-1 * clamp(18px, 4vw, 40px)); padding: 4px clamp(18px, 4vw, 40px) 8px; }
+  .facrow::-webkit-scrollbar { display: none; }
+  .ftile, .ftile.on { flex: 0 0 62vw; max-width: 300px; scroll-snap-align: center; }
+  .ft-name, .ftile.on .ft-name { font-size: 1.2rem; }
+  .ft-count { max-height: 30px; opacity: 1; transform: none; }
+  .facstage.on { grid-template-columns: 1fr; gap: 16px; }
+  .fs-side { position: static; }
+  .fs-pic { aspect-ratio: 16 / 7; }
+  .facstage .plist { grid-template-columns: 1fr; }
+}
