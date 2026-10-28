@@ -451,12 +451,12 @@
       "ar": "البرامج والخطط الدراسية كما نُشرت في صفحات الأقسام على موقع الجامعة (26 تشرين الأول 2026). تظهر الرسوم فقط حيث نشرتها الجامعة."
     },
     "facultiesKicker": {
-      "en": "Seven faculties",
-      "ar": "سبع كليات"
+      "en": "Faculties",
+      "ar": "الكليات"
     },
     "facultiesTitle": {
-      "en": "One campus, seven ways in.",
-      "ar": "حرم واحد وسبعة أبواب."
+      "en": "Seven faculties.",
+      "ar": "سبع كليات."
     },
     "scienceKicker": {
       "en": "Faculty spotlight",
@@ -1149,6 +1149,10 @@
     "filmBeat1Cta": {
       "en": "Find a programme",
       "ar": "ابحث عن تخصص"
+    },
+    "facultiesLead": {
+      "en": "Choose a faculty to see its programmes.",
+      "ar": "اختر كلية لعرض برامجها."
     }
   },
   "academics": {

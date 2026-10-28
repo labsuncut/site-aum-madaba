@@ -1502,16 +1502,17 @@ html[dir="rtl"] .fact b { text-align: right; }
 /* v4j: inner pages open with the seal spinning in and settling while a ring of tesserae orbits it; Student tools is one flat list; Life at AUM reordered around campus life */
 .seal-hero { overflow: hidden; }
 .seal-hero > .tesserae { position: absolute; inset: 0; pointer-events: none; }
-.seal-hero > .tesserae i { opacity: .22; animation: drift 12s ease-in-out infinite alternate; }
+.seal-hero > .tesserae i { opacity: .22; animation: drift 12s ease-in-out infinite alternate; will-change: transform; }
 .seal-hero .phero-split { align-items: center; }
 .sealmark { position: relative; width: min(100%, 400px); aspect-ratio: 1; margin-inline: auto; display: grid; place-items: center; }
 .sealmark::before { content: ""; position: absolute; inset: 16%; border-radius: 50%; background: radial-gradient(circle, rgba(192,138,46,.2), rgba(192,138,46,0) 70%); }
-.sm-orbit, .sm-spin { position: absolute; inset: 0; }
+.sm-orbit, .sm-spin { position: absolute; inset: 0; will-change: transform; }
 .sm-orbit { animation: sm-settle 2.2s cubic-bezier(.16,.84,.26,1) both; }
 .sm-spin { animation: slowspin 80s linear infinite; }
 .sm-spin svg { width: 100%; height: 100%; display: block; }
-.sm-seal-wrap { position: relative; width: 50%; perspective: 900px; animation: breathe 8s ease-in-out 2.6s infinite; }
-.sm-seal { width: 100%; height: auto; display: block; filter: drop-shadow(0 20px 34px rgba(86,3,9,.28)); backface-visibility: visible; animation: sm-spin-in 2.3s cubic-bezier(.2,.75,.25,1) both; }
+.sm-seal-wrap { position: relative; width: 50%; perspective: 900px; animation: breathe 8s ease-in-out 2.6s infinite; will-change: transform; }
+.sm-seal-wrap::after { content: ""; position: absolute; left: 10%; right: 10%; bottom: -14%; height: 22%; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(86,3,9,.28), rgba(86,3,9,0) 70%); z-index: -1; }
+.sm-seal { width: 100%; height: auto; display: block; backface-visibility: visible; will-change: transform, opacity; transform: translateZ(0); animation: sm-spin-in 2.3s cubic-bezier(.2,.75,.25,1) both; }
 @keyframes sm-spin-in { from { transform: rotateY(1260deg) scale(.6); opacity: 0; } 30% { opacity: 1; } to { transform: rotateY(0) scale(1); opacity: 1; } }
 @keyframes sm-settle { from { transform: rotate(170deg) scale(.82); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (max-width: 860px) { .sealmark { width: min(64vw, 280px); margin-top: 10px; } }
@@ -1521,3 +1522,32 @@ html[dir="rtl"] .fact b { text-align: right; }
 .aud-mid { padding-top: clamp(44px, 6.5vw, 84px); }
 .aud-mid .audbar { margin: 0; }
 .aud-mid + .section { padding-top: clamp(28px, 4vw, 48px); }
+
+/* v4k: faculty tiles as mosaic crests (no photos): colour field, fine tesserae grid, gold crest ring; calmer row (no numbers, no icon badges) */
+.ft-art { position: absolute; inset: 0; background: linear-gradient(170deg, color-mix(in srgb, var(--fc) 86%, #fff), color-mix(in srgb, var(--fc) 70%, #3a0608)); transition: filter .5s; }
+.ft-art::before { content: ""; position: absolute; inset: 0; opacity: .26; background: repeating-linear-gradient(90deg, rgba(255,255,255,.16) 0 10px, transparent 10px 12px), repeating-linear-gradient(0deg, rgba(255,255,255,.16) 0 10px, transparent 10px 12px); }
+.ft-art::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 38%, rgba(255,255,255,.14), transparent 55%); }
+.ftile::before { background: linear-gradient(180deg, rgba(58,6,8,0) 55%, rgba(58,6,8,.42)); }
+.ftile:hover .ft-art, .ftile.on .ft-art { filter: brightness(1.06); }
+.crest { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); width: 78px; height: 78px; border-radius: 50%; border: 1.5px solid rgba(233,214,166,.9); box-shadow: 0 0 0 6px rgba(233,214,166,.16), 0 0 0 7px rgba(233,214,166,.5); display: grid; place-items: center; z-index: 2; transition: transform .5s var(--ease); }
+.crest .icon { width: 46px; height: 46px; background: transparent; color: #f6ecd8; box-shadow: none; }
+.crest .icon svg { width: 28px; height: 28px; }
+.ftile.on .crest { transform: translate(-50%, -50%) scale(1.25); }
+.ftile:hover:not(.on) .crest { transform: translate(-50%, -50%) scale(1.1); }
+.facrow { gap: 12px; }
+.ft-body { inset-inline: 16px; bottom: 16px; }
+.ft-name { font-size: 1.02rem; text-shadow: none; color: #fbf3e4; }
+.ftile.on .ft-name { font-size: clamp(1.4rem, 2.1vw, 1.8rem); }
+.ftile::after { background: var(--gold-soft); }
+.ftile.on::after { background: var(--mosaic); }
+.fs-pic .ft-art { position: absolute; inset: 0; }
+.fs-pic .crest { width: 96px; height: 96px; top: 50%; }
+.fs-pic .crest .icon svg { width: 36px; height: 36px; }
+/* home page: the row links to the faculty's stage on Academics; equal tiles that widen on hover */
+.facrow.links { height: clamp(260px, 28vw, 340px); }
+.facrow.links .ftile { text-decoration: none; }
+.facrow.links .ft-count { max-height: 30px; opacity: 1; transform: none; }
+.home-fac > .tesserae { position: absolute; inset: 0; pointer-events: none; }
+.home-fac > .tesserae i { opacity: .18; }
+@media (hover: hover) and (min-width: 861px) { .facrow.links .ftile:hover { flex: 1.8 1 0; transform: translateY(-6px); } .facrow.links .ftile:hover .ft-name { font-size: 1.25rem; } }
+@media (max-width: 860px) { .facrow.links { height: 230px; } .crest { width: 66px; height: 66px; } .fs-pic .crest { width: 80px; height: 80px; } }

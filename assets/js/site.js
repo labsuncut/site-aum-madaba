@@ -112,7 +112,7 @@
   }
 
   // v4g: faculty row on the academics page: one tile open at a time, its stage shown below
-  var facrow = doc.querySelector('.facrow');
+  var facrow = doc.querySelector('.facrow[role="tablist"]');
   if (facrow) {
     var ftiles = [].slice.call(facrow.querySelectorAll('.ftile')), fstages = [].slice.call(doc.querySelectorAll('.facstage')), fdots = [].slice.call(doc.querySelectorAll('[data-fac-dot]'));
     var fids = ftiles.map(function (b) { return b.dataset.fac; }), fcur = fids[0];

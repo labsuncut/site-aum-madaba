@@ -384,6 +384,7 @@ const jd = (lang) => lang === 'ar' ? 'دينار' : 'JD';
 const facultyIcon = { engineering: 'engineering', science: 'science', health: 'health', it: 'it', business: 'business', design: 'design', languages: 'languages' };
 // v4d: each faculty gets its own photo (AUM's department card images), a colour edge and the icon as fallback
 const facultyColor = { engineering: '#9a4a2a', science: '#5e6b3a', health: '#8b0a12', it: '#5a3d2b', business: '#b8862b', design: '#560309', languages: '#c08a2e' };
+const facArt = (f) => `<span class="ft-art" aria-hidden="true"><span class="crest">${icon(facultyIcon[f.id])}</span></span>`;
 const facData = (R) => Object.fromEntries(D.faculties.map((f) => [f.id, { icon: icon(facultyIcon[f.id]), img: has(`dept/fac-${f.id}.jpg`) ? mp(R, `dept/fac-${f.id}.jpg`) : '', color: facultyColor[f.id] || '#8b0a12' }]));
 // v4e: breaking-news bar data (text from strings.json when an item names a key, else inline en/ar)
 const alertsData = (lang) => ({ active: !!AL.active, items: (AL.items || []).map((i) => ({ level: i.level || 'notice', text: i.key ? ((S.home[i.key] || {})[lang] || (S.home[i.key] || {}).en || '') : (i[lang] || i.en || ''), url: i.url || '' })).filter((i) => i.text) });
@@ -566,6 +567,13 @@ function home(ctx) {
 </section>
 <section class="stats"><div class="wrap five">${stats}</div></section>
 
+<section class="section faculties home-fac" id="faculties"><div class="tesserae" data-count="40" aria-hidden="true"></div>
+  <div class="wrap">
+    ${head(ctx, t('facultiesKicker'), t('facultiesTitle'), t('facultiesLead'))}
+    <div class="facrow links rv">${D.faculties.map((f) => { const n = D.programmes.filter((p) => p.faculty === f.id).length; return `<a class="ftile" href="${R + PAGES.academics}#${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}">${facArt(f)}<span class="ft-body"><span class="ft-name">${esc((f[lang] || f.en).replace(/^Faculty of /, '').replace(/^كلية /, ''))}</span><span class="ft-count">${n === 1 ? esc(c('programmeOne')) : `${n} ${esc(c('programmesN'))}`}</span></span></a>`; }).join('')}</div>
+    <p class="rv d1" style="margin-top:18px"><a class="link" href="${R + PAGES.academics}">${esc(c('navAcademics'))} <span class="arr">→</span></a></p>
+  </div>
+</section>
 <section class="section" id="finder">
   <div class="wrap">
     ${head(ctx, t('finderKicker'), t('finderTitle'), t('finderLead'))}
@@ -668,10 +676,11 @@ function academics(ctx) {
   const { R, t, c, lang } = ctx;
   // v4g (27 Oct, Abdullah): the faculties as a presented row (expanding photo tiles) with one stage below for the chosen faculty
   const shortName = (f) => (f[lang] || f.en).replace(/^Faculty of /, '').replace(/^كلية /, '');
-  const facImg = (f) => has(`dept/fac-${f.id}.jpg`) ? `<img src="${mp(R, `dept/fac-${f.id}.jpg`)}" alt="" loading="lazy" width="480" height="480">` : '<span class="ft-ph" aria-hidden="true"></span>';
+  // v4k (28 Oct, Abdullah): no stock photos on the faculties; each faculty is a colour field with a fine tesserae grid and a gold crest ring
+  const facImg = (f) => facArt(f);
   const tiles = D.faculties.map((f, i) => {
     const total = D.programmes.filter((p) => p.faculty === f.id).length;
-    return `<button type="button" class="ftile${i === 0 ? ' on' : ''}" role="tab" id="tab-${f.id}" aria-selected="${i === 0}" aria-controls="${f.id}" data-fac="${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}">${facImg(f)}<span class="ft-num">0${i + 1}</span><span class="ft-body">${icon(facultyIcon[f.id])}<span class="ft-name">${esc(shortName(f))}</span><span class="ft-count">${total === 1 ? esc(c('programmeOne')) : `${total} ${esc(c('programmesN'))}`}</span></span></button>`;
+    return `<button type="button" class="ftile${i === 0 ? ' on' : ''}" role="tab" id="tab-${f.id}" aria-selected="${i === 0}" aria-controls="${f.id}" data-fac="${f.id}" style="--fc:${facultyColor[f.id] || '#8b0a12'}">${facImg(f)}<span class="ft-body"><span class="ft-name">${esc(shortName(f))}</span><span class="ft-count">${total === 1 ? esc(c('programmeOne')) : `${total} ${esc(c('programmesN'))}`}</span></span></button>`;
   }).join('');
   const stages = D.faculties.map((f, i) => {
     const n = count(f.id, 'bachelor'), nm = count(f.id, 'master');
@@ -998,7 +1007,7 @@ function life(ctx) {
   const sport = sportPics.length ? `<div class="gallery collage rv d1">${sportPics.map((f) => `<a href="${M.sport.url}" target="_blank" rel="noopener"><img src="${mp(R, f)}" alt="${esc(t('stripLabel'))}" loading="lazy"></a>`).join('')}</div>` : `<div class="photo olive rv d1"><div class="tesserae" data-count="60"></div><p class="note">${esc(S.science.photoNote[lang])}</p></div>`;
   const health = M.health && has(M.health.file) ? `<a class="photo-link rv d1" href="${LINKS.health}" target="_blank" rel="noopener"><img src="${mp(R, M.health.file)}" alt="${esc(t('healthAlt'))}" loading="lazy"><span>${esc(t('healthAlt'))}</span></a>` : '';
   return `
-${pheroPhoto(ctx, t('kicker'), t('h1'), t('lead'), M.lifeHero, t('heroAlt'))}
+${phero(ctx, t('kicker'), t('h1'), t('lead'))}
 ${onpage(ctx, [['#clubs', t('sportKicker')], ['#health', t('healthKicker')], ['#housing', t('housingKicker')], ['#bus', t('busKicker')], ['#start', t('opStart')], ['#week', t('opWeek')], ['#intl', t('intlKicker')]])}
 ${strip}
 <section class="stats life-stats"><div class="wrap"><div class="stats-kicker kicker">${esc(t('dayKicker'))}</div><div class="stats-grid">${facts}</div></div></section>
