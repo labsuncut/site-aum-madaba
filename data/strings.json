@@ -479,8 +479,8 @@
       "ar": "الحياة في الجامعة"
     },
     "lifeTitle": {
-      "en": "Getting here, living here.",
-      "ar": "الوصول إلى الجامعة والعيش فيها."
+      "en": "Life at AUM.",
+      "ar": "الحياة في الجامعة."
     },
     "lifeBusT": {
       "en": "Buses from Amman, Zarqa, Fuhais and Karak",
@@ -495,8 +495,8 @@
       "ar": "السكن"
     },
     "lifeHousingD": {
-      "en": "House of Grace for women near campus; the Student Affairs team helps everyone else find a place in Madaba or Amman.",
-      "ar": "بيت النعمة للطالبات قرب الحرم الجامعي؛ ويساعد فريق شؤون الطلبة الجميع في إيجاد سكن في مادبا أو عمّان."
+      "en": "House of Grace, the women-only dormitory near campus; the Student Affairs team helps everyone else find a place in Madaba or Amman.",
+      "ar": "بيت النعمة سكن للطالبات فقط قرب الحرم الجامعي؛ ويساعد فريق شؤون الطلبة الجميع في إيجاد سكن في مادبا أو عمّان."
     },
     "lifeClubsT": {
       "en": "Clubs and sport",
@@ -551,8 +551,8 @@
       "ar": "زيارة الجامعة"
     },
     "visitTitle": {
-      "en": "Come and see the campus.",
-      "ar": "تعال وشاهد الحرم الجامعي."
+      "en": "Visit the campus.",
+      "ar": "زر الحرم الجامعي."
     },
     "visitLead": {
       "en": "A 100-acre campus five miles from the historic centre of Madaba, designed so every indoor and outdoor space is accessible.",
@@ -571,8 +571,8 @@
       "ar": "أدوات الطالب"
     },
     "toolsTitle": {
-      "en": "The links students use every day.",
-      "ar": "الروابط التي يستخدمها الطلبة كل يوم."
+      "en": "Student tools.",
+      "ar": "أدوات الطالب."
     },
     "finderAllFaculties": {
       "en": "All faculties and programmes",
@@ -647,8 +647,8 @@
       "ar": "منح دراسية متاحة"
     },
     "why3": {
-      "en": "Female student dorm",
-      "ar": "سكن للطالبات"
+      "en": "Women-only dormitory",
+      "ar": "سكن للطالبات فقط"
     },
     "why4": {
       "en": "Study abroad programme",
@@ -735,8 +735,8 @@
       "ar": "خريجونا"
     },
     "alumniTitle": {
-      "en": "Where AUM graduates go.",
-      "ar": "إلى أين يصل خريجو الجامعة."
+      "en": "AUM alumni.",
+      "ar": "خريجو الجامعة."
     },
     "al1Q": {
       "en": "Graduating with excellence in Computer Science from AUM in 2024 was a turning point in my career. The knowledge and skills I gained were instrumental in co-founding HiTech Company and becoming a Full Stack Developer. I am truly grateful to my professors at AUM for their support and guidance.",
@@ -1003,8 +1003,8 @@
       "ar": "منح جزئية من الرسوم بحسب معدل التوجيهي."
     },
     "why3D": {
-      "en": "House of Grace: 88 rooms near campus, opened 2018.",
-      "ar": "بيت النعمة: 88 غرفة قرب الحرم الجامعي، افتُتح عام 2018."
+      "en": "House of Grace, the women-only dormitory: 88 rooms near campus, opened 2018.",
+      "ar": "بيت النعمة، سكن الطالبات فقط: 88 غرفة قرب الحرم الجامعي، افتُتح عام 2018."
     },
     "why4D": {
       "en": "A semester with partner universities in the US, Italy and Lebanon.",
@@ -1343,12 +1343,12 @@
       "ar": "داخل المختبرات"
     },
     "labsTitle": {
-      "en": "Teaching laboratories, not slides.",
-      "ar": "مختبرات تعليمية، لا شرائح عرض."
+      "en": "Teaching laboratories.",
+      "ar": "المختبرات التعليمية."
     },
     "labsLead": {
-      "en": "Students learn the techniques on the instruments, not from slides.",
-      "ar": "يتعلّم الطلبة التقنيات على الأجهزة نفسها، لا من الشرائح."
+      "en": "Students learn the techniques on the instruments themselves.",
+      "ar": "يتعلم الطلبة التقنيات على الأجهزة نفسها."
     },
     "lab1T": {
       "en": "Molecular biology",
@@ -1419,8 +1419,8 @@
       "ar": "بعد التخرج"
     },
     "careersTitle": {
-      "en": "Where graduates go.",
-      "ar": "إلى أين يذهب الخريجون."
+      "en": "Careers after graduation.",
+      "ar": "المهن بعد التخرج."
     },
     "careersLead": {
       "en": "AUM prepares Biology and Biotechnology graduates for pharmaceuticals, clinical laboratories, environmental consultancy and postgraduate research.",
@@ -1483,8 +1483,8 @@
       "ar": "أخبار الكلية"
     },
     "newsTitle": {
-      "en": "What the faculty has been up to.",
-      "ar": "ماذا يجري في الكلية."
+      "en": "Faculty news.",
+      "ar": "أخبار الكلية."
     },
     "n1T": {
       "en": "Awareness lectures on the hazards of smoking in two Madaba schools",
@@ -1567,8 +1567,8 @@
       "ar": "اليوم المفتوح للتوعية بمخاطر التدخين"
     },
     "staffTitle": {
-      "en": "The people who teach you.",
-      "ar": "من يعلّمونك."
+      "en": "Faculty staff.",
+      "ar": "أعضاء هيئة التدريس."
     },
     "st_ammari": {
       "en": "Dean of the Faculty of Science",
@@ -1661,8 +1661,8 @@
       "ar": "ماذا تدرس"
     },
     "coversTitle": {
-      "en": "Nine fields, one degree.",
-      "ar": "تسعة مجالات في درجة واحدة."
+      "en": "What the degree covers.",
+      "ar": "ما تغطيه الدرجة."
     },
     "f1": {
       "en": "Biochemistry",
@@ -1745,8 +1745,8 @@
       "ar": "المهن"
     },
     "careersTitle": {
-      "en": "Pharma, the clinic, the field, the lab.",
-      "ar": "الدواء، والعيادة، والميدان، والمختبر."
+      "en": "Careers for graduates.",
+      "ar": "مهن الخريجين."
     },
     "car1": {
       "en": "Pharmaceutical industry",
@@ -1769,8 +1769,8 @@
       "ar": "جاهز؟"
     },
     "applyTitle": {
-      "en": "Start with the online application.",
-      "ar": "ابدأ بطلب القبول الإلكتروني."
+      "en": "Apply online.",
+      "ar": "قدّم طلبك إلكترونيًا."
     },
     "applyLead": {
       "en": "Tawjihi or an equivalent certificate with at least a 60 percent average, then placement tests in English, Arabic and computer skills.",
@@ -1939,8 +1939,8 @@
       "ar": "تواصل مع القبول"
     },
     "contactTitle": {
-      "en": "A person answers.",
-      "ar": "يردّ عليك شخص حقيقي."
+      "en": "Contact the Admissions Office.",
+      "ar": "تواصل مع مكتب القبول."
     },
     "contactLead": {
       "en": "Admission and Registration Office, Sunday to Thursday during official hours.",
@@ -1951,8 +1951,8 @@
       "ar": "الصفحات الرسمية"
     },
     "linksTitle": {
-      "en": "The details, from the source.",
-      "ar": "التفاصيل من مصدرها."
+      "en": "Official admissions pages.",
+      "ar": "صفحات القبول الرسمية."
     },
     "intlT": {
       "en": "International applicants",
@@ -1979,8 +1979,8 @@
       "ar": "الطريق إلى القبول"
     },
     "routeTitle": {
-      "en": "Four steps, one afternoon online.",
-      "ar": "أربع خطوات، وتقديم إلكتروني في جلسة واحدة."
+      "en": "Four steps to apply.",
+      "ar": "أربع خطوات للتقديم."
     },
     "applyCardT": {
       "en": "Apply online",
@@ -1999,8 +1999,8 @@
       "ar": "الأيام المفتوحة"
     },
     "openTitle": {
-      "en": "Come and see it first.",
-      "ar": "تعال وشاهد الجامعة أولًا."
+      "en": "Visit on an open day.",
+      "ar": "زر الجامعة في يوم مفتوح."
     },
     "openLead": {
       "en": "AUM held open days on 1 August, 29 August and 10 October 2026, from 4:00 pm to 8:30 pm. The next dates appear on the events page.",
@@ -2053,8 +2053,8 @@
       "ar": "الحياة في الجامعة"
     },
     "h1": {
-      "en": "Getting here, living here",
-      "ar": "الوصول إلى الجامعة والعيش فيها"
+      "en": "Life at AUM",
+      "ar": "الحياة في الجامعة"
     },
     "lead": {
       "en": "Most students commute from Amman, Madaba and Zarqa. Here is what the day looks like around the lectures.",
@@ -2065,8 +2065,8 @@
       "ar": "المواصلات"
     },
     "busTitle": {
-      "en": "University buses, every semester.",
-      "ar": "باصات الجامعة كل فصل."
+      "en": "University buses.",
+      "ar": "باصات الجامعة."
     },
     "busLead": {
       "en": "Morning rounds and afternoon returns, with a separate timetable for exam periods and summer. Fees are per semester.",
@@ -2117,12 +2117,12 @@
       "ar": "السكن"
     },
     "housingTitle": {
-      "en": "A room near campus.",
-      "ar": "غرفة قرب الحرم الجامعي."
+      "en": "Student housing.",
+      "ar": "سكن الطلبة."
     },
     "housingW": {
-      "en": "House of Grace, a residence for women run by nuns: single air-conditioned rooms, Wi-Fi, laundry, dining areas and a shuttle to campus.",
-      "ar": "بيت النعمة، سكن للطالبات تديره راهبات: غرف مفردة مكيّفة، وإنترنت، ومغسلة، وقاعات طعام، وباص إلى الحرم الجامعي."
+      "en": "House of Grace, the women-only dormitory run by nuns: single air-conditioned rooms, Wi-Fi, laundry, dining areas and a shuttle to campus.",
+      "ar": "بيت النعمة، سكن للطالبات فقط تديره راهبات: غرف مفردة مكيّفة، وإنترنت، ومغسلة، وقاعات طعام، وباص إلى الحرم الجامعي."
     },
     "housingM": {
       "en": "For men and international students, the International Students Office helps find housing in Madaba or Amman.",
@@ -2169,8 +2169,8 @@
       "ar": "الطلبة الدوليون"
     },
     "intlTitle": {
-      "en": "Students from many countries, partners on three continents.",
-      "ar": "طلبة من دول كثيرة وشركاء في ثلاث قارات."
+      "en": "International students and partner universities.",
+      "ar": "الطلبة الدوليون والجامعات الشريكة."
     },
     "intlLead": {
       "en": "AUM is a member of the International Association of Universities, the Association of Arab Universities and the Association of Catholic Colleges and Universities, with exchange partners including Temple University, Northern Arizona University, Università Cattolica del Sacro Cuore and Notre Dame University-Louaize.",
@@ -2185,8 +2185,8 @@
       "ar": "الصحة والرفاه"
     },
     "healthTitle": {
-      "en": "A health centre on campus.",
-      "ar": "مركز صحي داخل الحرم."
+      "en": "The health centre.",
+      "ar": "المركز الصحي."
     },
     "healthLead": {
       "en": "Two doctors, two nurses, a pharmacist and a three-bed emergency room; an ambulance with a nurse for hospital transfers.",
@@ -2241,8 +2241,8 @@
       "ar": "88"
     },
     "f1": {
-      "en": "rooms in House of Grace, the women’s residence",
-      "ar": "غرفة في بيت النعمة، سكن الطالبات"
+      "en": "rooms in House of Grace, the women-only dormitory",
+      "ar": "غرفة في بيت النعمة، سكن الطالبات فقط"
     },
     "f2N": {
       "en": "5",
@@ -2277,8 +2277,8 @@
       "ar": "الرياضة والمجتمعات الطلابية"
     },
     "sportTitle": {
-      "en": "A sports complex, a pool and student communities.",
-      "ar": "مجمّع رياضي ومسبح ومجتمعات طلابية."
+      "en": "Sport, clubs and student communities.",
+      "ar": "الرياضة والأندية والمجتمعات الطلابية."
     },
     "sportLead": {
       "en": "The sports complex has a semi-Olympic indoor pool and courts. Student communities include Ra7ala, a hiking group on the Jordan Trail, and the Mosaic Thought Leaders Forum.",
@@ -2325,8 +2325,8 @@
       "ar": "للطلبة الحاليين"
     },
     "weekTitle": {
-      "en": "Your week at AUM, in one place.",
-      "ar": "أسبوعك في الجامعة، في مكان واحد."
+      "en": "Links and hours for current students.",
+      "ar": "روابط وأوقات للطلبة الحاليين."
     },
     "weekLead": {
       "en": "The links you open every week, the hours you keep forgetting, and your bus.",
@@ -2389,8 +2389,8 @@
       "ar": "للطلبة الجدد"
     },
     "newTitle": {
-      "en": "Your first weeks, step by step.",
-      "ar": "أسابيعك الأولى، خطوة بخطوة."
+      "en": "Checklist for new students.",
+      "ar": "قائمة للطلبة الجدد."
     },
     "newLead": {
       "en": "Five things most new AUMers sort out before the first exam week.",
@@ -2417,8 +2417,8 @@
       "ar": "قدّم طلب سكن"
     },
     "n3D": {
-      "en": "House of Grace for women; the International Students Office helps men and international students find housing.",
-      "ar": "بيت النعمة للطالبات؛ ويساعد مكتب الطلبة الدوليين الطلاب والطلبة الدوليين في إيجاد سكن."
+      "en": "House of Grace is a women-only dormitory; the International Students Office helps men and international students find housing.",
+      "ar": "بيت النعمة سكن للطالبات فقط؛ ويساعد مكتب الطلبة الدوليين الطلاب والطلبة الدوليين في إيجاد سكن."
     },
     "n4": {
       "en": "Check the academic calendar",
@@ -2615,8 +2615,8 @@
       "ar": "الختم"
     },
     "sealTitle": {
-      "en": "A map, two hands and a light.",
-      "ar": "خريطة ويدان ونور."
+      "en": "What the seal shows.",
+      "ar": "ما يرمز إليه الشعار."
     },
     "sealLead": {
       "en": "The background is a section of the Holy City of Jerusalem from the sixth-century mosaic floor of St George's Church in Madaba. The two hands stand for the people who built the university, and the light between them for the wisdom that guides it.",
@@ -2627,16 +2627,16 @@
       "ar": "تواصل"
     },
     "contactTitle": {
-      "en": "Find us.",
-      "ar": "جدنا."
+      "en": "Contact and location.",
+      "ar": "التواصل والموقع."
     },
     "linksKicker": {
       "en": "Governance",
       "ar": "الحوكمة"
     },
     "linksTitle": {
-      "en": "Who runs the university.",
-      "ar": "من يدير الجامعة."
+      "en": "Governance and leadership.",
+      "ar": "الحوكمة والقيادة."
     },
     "l1": {
       "en": "Message from the President",
@@ -2695,8 +2695,8 @@
       "ar": "أدوات الطالب"
     },
     "h1": {
-      "en": "Everything you need, one tap away",
-      "ar": "كل ما تحتاجه بلمسة واحدة"
+      "en": "Student tools and links",
+      "ar": "أدوات الطالب وروابطه"
     },
     "lead": {
       "en": "The systems, schedules and rules students look for most, gathered on one page. Type what you need to filter the list.",
@@ -2851,8 +2851,8 @@
       "ar": "طلب السكن"
     },
     "d_housing": {
-      "en": "Apply for a room in House of Grace, the residence for women.",
-      "ar": "قدّم طلبًا لغرفة في بيت النعمة، سكن الطالبات."
+      "en": "Apply for a room in House of Grace, the women-only dormitory.",
+      "ar": "قدّم طلبًا لغرفة في بيت النعمة، سكن الطالبات فقط."
     },
     "t_studentAffairs": {
       "en": "Deanship of Student Affairs",
@@ -2981,14 +2981,6 @@
     "d_contact": {
       "en": "Every office, its extension and email.",
       "ar": "كل دائرة وتحويلتها وبريدها."
-    },
-    "groupKicker": {
-      "en": "Group",
-      "ar": "المجموعة"
-    },
-    "extShort": {
-      "en": "Extensions",
-      "ar": "التحويلات"
     }
   },
   "guide": {
@@ -3089,8 +3081,8 @@
       "ar": "المساقات والمواد والواجبات في نظام التعلّم الإلكتروني، والعلامات والتسجيل في نظام التسجيل."
     },
     "a_housing": {
-      "en": "The House of Grace dorm for women is near campus; the Student Affairs team helps everyone else find housing in Madaba or Amman.",
-      "ar": "سكن بيت النعمة للطالبات قرب الحرم الجامعي، ويساعد فريق شؤون الطلبة الجميع في إيجاد سكن في مادبا أو عمّان."
+      "en": "House of Grace, the women-only dormitory, is near campus; the Student Affairs team helps everyone else find housing in Madaba or Amman.",
+      "ar": "بيت النعمة، سكن الطالبات فقط، قرب الحرم الجامعي، ويساعد فريق شؤون الطلبة الجميع في إيجاد سكن في مادبا أو عمّان."
     },
     "a_library": {
       "en": "The library offers borrowing, electronic databases, printing and study space.",
@@ -3375,8 +3367,8 @@
       "ar": "الخطط الدراسية"
     },
     "h1": {
-      "en": "Every programme, semester by semester.",
-      "ar": "كل برنامج، فصلًا بفصل."
+      "en": "Study plans",
+      "ar": "الخطط الدراسية"
     },
     "lead": {
       "en": "Pick your programme to see which courses to take each semester, with codes, credit hours and prerequisites, as published by each department.",

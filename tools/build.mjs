@@ -351,8 +351,9 @@ ${guideHtml(ctx)}
 const head = (ctx, kicker, title, lead, center) =>
   `<div class="section-head${center ? ' center' : ''} rv">${kicker ? `<span class="kicker">${esc(kicker)}</span>` : ''}<h2>${esc(title)}</h2>${lead ? `<p class="lead">${esc(lead)}</p>` : ''}</div>`;
 
+// v4j: the inner pages open with the seal spinning in and settling while a ring of tesserae orbits it (plays with Reduce Motion too, once per load)
 const phero = (ctx, kicker, h1, lead, h1em) =>
-  `<section class="phero"><div class="wrap"><div class="phero-band">${ring('')}<img class="phero-seal" src="${ctx.R}assets/img/seal.png" width="239" height="239" alt=""></div><span class="kicker rv">${esc(kicker)}</span><h1 class="rv d1">${esc(h1)}${h1em ? ` <em>${esc(h1em)}</em>` : ''}</h1><p class="lead rv d2">${esc(lead)}</p></div></section>${mosaicRule()}`;
+  `<section class="phero seal-hero"><div class="tesserae" data-count="28" aria-hidden="true"></div><div class="wrap phero-split"><div><span class="kicker rv">${esc(kicker)}</span><h1 class="rv d1">${esc(h1)}${h1em ? ` <em>${esc(h1em)}</em>` : ''}</h1><p class="lead rv d2">${esc(lead)}</p></div><div class="sealmark" aria-hidden="true"><div class="sm-orbit"><div class="sm-spin">${ring('')}</div></div><div class="sm-seal-wrap"><img class="sm-seal" src="${ctx.R}assets/img/seal.png" width="239" height="239" alt=""></div></div></div></section>${mosaicRule()}`;
 
 const pheroPhoto = (ctx, kicker, h1, lead, media, alt) => {
   const img = media && has(media.file) ? `<img src="${mp(ctx.R, media.file)}" alt="${esc(alt)}" loading="eager">` : `<div class="ph"><div class="tesserae" data-count="40"></div><span>${esc(PH)}</span></div>`;
@@ -431,7 +432,7 @@ function lifeWeek(ctx) {
   const quick = ['elearning', 'registration', 'courseFinder', 'calendar', 'library', 'email'].map((id, i) => { const tl = TOOLS.find((x) => x[0] === id); return `<a class="quick rv d${i % 4}" href="${tl[3]}" target="_blank" rel="noopener">${icon(tl[2])}<b>${esc(T('tools', 't_' + id))}</b></a>`; }).join('');
   const routes = [['rAmman', 250], ['rFuhais', 250], ['rZarqa', 250], ['rKarak', 250], ['rMadaba', 160]];
   const opts = routes.map(([k, fee], i) => `<option value="${fee}"${i ? '' : ' selected'}>${esc(t(k))}</option>`).join('');
-  return `<section class="section week" id="week" data-aud="current">
+  return `<section class="section tint week" id="week" data-aud="current">
   <div class="wrap">
     ${head(ctx, t('weekKicker'), t('weekTitle'), t('weekLead'))}
     <div class="week-grid">
@@ -446,7 +447,7 @@ function lifeStart(ctx) {
   const { t } = ctx;
   const links = [LINKS.elearning, LINKS.bus, LINKS.housing, LINKS.calendar, LINKS.studentAffairs];
   const steps = [1, 2, 3, 4, 5].map((i) => `<li class="rstep rv d${(i - 1) % 4}"><span class="rstep-n">${i}</span><div><h3>${esc(t('n' + i))}</h3><p>${esc(t('n' + i + 'D'))}</p><a class="link" href="${links[i - 1]}" target="_blank" rel="noopener">${esc(ctx.c('opensAum'))} <span class="arr">↗</span></a></div></li>`).join('');
-  return `<section class="section tint start" id="start" data-aud="new">
+  return `<section class="section start" id="start" data-aud="new">
   <div class="wrap">
     ${head(ctx, t('newKicker'), t('newTitle'), t('newLead'))}
     <ol class="route-steps start-steps">${steps}</ol>
@@ -634,13 +635,8 @@ ${applyCta(ctx)}`;
 }
 
 function tools(ctx) {
-  const { t, T, c, lang } = ctx;
-  const groups = ['gStudy', 'gCampus', 'gMoney', 'gRules', 'gContact'];
-  const gIcon = { gStudy: 'book', gCampus: 'pin', gMoney: 'coins', gRules: 'list', gContact: 'megaphone' };
-  const blocks = groups.map((g, gi) => {
-    const list = TOOLS.filter((x) => x[1] === g);
-    return board({ id: g, cls: 'tgroup', attrs: ` data-group="${g}"`, icon: icon(gIcon[g]), kicker: `${t('groupKicker')} ${String(gi + 1).padStart(2, '0')}`, title: t(g), meta: nLinks(list.length, lang), main: `<div class="tgrid">${list.map((x, i) => toolCard(ctx, x[0], x[1], x[2], x[3], i)).join('')}</div>` });
-  }).join('');
+  const { t, c } = ctx;
+  const cards = TOOLS.map((x, i) => toolCard(ctx, x[0], x[1], x[2], x[3], i)).join('');
   const ext = board({ id: 'ext', icon: icon('phone'), kicker: t('extKicker'), title: t('extTitle'), lead: t('extNote'), main: `<div class="facts">
       <div class="fact"><b>1900 · 1901</b><span>${esc(t('extAdm'))}</span></div>
       <div class="fact"><b>1700 – 1702</b><span>${esc(t('extSA'))}</span></div>
@@ -649,11 +645,10 @@ function tools(ctx) {
     </div>` });
   return `
 ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
-${onpage(ctx, groups.map((g) => ['#' + g, t(g)]).concat([['#ext', t('extShort')]]))}
 <section class="section" id="tools">
   <div class="wrap">
     <div class="finder rv tool-search"><label class="field">${esc(t('search'))}<input id="t-q" type="search" placeholder="${esc(t('placeholder'))}" autocomplete="off"></label><p class="finder-note" style="margin:10px 0 0">${esc(c('opensAum'))}</p></div>
-    <div class="boards">${blocks}</div>
+    <div class="tgrid flat">${cards}</div>
     <p class="empty" id="t-empty" hidden>${esc(t('empty'))}</p>
   </div>
 </section>
@@ -938,7 +933,7 @@ function admissions(ctx) {
   const feesList = feeRows.map((p) => p.feePerCredit).filter(Boolean), credList = feeRows.map((p) => p.credits).filter(Boolean);
   const feeMin = Math.min(...feesList), feeMax = Math.max(...feesList), credMin = Math.min(...credList), credMax = Math.max(...credList);
   return `
-${pheroPhoto(ctx, t('kicker'), t('h1'), t('lead'), M.admissionsHero, t('heroAlt'))}
+${phero(ctx, t('kicker'), t('h1'), t('lead'))}
 ${onpage(ctx, [['#route', t('routeKicker')], ['#fees', t('feesKicker')], ['#scholarships', t('scholKicker')], ['#links', t('linksKicker')], ['#contact', t('contactKicker')]])}
 <section class="section" id="route">
   <div class="wrap route">
@@ -998,26 +993,9 @@ function life(ctx) {
   const health = M.health && has(M.health.file) ? `<a class="photo-link rv d1" href="${LINKS.health}" target="_blank" rel="noopener"><img src="${mp(R, M.health.file)}" alt="${esc(t('healthAlt'))}" loading="lazy"><span>${esc(t('healthAlt'))}</span></a>` : '';
   return `
 ${pheroPhoto(ctx, t('kicker'), t('h1'), t('lead'), M.lifeHero, t('heroAlt'))}
-${onpage(ctx, [['#week', t('opWeek')], ['#start', t('opStart')], ['#bus', t('busKicker')], ['#housing', t('housingKicker')], ['#clubs', t('sportKicker')], ['#health', t('healthKicker')], ['#intl', t('intlKicker')]])}
-${audBar(ctx)}
-${lifeWeek(ctx)}
-${lifeStart(ctx)}
+${onpage(ctx, [['#clubs', t('sportKicker')], ['#health', t('healthKicker')], ['#housing', t('housingKicker')], ['#bus', t('busKicker')], ['#start', t('opStart')], ['#week', t('opWeek')], ['#intl', t('intlKicker')]])}
 ${strip}
 <section class="stats life-stats"><div class="wrap"><div class="stats-kicker kicker">${esc(t('dayKicker'))}</div><div class="stats-grid">${facts}</div></div></section>
-<section class="section" id="bus">
-  <div class="wrap">
-    ${board({ icon: icon('bus'), kicker: t('busKicker'), title: t('busTitle'), lead: t('busLead'), meta: `5 ${t('routesWord')}`, side: `<span class="tray-h">${esc(S.academics.glance[lang])}</span><dl class="glance"><div><dt>${esc(t('glanceRoutes'))}</dt><dd>5</dd></div><div><dt>${esc(t('glanceSem'))}</dt><dd>250 <small>${jd(lang)}</small></dd></div><div><dt>${esc(t('glanceMadaba'))}</dt><dd>160 <small>${jd(lang)}</small></dd></div></dl><p class="finder-note">${esc(t('busNote'))}</p><p><a class="btn" href="${LINKS.bus}" target="_blank" rel="noopener">${esc(t('busCta'))} <span class="arr">→</span></a></p>`, main: trayBox(t('thFallSpring'), '', `<div class="tablewrap"><table><thead><tr><th>${esc(t('thRoute'))}</th><th class="num">${esc(t('thFallSpring'))}</th></tr></thead><tbody>${rows}</tbody></table></div>`) })}
-  </div>
-</section>
-<section class="section tint" id="housing" data-aud="new">
-  <div class="wrap">
-    ${head(ctx, t('housingKicker'), t('housingTitle'))}
-    <div class="grid c2">
-      <div class="tile rv">${icon('home')}<h3>${esc(lang === 'ar' ? 'للطالبات' : 'For women')}</h3><p>${esc(t('housingW'))}</p><span class="chip gold">${esc(t('housingFacts'))}</span><a class="link" href="${LINKS.housing}" target="_blank" rel="noopener">${esc(t('housingApply'))}</a></div>
-      <div class="tile rv d1">${icon('pin')}<h3>${esc(lang === 'ar' ? 'للطلاب والطلبة الدوليين' : 'For men and international students')}</h3><p>${esc(t('housingM'))}</p><a class="link" href="${LINKS.intl}" target="_blank" rel="noopener">${esc(t('intlCta'))}</a></div>
-    </div>
-  </div>
-</section>
 <section class="section" id="clubs">
   <div class="wrap two">
     <div class="rv"><span class="kicker">${esc(t('sportKicker'))}</span><h2>${esc(t('sportTitle'))}</h2><p class="lead">${esc(t('sportLead'))}</p><p class="finder-note">${esc(t('clubsLead'))}</p><div class="fchips kind-chips" id="kind-chips">${kindChips}</div><div class="pills" id="club-pills">${clubs}</div><p style="margin-top:18px"><a class="link" href="${LINKS.studentAffairs}" target="_blank" rel="noopener">${esc(S.tools.t_studentAffairs[lang])} <span class="arr">↗</span></a></p></div>
@@ -1030,6 +1008,23 @@ ${strip}
     ${health}
   </div>
 </section>
+<section class="section" id="housing">
+  <div class="wrap">
+    ${head(ctx, t('housingKicker'), t('housingTitle'))}
+    <div class="grid c2">
+      <div class="tile rv">${icon('home')}<h3>${esc(lang === 'ar' ? 'سكن للطالبات فقط' : 'Women-only dormitory')}</h3><p>${esc(t('housingW'))}</p><span class="chip gold">${esc(t('housingFacts'))}</span><a class="link" href="${LINKS.housing}" target="_blank" rel="noopener">${esc(t('housingApply'))}</a></div>
+      <div class="tile rv d1">${icon('pin')}<h3>${esc(lang === 'ar' ? 'للطلاب والطلبة الدوليين' : 'For men and international students')}</h3><p>${esc(t('housingM'))}</p><a class="link" href="${LINKS.intl}" target="_blank" rel="noopener">${esc(t('intlCta'))}</a></div>
+    </div>
+  </div>
+</section>
+<section class="section tint" id="bus">
+  <div class="wrap">
+    ${board({ icon: icon('bus'), kicker: t('busKicker'), title: t('busTitle'), lead: t('busLead'), meta: `5 ${t('routesWord')}`, side: `<span class="tray-h">${esc(S.academics.glance[lang])}</span><dl class="glance"><div><dt>${esc(t('glanceRoutes'))}</dt><dd>5</dd></div><div><dt>${esc(t('glanceSem'))}</dt><dd>250 <small>${jd(lang)}</small></dd></div><div><dt>${esc(t('glanceMadaba'))}</dt><dd>160 <small>${jd(lang)}</small></dd></div></dl><p class="finder-note">${esc(t('busNote'))}</p><p><a class="btn" href="${LINKS.bus}" target="_blank" rel="noopener">${esc(t('busCta'))} <span class="arr">→</span></a></p>`, main: trayBox(t('thFallSpring'), '', `<div class="tablewrap"><table><thead><tr><th>${esc(t('thRoute'))}</th><th class="num">${esc(t('thFallSpring'))}</th></tr></thead><tbody>${rows}</tbody></table></div>`) })}
+  </div>
+</section>
+<div class="aud-mid">${audBar(ctx)}</div>
+${lifeStart(ctx)}
+${lifeWeek(ctx)}
 <section class="section" id="support" data-aud="current">
   <div class="wrap">
     <div class="grid c4">

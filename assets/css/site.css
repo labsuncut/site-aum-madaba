@@ -1498,3 +1498,26 @@ html[dir="rtl"] .fact b { text-align: right; }
 }
 .bd-body.has-side > .bd-main, .bd-body.has-side > .bd-side { min-width: 0; }
 #bus .tray table { min-width: 0; }
+
+/* v4j: inner pages open with the seal spinning in and settling while a ring of tesserae orbits it; Student tools is one flat list; Life at AUM reordered around campus life */
+.seal-hero { overflow: hidden; }
+.seal-hero > .tesserae { position: absolute; inset: 0; pointer-events: none; }
+.seal-hero > .tesserae i { opacity: .22; animation: drift 12s ease-in-out infinite alternate; }
+.seal-hero .phero-split { align-items: center; }
+.sealmark { position: relative; width: min(100%, 400px); aspect-ratio: 1; margin-inline: auto; display: grid; place-items: center; }
+.sealmark::before { content: ""; position: absolute; inset: 16%; border-radius: 50%; background: radial-gradient(circle, rgba(192,138,46,.2), rgba(192,138,46,0) 70%); }
+.sm-orbit, .sm-spin { position: absolute; inset: 0; }
+.sm-orbit { animation: sm-settle 2.2s cubic-bezier(.16,.84,.26,1) both; }
+.sm-spin { animation: slowspin 80s linear infinite; }
+.sm-spin svg { width: 100%; height: 100%; display: block; }
+.sm-seal-wrap { position: relative; width: 50%; animation: breathe 8s ease-in-out 2.4s infinite; }
+.sm-seal { width: 100%; height: auto; display: block; filter: drop-shadow(0 20px 34px rgba(86,3,9,.28)); animation: sm-spin-in 1.9s cubic-bezier(.16,.84,.26,1) both; }
+@keyframes sm-spin-in { from { transform: rotate(-420deg) scale(.5); opacity: 0; } 55% { opacity: 1; } to { transform: none; opacity: 1; } }
+@keyframes sm-settle { from { transform: rotate(170deg) scale(.82); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (max-width: 860px) { .sealmark { width: min(64vw, 280px); margin-top: 10px; } }
+.tgrid.flat { grid-template-columns: repeat(3, 1fr); margin-top: 22px; }
+@media (max-width: 1100px) { .tgrid.flat { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 760px) { .tgrid.flat { grid-template-columns: 1fr; margin-top: 16px; } }
+.aud-mid { padding-top: clamp(44px, 6.5vw, 84px); }
+.aud-mid .audbar { margin: 0; }
+.aud-mid + .section { padding-top: clamp(28px, 4vw, 48px); }
