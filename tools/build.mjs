@@ -635,8 +635,13 @@ ${applyCta(ctx)}`;
 }
 
 function tools(ctx) {
-  const { t, c } = ctx;
-  const cards = TOOLS.map((x, i) => toolCard(ctx, x[0], x[1], x[2], x[3], i)).join('');
+  const { t, c, lang } = ctx;
+  const groups = ['gStudy', 'gCampus', 'gMoney', 'gRules', 'gContact'];
+  const gIcon = { gStudy: 'book', gCampus: 'pin', gMoney: 'coins', gRules: 'list', gContact: 'megaphone' };
+  const blocks = groups.map((g) => {
+    const list = TOOLS.filter((x) => x[1] === g);
+    return board({ id: g, cls: 'tgroup', attrs: ` data-group="${g}"`, icon: icon(gIcon[g]), title: t(g), meta: nLinks(list.length, lang), main: `<div class="tgrid">${list.map((x, i) => toolCard(ctx, x[0], x[1], x[2], x[3], i)).join('')}</div>` });
+  }).join('');
   const ext = board({ id: 'ext', icon: icon('phone'), kicker: t('extKicker'), title: t('extTitle'), lead: t('extNote'), main: `<div class="facts">
       <div class="fact"><b>1900 · 1901</b><span>${esc(t('extAdm'))}</span></div>
       <div class="fact"><b>1700 – 1702</b><span>${esc(t('extSA'))}</span></div>
@@ -645,10 +650,11 @@ function tools(ctx) {
     </div>` });
   return `
 ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
+${onpage(ctx, groups.map((g) => ['#' + g, t(g)]).concat([['#ext', t('extShort')]]))}
 <section class="section" id="tools">
   <div class="wrap">
     <div class="finder rv tool-search"><label class="field">${esc(t('search'))}<input id="t-q" type="search" placeholder="${esc(t('placeholder'))}" autocomplete="off"></label><p class="finder-note" style="margin:10px 0 0">${esc(c('opensAum'))}</p></div>
-    <div class="tgrid flat">${cards}</div>
+    <div class="boards">${blocks}</div>
     <p class="empty" id="t-empty" hidden>${esc(t('empty'))}</p>
   </div>
 </section>

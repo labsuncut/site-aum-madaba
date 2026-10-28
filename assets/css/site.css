@@ -1510,9 +1510,9 @@ html[dir="rtl"] .fact b { text-align: right; }
 .sm-orbit { animation: sm-settle 2.2s cubic-bezier(.16,.84,.26,1) both; }
 .sm-spin { animation: slowspin 80s linear infinite; }
 .sm-spin svg { width: 100%; height: 100%; display: block; }
-.sm-seal-wrap { position: relative; width: 50%; animation: breathe 8s ease-in-out 2.4s infinite; }
-.sm-seal { width: 100%; height: auto; display: block; filter: drop-shadow(0 20px 34px rgba(86,3,9,.28)); animation: sm-spin-in 1.9s cubic-bezier(.16,.84,.26,1) both; }
-@keyframes sm-spin-in { from { transform: rotate(-420deg) scale(.5); opacity: 0; } 55% { opacity: 1; } to { transform: none; opacity: 1; } }
+.sm-seal-wrap { position: relative; width: 50%; perspective: 900px; animation: breathe 8s ease-in-out 2.6s infinite; }
+.sm-seal { width: 100%; height: auto; display: block; filter: drop-shadow(0 20px 34px rgba(86,3,9,.28)); backface-visibility: visible; animation: sm-spin-in 2.3s cubic-bezier(.2,.75,.25,1) both; }
+@keyframes sm-spin-in { from { transform: rotateY(1260deg) scale(.6); opacity: 0; } 30% { opacity: 1; } to { transform: rotateY(0) scale(1); opacity: 1; } }
 @keyframes sm-settle { from { transform: rotate(170deg) scale(.82); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (max-width: 860px) { .sealmark { width: min(64vw, 280px); margin-top: 10px; } }
 .tgrid.flat { grid-template-columns: repeat(3, 1fr); margin-top: 22px; }

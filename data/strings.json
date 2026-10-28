@@ -2981,6 +2981,10 @@
     "d_contact": {
       "en": "Every office, its extension and email.",
       "ar": "كل دائرة وتحويلتها وبريدها."
+    },
+    "extShort": {
+      "en": "Extensions",
+      "ar": "التحويلات"
     }
   },
   "guide": {
