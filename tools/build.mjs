@@ -373,6 +373,13 @@ const contactTiles = (ctx, kicker, title, lead) => {
   </div></div></section>`;
 };
 
+// v4i: the inner pages share the faculties-board logic: an "On this page" strip, framed boards with a header bar, labelled trays with counts
+const onpage = (ctx, items) => `<nav class="onpage" aria-label="${esc(S.academics.onPage[ctx.lang])}"><div class="wrap"><span class="kicker">${esc(S.academics.onPage[ctx.lang])}</span>${items.map(([href, label], i) => `<a href="${href}"><i>${i + 1}</i>${esc(label)}</a>`).join('')}</div></nav>`;
+const board = (o) => `<article class="board rv${o.cls ? ' ' + o.cls : ''}"${o.id ? ` id="${o.id}"` : ''}${o.attrs || ''}${o.color ? ` style="--fc:${o.color}"` : ''}><header class="bd-head">${o.icon || ''}<div class="bd-head-text">${o.kicker ? `<span class="kicker">${esc(o.kicker)}</span>` : ''}<h3>${esc(o.title)}</h3>${o.lead ? `<p>${esc(o.lead)}</p>` : ''}</div>${o.meta ? `<span class="bd-meta">${esc(o.meta)}</span>` : ''}</header><div class="bd-body${o.side ? ' has-side' : ''}">${o.side ? `<aside class="bd-side">${o.side}</aside>` : ''}<div class="bd-main">${o.main}</div></div></article>`;
+const trayBox = (title, cnt, body) => `<section class="tray"><h4 class="tray-h">${esc(title)}${cnt ? `<small>${esc(String(cnt))}</small>` : ''}</h4>${body}</section>`;
+const nLinks = (n, lang) => lang === 'ar' ? (n === 1 ? 'رابط واحد' : n === 2 ? 'رابطان' : n <= 10 ? `${n} روابط` : `${n} رابطًا`) : `${n} links`;
+const jd = (lang) => lang === 'ar' ? 'دينار' : 'JD';
+
 const facultyIcon = { engineering: 'engineering', science: 'science', health: 'health', it: 'it', business: 'business', design: 'design', languages: 'languages' };
 // v4d: each faculty gets its own photo (AUM's department card images), a colour edge and the icon as fallback
 const facultyColor = { engineering: '#9a4a2a', science: '#5e6b3a', health: '#8b0a12', it: '#5a3d2b', business: '#b8862b', design: '#560309', languages: '#c08a2e' };
@@ -627,29 +634,31 @@ ${applyCta(ctx)}`;
 }
 
 function tools(ctx) {
-  const { t, T, c } = ctx;
+  const { t, T, c, lang } = ctx;
   const groups = ['gStudy', 'gCampus', 'gMoney', 'gRules', 'gContact'];
-  const blocks = groups.map((g) => `<div class="tgroup" data-group="${g}"><h2 class="rv">${esc(t(g))}</h2><div class="tgrid">${TOOLS.filter((x) => x[1] === g).map((x, i) => toolCard(ctx, x[0], x[1], x[2], x[3], i)).join('')}</div></div>`).join('');
+  const gIcon = { gStudy: 'book', gCampus: 'pin', gMoney: 'coins', gRules: 'list', gContact: 'megaphone' };
+  const blocks = groups.map((g, gi) => {
+    const list = TOOLS.filter((x) => x[1] === g);
+    return board({ id: g, cls: 'tgroup', attrs: ` data-group="${g}"`, icon: icon(gIcon[g]), kicker: `${t('groupKicker')} ${String(gi + 1).padStart(2, '0')}`, title: t(g), meta: nLinks(list.length, lang), main: `<div class="tgrid">${list.map((x, i) => toolCard(ctx, x[0], x[1], x[2], x[3], i)).join('')}</div>` });
+  }).join('');
+  const ext = board({ id: 'ext', icon: icon('phone'), kicker: t('extKicker'), title: t('extTitle'), lead: t('extNote'), main: `<div class="facts">
+      <div class="fact"><b>1900 · 1901</b><span>${esc(t('extAdm'))}</span></div>
+      <div class="fact"><b>1700 – 1702</b><span>${esc(t('extSA'))}</span></div>
+      <div class="fact"><b>1200 · 1201</b><span>${esc(t('extLib'))}</span></div>
+      <a class="fact" href="${LINKS.tel}"><b>${esc(c('phone'))}</b><span>${esc(c('siteName'))}</span></a>
+    </div>` });
   return `
 ${phero(ctx, t('kicker'), t('h1'), t('lead'))}
+${onpage(ctx, groups.map((g) => ['#' + g, t(g)]).concat([['#ext', t('extShort')]]))}
 <section class="section" id="tools">
   <div class="wrap">
     <div class="finder rv tool-search"><label class="field">${esc(t('search'))}<input id="t-q" type="search" placeholder="${esc(t('placeholder'))}" autocomplete="off"></label><p class="finder-note" style="margin:10px 0 0">${esc(c('opensAum'))}</p></div>
-    ${blocks}
+    <div class="boards">${blocks}</div>
     <p class="empty" id="t-empty" hidden>${esc(t('empty'))}</p>
   </div>
 </section>
 <section class="section tint">
-  <div class="wrap">
-    ${head(ctx, t('extKicker'), t('extTitle'))}
-    <div class="facts">
-      <div class="fact rv"><b>1900 · 1901</b><span>${esc(t('extAdm'))}</span></div>
-      <div class="fact rv d1"><b>1700 – 1702</b><span>${esc(t('extSA'))}</span></div>
-      <div class="fact rv d2"><b>1200 · 1201</b><span>${esc(t('extLib'))}</span></div>
-      <a class="fact rv d3" href="${LINKS.tel}"><b>${esc(c('phone'))}</b><span>${esc(c('siteName'))}</span></a>
-    </div>
-    <p class="finder-note">${esc(t('extNote'))}</p>
-  </div>
+  <div class="wrap">${ext}</div>
 </section>
 ${applyCta(ctx)}`;
 }
@@ -925,8 +934,12 @@ function admissions(ctx) {
   const { R, t, c, lang } = ctx;
   const steps = [1, 2, 3, 4].map((i) => `<li class="rstep rv d${i - 1}"><span class="rstep-n"><span>${String(i).padStart(2, '0')}</span></span><div><h3>${esc(t('s' + i + 'T'))}</h3><p>${esc(t('s' + i + 'D'))}</p>${i === 1 ? `<a class="link" href="${R}index.html#finder">${esc(c('findProgramme'))} <span class="arr">→</span></a>` : ''}${i === 2 ? `<a class="link" href="${LINKS.apply}" target="_blank" rel="noopener">${esc(c('apply'))} <span class="arr">↗</span></a>` : ''}${i === 4 ? `<a class="link" href="${R + PAGES.life}#bus">${esc(S.home.lifeBusT[lang])} <span class="arr">→</span></a>` : ''}</div></li>`).join('');
   const poster = (M.events || []).find((e) => /openday/.test(e.file || '') && has(e.file));
+  const feeRows = D.programmes.filter((p) => p.level === 'bachelor' && (p.credits || p.feePerCredit || p.minAverage));
+  const feesList = feeRows.map((p) => p.feePerCredit).filter(Boolean), credList = feeRows.map((p) => p.credits).filter(Boolean);
+  const feeMin = Math.min(...feesList), feeMax = Math.max(...feesList), credMin = Math.min(...credList), credMax = Math.max(...credList);
   return `
 ${pheroPhoto(ctx, t('kicker'), t('h1'), t('lead'), M.admissionsHero, t('heroAlt'))}
+${onpage(ctx, [['#route', t('routeKicker')], ['#fees', t('feesKicker')], ['#scholarships', t('scholKicker')], ['#links', t('linksKicker')], ['#contact', t('contactKicker')]])}
 <section class="section" id="route">
   <div class="wrap route">
     <div>
@@ -941,31 +954,28 @@ ${pheroPhoto(ctx, t('kicker'), t('h1'), t('lead'), M.admissionsHero, t('heroAlt'
 </section>
 <section class="section tint" id="fees">
   <div class="wrap">
-    ${head(ctx, t('feesKicker'), t('feesTitle'), t('feesLead'))}
-    <div class="tablewrap rv"><table>
+    ${board({ icon: icon('coins'), kicker: t('feesKicker'), title: t('feesTitle'), lead: t('feesLead'), meta: `${feeRows.length} ${t('progWord')}`, side: `<span class="tray-h">${esc(S.academics.glance[lang])}</span><dl class="glance"><div><dt>${esc(t('glanceProg'))}</dt><dd>${feeRows.length}</dd></div><div><dt>${esc(t('glanceFee'))}</dt><dd><bdi>${feeMin}–${feeMax}</bdi></dd></div><div><dt>${esc(t('glanceCredits'))}</dt><dd><bdi>${credMin}–${credMax}</bdi></dd></div></dl><p class="finder-note">${esc(c('estimate'))}: ${esc(c('estimateNote'))}. ${esc(c('verify'))}</p><p><a class="link" href="#scholarships">${esc(t('scholTitle'))} <span class="arr">→</span></a></p>`, main: trayBox(t('tableTray'), '', `<div class="tablewrap"><table>
       <thead><tr><th>${esc(t('thProgramme'))}</th><th class="num">${esc(t('thCredits'))}</th><th class="num">${esc(t('thMin'))}</th><th class="num">${esc(t('thFee'))}</th><th class="num">${esc(t('thEstimate'))} (JD)</th></tr></thead>
       <tbody id="fee-rows"></tbody>
-    </table></div>
-    <p class="finder-note">${esc(c('estimate'))}: ${esc(c('estimateNote'))}. ${esc(c('verify'))}</p>
+    </table></div>`) })}
   </div>
 </section>
-<section class="section">
+<section class="section" id="scholarships">
   <div class="wrap two">
     <div class="rv"><span class="kicker">${esc(t('scholKicker'))}</span><h2>${esc(t('scholTitle'))}</h2><p class="lead">${esc(t('scholLead'))}</p><p class="finder-note">${esc(t('scholNote'))}</p></div>
     <div class="tile rv d1">${icon('book')}<h3>${esc(t('gradKicker'))}</h3><p>${esc(t('gradLead'))}</p><p>${esc(S.academics.graduateLead[lang])}</p></div>
   </div>
 </section>
-<section class="section tint">
+<section class="section tint" id="links">
   <div class="wrap">
-    ${head(ctx, t('linksKicker'), t('linksTitle'))}
-    <div class="grid c3">
-      <a class="tile rv" href="${LINKS.fees}" target="_blank" rel="noopener">${icon('coins')}<h3>${esc(S.tools.t_fees[lang])}</h3><p>${esc(S.tools.d_fees[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
-      <a class="tile rv d1" href="${LINKS.scholarships}" target="_blank" rel="noopener">${icon('award')}<h3>${esc(S.tools.t_scholarships[lang])}</h3><p>${esc(S.tools.d_scholarships[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
-      <a class="tile rv d2" href="${LINKS.qa}" target="_blank" rel="noopener">${icon('help')}<h3>${esc(S.tools.t_qa[lang])}</h3><p>${esc(S.tools.d_qa[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
-      <a class="tile rv" href="${LINKS.grading}" target="_blank" rel="noopener">${icon('percent')}<h3>${esc(t('gradeT'))}</h3><p>${esc(t('gradeD'))}</p><span class="link">${esc(c('opensAum'))}</span></a>
-      <a class="tile rv d1" href="${LINKS.intl}" target="_blank" rel="noopener">${icon('intl')}<h3>${esc(t('intlT'))}</h3><p>${esc(t('intlD'))}</p><span class="link">${esc(c('opensAum'))}</span></a>
-      <a class="tile rv d2" href="${LINKS.transferPolicy}" target="_blank" rel="noopener">${icon('swap')}<h3>${esc(S.tools.t_transfer[lang])}</h3><p>${esc(S.tools.d_transfer[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
-    </div>
+    ${board({ icon: icon('file'), kicker: t('linksKicker'), title: t('linksTitle'), meta: nLinks(6, lang), main: `<div class="grid c3">
+      <a class="tile" href="${LINKS.fees}" target="_blank" rel="noopener">${icon('coins')}<h3>${esc(S.tools.t_fees[lang])}</h3><p>${esc(S.tools.d_fees[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile" href="${LINKS.scholarships}" target="_blank" rel="noopener">${icon('award')}<h3>${esc(S.tools.t_scholarships[lang])}</h3><p>${esc(S.tools.d_scholarships[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile" href="${LINKS.qa}" target="_blank" rel="noopener">${icon('help')}<h3>${esc(S.tools.t_qa[lang])}</h3><p>${esc(S.tools.d_qa[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile" href="${LINKS.grading}" target="_blank" rel="noopener">${icon('percent')}<h3>${esc(t('gradeT'))}</h3><p>${esc(t('gradeD'))}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile" href="${LINKS.intl}" target="_blank" rel="noopener">${icon('intl')}<h3>${esc(t('intlT'))}</h3><p>${esc(t('intlD'))}</p><span class="link">${esc(c('opensAum'))}</span></a>
+      <a class="tile" href="${LINKS.transferPolicy}" target="_blank" rel="noopener">${icon('swap')}<h3>${esc(S.tools.t_transfer[lang])}</h3><p>${esc(S.tools.d_transfer[lang])}</p><span class="link">${esc(c('opensAum'))}</span></a>
+    </div>` })}
   </div>
 </section>
 ${contactTiles(ctx, t('contactKicker'), t('contactTitle'), t('contactLead'))}
@@ -988,19 +998,15 @@ function life(ctx) {
   const health = M.health && has(M.health.file) ? `<a class="photo-link rv d1" href="${LINKS.health}" target="_blank" rel="noopener"><img src="${mp(R, M.health.file)}" alt="${esc(t('healthAlt'))}" loading="lazy"><span>${esc(t('healthAlt'))}</span></a>` : '';
   return `
 ${pheroPhoto(ctx, t('kicker'), t('h1'), t('lead'), M.lifeHero, t('heroAlt'))}
+${onpage(ctx, [['#week', t('opWeek')], ['#start', t('opStart')], ['#bus', t('busKicker')], ['#housing', t('housingKicker')], ['#clubs', t('sportKicker')], ['#health', t('healthKicker')], ['#intl', t('intlKicker')]])}
 ${audBar(ctx)}
 ${lifeWeek(ctx)}
 ${lifeStart(ctx)}
 ${strip}
 <section class="stats life-stats"><div class="wrap"><div class="stats-kicker kicker">${esc(t('dayKicker'))}</div><div class="stats-grid">${facts}</div></div></section>
 <section class="section" id="bus">
-  <div class="wrap two">
-    <div>
-      ${head(ctx, t('busKicker'), t('busTitle'), t('busLead'))}
-      <p class="finder-note rv">${esc(t('busNote'))}</p>
-      <p class="rv d1"><a class="btn" href="${LINKS.bus}" target="_blank" rel="noopener">${esc(t('busCta'))} <span class="arr">→</span></a></p>
-    </div>
-    <div class="tablewrap rv d1"><table><thead><tr><th>${esc(t('thRoute'))}</th><th class="num">${esc(t('thFallSpring'))}</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="wrap">
+    ${board({ icon: icon('bus'), kicker: t('busKicker'), title: t('busTitle'), lead: t('busLead'), meta: `5 ${t('routesWord')}`, side: `<span class="tray-h">${esc(S.academics.glance[lang])}</span><dl class="glance"><div><dt>${esc(t('glanceRoutes'))}</dt><dd>5</dd></div><div><dt>${esc(t('glanceSem'))}</dt><dd>250 <small>${jd(lang)}</small></dd></div><div><dt>${esc(t('glanceMadaba'))}</dt><dd>160 <small>${jd(lang)}</small></dd></div></dl><p class="finder-note">${esc(t('busNote'))}</p><p><a class="btn" href="${LINKS.bus}" target="_blank" rel="noopener">${esc(t('busCta'))} <span class="arr">→</span></a></p>`, main: trayBox(t('thFallSpring'), '', `<div class="tablewrap"><table><thead><tr><th>${esc(t('thRoute'))}</th><th class="num">${esc(t('thFallSpring'))}</th></tr></thead><tbody>${rows}</tbody></table></div>`) })}
   </div>
 </section>
 <section class="section tint" id="housing" data-aud="new">

@@ -204,7 +204,7 @@
       var from = slides[cur], to = slides[n]; busy = true;
       to.classList.add('on'); to.style.transition = 'none'; to.style.transform = 'translateX(' + (dir * 100) + '%)'; to.style.zIndex = 2; from.style.zIndex = 1;
       void to.offsetWidth; to.style.transition = ''; to.style.transform = 'translateX(0)'; from.style.transform = 'translateX(' + (dir * -100) + '%)';
-      setTimeout(function () { from.classList.remove('on'); from.style.transform = ''; from.style.zIndex = ''; to.style.zIndex = ''; from.tabIndex = -1; to.tabIndex = 0; busy = false; }, 820);
+      setTimeout(function () { from.classList.remove('on'); from.style.transform = ''; from.style.zIndex = ''; to.style.zIndex = ''; from.tabIndex = -1; to.tabIndex = 0; busy = false; }, 620);
       cur = n; dots.forEach(function (d, i) { d.classList.toggle('on', i === n); d.setAttribute('aria-selected', i === n ? 'true' : 'false'); });
     }
     function rest() { restUntil = Date.now() + 9000; }
@@ -219,7 +219,7 @@
     band.addEventListener('click', function (e) { if (moved) { e.preventDefault(); moved = false; } }, true);
     band.addEventListener('mouseenter', rest); band.addEventListener('focusin', rest);
     if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { threshold: .3 }).observe(band);
-    timer = setInterval(function () { if (!visible || doc.hidden || Date.now() < restUntil) return; go(cur + 1, 1); }, 4600);
+    timer = setInterval(function () { if (!visible || doc.hidden || Date.now() < restUntil) return; go(cur + 1, 1); }, 3400);
   });
 
   // v4e: breaking-news bar in the newsroom (data from data/alerts.json; hidden when nothing is active)

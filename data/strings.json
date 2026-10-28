@@ -2017,6 +2017,26 @@
     "stepLabel": {
       "en": "Step",
       "ar": "الخطوة"
+    },
+    "progWord": {
+      "en": "programmes",
+      "ar": "تخصصًا"
+    },
+    "glanceProg": {
+      "en": "Programmes listed",
+      "ar": "تخصصات مدرجة"
+    },
+    "glanceFee": {
+      "en": "Fee per credit (JD)",
+      "ar": "رسم الساعة (دينار)"
+    },
+    "glanceCredits": {
+      "en": "Credit hours",
+      "ar": "الساعات المعتمدة"
+    },
+    "tableTray": {
+      "en": "Published fees by programme",
+      "ar": "الرسوم المنشورة حسب التخصص"
     }
   },
   "life": {
@@ -2415,6 +2435,30 @@
     "n5D": {
       "en": "The Deanship of Student Affairs runs the clubs, the sport teams and the student communities.",
       "ar": "تدير عمادة شؤون الطلبة الأندية والفرق الرياضية والمجتمعات الطلابية."
+    },
+    "opWeek": {
+      "en": "Your week",
+      "ar": "أسبوعك"
+    },
+    "opStart": {
+      "en": "First weeks",
+      "ar": "الأسابيع الأولى"
+    },
+    "routesWord": {
+      "en": "routes",
+      "ar": "خطوط"
+    },
+    "glanceRoutes": {
+      "en": "Routes",
+      "ar": "الخطوط"
+    },
+    "glanceSem": {
+      "en": "Per semester",
+      "ar": "لكل فصل"
+    },
+    "glanceMadaba": {
+      "en": "Madaba route",
+      "ar": "خط مادبا"
     }
   },
   "about": {
@@ -2937,6 +2981,14 @@
     "d_contact": {
       "en": "Every office, its extension and email.",
       "ar": "كل دائرة وتحويلتها وبريدها."
+    },
+    "groupKicker": {
+      "en": "Group",
+      "ar": "المجموعة"
+    },
+    "extShort": {
+      "en": "Extensions",
+      "ar": "التحويلات"
     }
   },
   "guide": {
